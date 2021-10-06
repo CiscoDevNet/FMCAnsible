@@ -13,7 +13,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import Fmc
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import DUPLICATE_NAME_ERROR_MESSAGE, UNPROCESSABLE_ENTITY_STATUS, \
     MULTIPLE_DUPLICATES_FOUND_ERROR, BaseConfigurationResource, FmcInvalidOperationNameError, QueryParams, \
     ADD_OPERATION_NOT_SUPPORTED_ERROR, ParamName
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
 
 ADD_RESPONSE = {'status': 'Object added'}
 EDIT_RESPONSE = {'status': 'Object edited'}

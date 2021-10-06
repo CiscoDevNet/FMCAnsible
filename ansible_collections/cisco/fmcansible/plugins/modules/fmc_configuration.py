@@ -96,7 +96,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcConfigurationError, \
     FmcServerError, FmcUnexpectedResponse
 

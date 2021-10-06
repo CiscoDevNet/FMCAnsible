@@ -73,9 +73,9 @@ msg:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import OperationField, ValidationError, FILE_MODEL_NAME
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError, FILE_MODEL_NAME
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import FmcServerError, HTTPMethod
-# from module_utils.fdm_swagger_client import OperationField, ValidationError, FILE_MODEL_NAME
+# from module_utils.fmc_swagger_client import OperationField, ValidationError, FILE_MODEL_NAME
 # from module_utils.common import FmcServerError, HTTPMethod
 
 def is_download_operation(op_spec):

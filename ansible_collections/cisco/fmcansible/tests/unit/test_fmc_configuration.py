@@ -8,7 +8,7 @@ from units.modules.utils import set_module_args, exit_json, fail_json, AnsibleFa
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import FmcConfigurationError, FmcServerError, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import FmcInvalidOperationNameError, CheckModeException
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
 
 from ansible_collections.cisco.fmcansible.plugins.modules import fmc_configuration
 

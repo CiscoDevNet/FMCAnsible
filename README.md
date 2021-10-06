@@ -214,7 +214,7 @@ export PYTHONPATH=$PYTHONPATH:.:$ANSIBLE_DIR/lib:$ANSIBLE_DIR/test
 
 6. Run unit tests:
 ```
-pytest ansible_collections/cisco/ftdansible/tests
+pytest ansible_collections/cisco/fmcansible/tests
 ```
 
 7. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.

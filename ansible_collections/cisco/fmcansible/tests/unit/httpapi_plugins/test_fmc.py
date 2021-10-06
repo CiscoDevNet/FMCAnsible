@@ -32,7 +32,7 @@ from units.compat.mock import mock_open, patch
 
 from ansible_collections.cisco.fmcansible.plugins.httpapi.fmc import HttpApi, BASE_HEADERS, TOKEN_PATH_TEMPLATE, DEFAULT_API_VERSIONS
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import FdmSwaggerParser, SpecProp
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp
 
 if PY3:
     BUILTINS_NAME = 'builtins'
@@ -256,7 +256,7 @@ class TestFmcHttpApi(unittest.TestCase):
 
         assert 'Invalid JSON response' in str(res.exception)
 
-    @patch.object(FdmSwaggerParser, 'parse_spec')
+    @patch.object(FmcSwaggerParser, 'parse_spec')
     def test_get_operation_spec(self, parse_spec_mock):
         self.connection_mock.send.return_value = self._connection_response(None)
         parse_spec_mock.return_value = {
@@ -266,7 +266,7 @@ class TestFmcHttpApi(unittest.TestCase):
         assert 'Specification for testOp' == self.fmc_plugin.get_operation_spec('testOp')
         assert self.fmc_plugin.get_operation_spec('nonExistingTestOp') is None
 
-    @patch.object(FdmSwaggerParser, 'parse_spec')
+    @patch.object(FmcSwaggerParser, 'parse_spec')
     def test_get_model_spec(self, parse_spec_mock):
         self.connection_mock.send.return_value = self._connection_response(None)
         parse_spec_mock.return_value = {
@@ -276,7 +276,7 @@ class TestFmcHttpApi(unittest.TestCase):
         assert 'Specification for TestModel' == self.fmc_plugin.get_model_spec('TestModel')
         assert self.fmc_plugin.get_model_spec('NonExistingTestModel') is None
 
-    @patch.object(FdmSwaggerParser, 'parse_spec')
+    @patch.object(FmcSwaggerParser, 'parse_spec')
     def test_get_operation_spec_by_model_name(self, parse_spec_mock):
         self.connection_mock.send.return_value = self._connection_response(None)
         operation1 = {'modelName': 'TestModel'}

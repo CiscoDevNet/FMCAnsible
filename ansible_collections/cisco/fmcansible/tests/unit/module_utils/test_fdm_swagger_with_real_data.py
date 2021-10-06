@@ -6,12 +6,12 @@ import json
 import os
 import unittest
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import FdmSwaggerValidator, FdmSwaggerParser
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerValidator, FmcSwaggerParser
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_FOLDER = os.path.join(DIR_PATH, 'test_data')
 
 
-class TestFdmSwagger(unittest.TestCase):
+class TestFmcSwagger(unittest.TestCase):
 
     def setUp(self):
         self.init_mock_data()
@@ -21,8 +21,8 @@ class TestFdmSwagger(unittest.TestCase):
             self.base_data = json.loads(f.read().decode('utf-8'))
 
     def test_with_all_data(self):
-        fdm_data = FdmSwaggerParser().parse_spec(self.base_data)
-        validator = FdmSwaggerValidator(fdm_data)
+        fdm_data = FmcSwaggerParser().parse_spec(self.base_data)
+        validator = FmcSwaggerValidator(fdm_data)
         models = fdm_data['models']
         operations = fdm_data['operations']
 
@@ -56,7 +56,7 @@ class TestFdmSwagger(unittest.TestCase):
                                'TestIdentitySource'])
 
     def test_parse_all_data(self):
-        self.fdm_data = FdmSwaggerParser().parse_spec(self.base_data)
+        self.fdm_data = FmcSwaggerParser().parse_spec(self.base_data)
         operations = self.fdm_data['operations']
         without_model_name = []
         expected_operations_counter = 0

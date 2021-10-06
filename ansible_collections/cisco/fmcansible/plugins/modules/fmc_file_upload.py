@@ -68,9 +68,9 @@ msg:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import OperationField
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcServerError, HTTPMethod
-# from module_utils.fdm_swagger_client import OperationField
+# from module_utils.fmc_swagger_client import OperationField
 # from module_utils.common import construct_ansible_facts, FmcServerError, HTTPMethod
 
 

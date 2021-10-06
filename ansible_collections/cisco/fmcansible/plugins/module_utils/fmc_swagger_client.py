@@ -105,7 +105,7 @@ class ValidationError(ValueError):
     pass
 
 
-class FdmSwaggerParser:
+class FmcSwaggerParser:
     _definitions = None
     _base_path = None
 
@@ -364,11 +364,11 @@ class FdmSwaggerParser:
             return model_name
 
 
-class FdmSwaggerValidator:
+class FmcSwaggerValidator:
     def __init__(self, spec):
         """
         :param spec: dict
-                    data from FdmSwaggerParser().parse_spec()
+                    data from FmcSwaggerParser().parse_spec()
         """
         self._operations = spec[SpecProp.OPERATIONS]
         self._models = spec[SpecProp.MODELS]

@@ -22,9 +22,9 @@ from ansible.module_utils.six import iteritems
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, \
     FmcServerError, ResponseParams, copy_identity_properties, FmcUnexpectedResponse
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import OperationField, ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, copy_identity_properties, FmcUnexpectedResponse
-# from module_utils.fdm_swagger_client import OperationField, ValidationError
+# from module_utils.fmc_swagger_client import OperationField, ValidationError
 
 DEFAULT_PAGE_SIZE = 10
 DEFAULT_OFFSET = 0
@@ -485,18 +485,6 @@ class BaseConfigurationResource(object):
         else:
             return self._add_upserted_object(model_operations, params)
 
-    # meignw2021 copied this from ftdansible
-    def _fetch_system_info(self):
-        if not self._system_info:
-            params = {ParamName.PATH_PARAMS: PATH_PARAMS_FOR_DEFAULT_OBJ}
-            self._system_info = self.send_general_request('getSystemInformation', params)
-
-        return self._system_info
-
-    # meignw2021 copied this from ftdansible
-    def get_build_version(self):
-        system_info = self._fetch_system_info()
-        return system_info['databaseInfo']['buildVersion']
 
 def _set_default(params, field_name, value):
     if field_name not in params or params[field_name] is None:

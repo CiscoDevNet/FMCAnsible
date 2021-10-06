@@ -26,7 +26,7 @@ import unittest
 
 import pytest
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import FdmSwaggerValidator, IllegalArgumentException
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerValidator, IllegalArgumentException
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 TEST_DATA_FOLDER = os.path.join(DIR_PATH, 'test_data')
 
@@ -131,7 +131,7 @@ def sort_validator_rez(data):
     return data
 
 
-class TestFdmSwaggerValidator(unittest.TestCase):
+class TestFmcSwaggerValidator(unittest.TestCase):
 
     @staticmethod
     def check_illegal_argument_exception(cb, msg):
@@ -181,7 +181,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'p_boolean': True,
             'p_number': 2.3
         }
-        validator = FdmSwaggerValidator(local_mock_spec)
+        validator = FmcSwaggerValidator(local_mock_spec)
         valid, rez = getattr(validator, method)('getNetwork', data)
         assert valid
         assert rez is None
@@ -230,7 +230,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 }
             }
         }
-        validator = FdmSwaggerValidator(local_mock_spec)
+        validator = FmcSwaggerValidator(local_mock_spec)
         valid, rez = getattr(validator, method)('getNetwork', None)
         assert not valid
         assert sort_validator_rez({
@@ -294,7 +294,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 }
             }
         }
-        validator = FdmSwaggerValidator(local_mock_spec)
+        validator = FmcSwaggerValidator(local_mock_spec)
         data = {
             'objId': 1,
             'parentId': True,
@@ -464,7 +464,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 }
             }
         }
-        validator = FdmSwaggerValidator(local_mock_spec)
+        validator = FmcSwaggerValidator(local_mock_spec)
         valid, rez = getattr(validator, method)('getNetwork', None)
         assert not valid
         assert {'required': ['objId']} == rez
@@ -496,7 +496,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "operation_does_not_exist operation does not support")
 
     def test_validate_data_method_with_empty_data(self):
-        validator = FdmSwaggerValidator(mock_data)
+        validator = FmcSwaggerValidator(mock_data)
         valid, rez = validator.validate_data('getNetworkObjectList', None)
         assert not valid
         assert sort_validator_rez({
@@ -534,7 +534,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
         data = {
             'name': 'test'
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert sort_validator_rez({
             'required': ['subType', 'type', 'value']
@@ -542,7 +542,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
 
     def test_errors_if_no_data_was_passed(self):
         data = {}
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert sort_validator_rez({
             'required': ['subType', 'type', 'value']
@@ -553,7 +553,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'subType': 'NETWORK',
             'value': '1.1.1.1'
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert {'required': ['type']} == rez
 
@@ -563,7 +563,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'type': 1,
             'value': False
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -589,7 +589,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'type': [],
             'value': {}
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -617,7 +617,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'type': 'networkobject',
             'value': '1.1.1.1'
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert valid
         assert rez is None
 
@@ -627,7 +627,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'type': 'networkobject',
             'value': None
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert {'required': ['value']} == rez
 
@@ -635,7 +635,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
         spec = copy.deepcopy(mock_data)
         del spec['models']['NetworkObject']['required']
 
-        valid, rez = FdmSwaggerValidator(spec).validate_data('getNetworkObjectList', {})
+        valid, rez = FmcSwaggerValidator(spec).validate_data('getNetworkObjectList', {})
 
         assert valid
         assert rez is None
@@ -656,7 +656,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 'id': 'fs-sf'
             }]
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert valid
         assert rez is None
 
@@ -682,7 +682,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 'test'
             ]
         }
-        valid, rez = FdmSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
+        valid, rez = FmcSwaggerValidator(mock_data).validate_data('getNetworkObjectList', data)
         assert not valid
         assert sort_validator_rez({
             'required': ['objects[0].type', 'objects[1].id', 'objects[2].id', 'objects[2].type'],
@@ -737,7 +737,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": 1
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -748,7 +748,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": 0
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -759,7 +759,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": 2
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -770,7 +770,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": None
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -801,7 +801,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": True
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -835,7 +835,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": "test"
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -869,7 +869,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             "f_integer": "1.2"
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', invalid_data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -898,7 +898,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(nested_mock_data1).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(nested_mock_data1).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -913,7 +913,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
                 'f_string': "test"
             }
         }
-        valid, rez = FdmSwaggerValidator(spec_without_object_type).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(spec_without_object_type).validate_data('getdata', valid_data)
 
         assert valid
         assert rez is None
@@ -923,7 +923,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             'f_integer': 2
         }
 
-        valid, rez = FdmSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
         assert not valid
         assert {'required': ['nested_model']} == rez
 
@@ -933,7 +933,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
         assert not valid
         assert {'required': ['nested_model.f_string']} == rez
 
@@ -947,7 +947,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
+        valid, rez = FmcSwaggerValidator(nested_mock_data1).validate_data('getdata', invalid_data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [
@@ -1073,7 +1073,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert valid
         assert rez is None
 
@@ -1098,7 +1098,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert not valid
         assert sort_validator_rez({
             'required': ['nested_model.fragments[0].object.ts'],
@@ -1125,7 +1125,7 @@ class TestFdmSwaggerValidator(unittest.TestCase):
             }
         }
 
-        valid, rez = FdmSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
+        valid, rez = FmcSwaggerValidator(local_mock_data).validate_data('getdata', valid_data)
         assert not valid
         assert sort_validator_rez({
             'invalid_type': [

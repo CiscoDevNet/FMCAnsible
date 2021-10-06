@@ -24,7 +24,7 @@ import copy
 import os
 import unittest
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import FdmSwaggerParser
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -115,12 +115,12 @@ def _get_objects(base_object, key_names):
     return dict((_key, base_object[_key]) for _key in key_names)
 
 
-class TestFdmSwaggerParser(unittest.TestCase):
+class TestFmcSwaggerParser(unittest.TestCase):
 
     def test_simple_object(self):
         self._data = copy.deepcopy(base)
 
-        self.fdm_data = FdmSwaggerParser().parse_spec(self._data)
+        self.fdm_data = FmcSwaggerParser().parse_spec(self._data)
 
         expected_operations = {
             'getNetworkObjectList': {
@@ -233,7 +233,7 @@ class TestFdmSwaggerParser(unittest.TestCase):
             }
         }
 
-        self.fdm_data = FdmSwaggerParser().parse_spec(api_spec, docs)
+        self.fdm_data = FmcSwaggerParser().parse_spec(api_spec, docs)
 
         assert 'Description for Network Object' == self.fdm_data['models']['NetworkObject']['description']
         assert '' == self.fdm_data['models']['NetworkObjectWrapper']['description']
@@ -362,7 +362,7 @@ class TestFdmSwaggerParser(unittest.TestCase):
             }
         }
 
-        fdm_data = FdmSwaggerParser().parse_spec(data)
+        fdm_data = FmcSwaggerParser().parse_spec(data)
         assert sorted(['Model1', 'Model2', 'Model3']) == sorted(fdm_data['models'].keys())
         assert expected_operations == fdm_data['operations']
         assert {
