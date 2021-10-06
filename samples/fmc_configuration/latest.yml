@@ -2,23 +2,23 @@
   connection: httpapi
   tasks:
     - name: Create an network object for Cisco FMC
-      ftd_configuration:
+      cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
         register_as: cra1
 
     - name: get all network objects
-      ftd_configuration:
+      cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         register_as: cra
 
     - name: Create an network object for Cisco FMC
-      ftd_configuration:
+      cisco.fmcansible.fmc_configuration:
         operation: createNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: CiscoFtdNetwork
+          name: CiscoFmcNetwork
           value: 3.3.3.0/24
           type: networkobject
