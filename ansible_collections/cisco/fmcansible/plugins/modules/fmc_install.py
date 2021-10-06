@@ -28,11 +28,11 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = """
 ---
-module: ftd_install
-short_description: Installs FTD pkg image on the firewall
+module: fmc_install
+short_description: Installs FMC pkg image on the firewall
 description:
-  - Provisioning module for FTD devices that installs ROMMON image (if needed) and
-    FTD pkg image on the firewall.
+  - Provisioning module for FMC devices that installs ROMMON image (if needed) and
+    FMC pkg image on the firewall.
   - Can be used with `httpapi` and `local` connection types. The `httpapi` is preferred,
     the `local` connection should be used only when the device cannot be accessed via
     REST API.
@@ -133,19 +133,19 @@ options:
     type: string
   image_file_location:
     description:
-      - Path to the FTD pkg image on the server to be downloaded.
+      - Path to the FMC pkg image on the server to be downloaded.
       - FTP, SCP, SFTP, TFTP, or HTTP protocols are usually supported, but may depend on the device model.
     required: true
     type: string
   image_version:
     description:
-      - Version of FTD image to be installed.
-      - Helps to compare target and current FTD versions to prevent unnecessary reinstalls.
+      - Version of FMC image to be installed.
+      - Helps to compare target and current FMC versions to prevent unnecessary reinstalls.
     required: true
     type: string
   force_install:
     description:
-      - Forces the FTD image to be installed even when the same version is already installed on the firewall.
+      - Forces the FMC image to be installed even when the same version is already installed on the firewall.
       - By default, the module stops execution when the target version is installed in the device.
     required: false
     type: boolean
@@ -160,8 +160,8 @@ options:
 """
 
 EXAMPLES = """
-  - name: Install image v6.3.0 on FTD 5516
-    ftd_install:
+  - name: Install image v6.3.0 on FMC 5516
+    fmc_install:
       device_hostname: firepower
       device_password: pass
       device_ip: 192.168.0.1
@@ -174,8 +174,8 @@ EXAMPLES = """
       console_username: console_user
       console_password: console_pass
 
-      rommon_file_location: 'tftp://10.89.0.11/installers/ftd-boot-9.10.1.3.lfbff'
-      image_file_location: 'https://10.89.0.11/installers/ftd-6.3.0-83.pkg'
+      rommon_file_location: 'tftp://10.89.0.11/installers/fmc-boot-9.10.1.3.lfbff'
+      image_file_location: 'https://10.89.0.11/installers/fmc-6.3.0-83.pkg'
       image_version: 6.3.0-83
 """
 
@@ -190,14 +190,8 @@ from ansible.module_utils.connection import Connection
 from enum import Enum
 from six import iteritems
 
-# try:
-#     from ansible.module_utils.configuration import BaseConfigurationResource, ParamName, PATH_PARAMS_FOR_DEFAULT_OBJ
-#     from ansible.module_utils.device import HAS_KICK, FtdPlatformFactory, FtdModel
-# except ImportError:
-#     from module_utils.configuration import BaseConfigurationResource, ParamName, PATH_PARAMS_FOR_DEFAULT_OBJ
-#     from module_utils.device import HAS_KICK, FtdPlatformFactory, FtdModel
-from module_utils.configuration import BaseConfigurationResource, ParamName, PATH_PARAMS_FOR_DEFAULT_OBJ
-from module_utils.device import HAS_KICK, FtdPlatformFactory, FtdModel
+from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, ParamName, PATH_PARAMS_FOR_DEFAULT_OBJ
+from ansible_collections.cisco.fmcansible.plugins.module_utils.device import HAS_KICK, FmcPlatformFactory, FmcModel
 
 REQUIRED_PARAMS_FOR_LOCAL_CONNECTION = ['device_ip', 'device_netmask', 'device_gateway', 'device_model', 'dns_server']
 
@@ -219,7 +213,7 @@ def main():
         device_ip=dict(type='str', required=False),
         device_netmask=dict(type='str', required=False),
         device_gateway=dict(type='str', required=False),
-        device_model=dict(type='str', required=False, choices=[e.value for e in FtdModel]),
+        device_model=dict(type='str', required=False, choices=[e.value for e in FmcModel]),
         dns_server=dict(type='str', required=False),
         search_domains=dict(type='str', required=False, default='cisco.com'),
 
@@ -253,11 +247,11 @@ def main():
         check_that_update_is_needed(module, system_info)
         check_management_and_dns_params(resource, module.params)
 
-    fmc_platform = FtdPlatformFactory.create(platform_model, module.params)
+    fmc_platform =FmcPlatformFactory.create(platform_model, module.params)
     fmc_platform.install_fmc_image(module.params)
 
     module.exit_json(changed=True,
-                     msg='Successfully installed FTD image %s on the firewall device.' % module.params["image_version"])
+                     msg='Successfully installed FMC image %s on the firewall device.' % module.params["image_version"])
 
 
 def check_required_params_for_local_connection(module, params):
@@ -275,14 +269,14 @@ def get_system_info(resource):
 
 
 def check_that_model_is_supported(module, platform_model):
-    if not FtdModel.has_value(platform_model):
+    if not FmcModel.has_value(platform_model):
         module.fail_json(msg="Platform model '%s' is not supported by this module." % platform_model)
 
 
 def check_that_update_is_needed(module, system_info):
-    target_ftd_version = module.params["image_version"]
-    if not module.params["force_reinstall"] and target_ftd_version == system_info['softwareVersion']:
-        module.exit_json(changed=False, msg="FTD already has %s version of software installed." % target_ftd_version)
+    target_fmc_version = module.params["image_version"]
+    if not module.params["force_reinstall"] and target_fmc_version == system_info['softwareVersion']:
+        module.exit_json(changed=False, msg="FMC already has %s version of software installed." % target_fmc_version)
 
 
 def check_management_and_dns_params(resource, params):

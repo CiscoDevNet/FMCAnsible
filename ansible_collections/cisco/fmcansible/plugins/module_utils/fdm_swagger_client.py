@@ -20,7 +20,7 @@
 #     from ansible.module_utils.network.fmc.common import HTTPMethod
 # except ImportError:
 #     from module_utils.common import HTTPMethod
-from module_utils.common import HTTPMethod
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod
 from ansible.module_utils.six import integer_types, string_types, iteritems
 
 FILE_MODEL_NAME = '_File'
@@ -105,7 +105,7 @@ class ValidationError(ValueError):
     pass
 
 
-class FmcSwaggerParser:
+class FdmSwaggerParser:
     _definitions = None
     _base_path = None
 
@@ -364,11 +364,11 @@ class FmcSwaggerParser:
             return model_name
 
 
-class FmcSwaggerValidator:
+class FdmSwaggerValidator:
     def __init__(self, spec):
         """
         :param spec: dict
-                    data from FmcSwaggerParser().parse_spec()
+                    data from FdmSwaggerParser().parse_spec()
         """
         self._operations = spec[SpecProp.OPERATIONS]
         self._models = spec[SpecProp.MODELS]

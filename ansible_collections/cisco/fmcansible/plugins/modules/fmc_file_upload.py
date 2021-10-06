@@ -28,10 +28,10 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 
 DOCUMENTATION = """
 ---
-module: ftd_file_upload
-short_description: Uploads files to Cisco FTD devices over HTTP(S)
+module: fmc_file_upload
+short_description: Uploads files to Cisco FMC devices over HTTP(S)
 description:
-  - Uploads files to Cisco FTD devices including disk files, backups, and upgrades.
+  - Uploads files to Cisco FMC devices including disk files, backups, and upgrades.
 version_added: "2.7"
 author: "Cisco Systems, Inc."
 options:
@@ -48,13 +48,13 @@ options:
     type: path
   register_as:
     description:
-      - Specifies Ansible fact name that is used to register received response from the FTD device.
+      - Specifies Ansible fact name that is used to register received response from the FMC device.
     type: string
 """
 
 EXAMPLES = """
 - name: Upload disk file
-  ftd_file_upload:
+  fmc_file_upload:
     operation: 'postuploaddiskfile'
     file_to_upload: /tmp/test1.txt
 """
@@ -68,13 +68,9 @@ msg:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
-try:
-    from ansible.module_utils.fdm_swagger_client import OperationField
-    from ansible.module_utils.common import construct_ansible_facts, FtdServerError, HTTPMethod
-except ImportError:
-    from module_utils.fmc_swagger_client import OperationField
-    from module_utils.common import construct_ansible_facts, FtdServerError, HTTPMethod
-# from module_utils.fmc_swagger_client import OperationField
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import OperationField
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcServerError, HTTPMethod
+# from module_utils.fdm_swagger_client import OperationField
 # from module_utils.common import construct_ansible_facts, FmcServerError, HTTPMethod
 
 

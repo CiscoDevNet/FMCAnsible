@@ -1,0 +1,8 @@
+pytest
+pytest-mock
+urllib3==1.26.5
+units
+pylint
+pycodestyle
+voluptuous
+yamllint

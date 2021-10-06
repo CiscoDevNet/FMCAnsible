@@ -35,13 +35,13 @@ options:
   token_path:
     type: str
     description:
-      - Specifies the api token path of the FTD device
+      - Specifies the api token path of the FMC device
     vars:
       - name: ansible_httpapi_fmc_token_path
   spec_path:
     type: str
     description:
-      - Specifies the api spec path of the FTD device
+      - Specifies the api spec path of the FMC device
     default: '/api/api-explorer/fmc.json'
     vars:
       - name: ansible_httpapi_fmc_spec_path
@@ -62,8 +62,8 @@ from urllib3 import encode_multipart_formdata
 from urllib3.fields import RequestField
 from ansible.module_utils.connection import ConnectionError
 
-from module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
-from module_utils.common import HTTPMethod, ResponseParams
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import FdmSwaggerParser, SpecProp, FdmSwaggerValidator
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
@@ -390,7 +390,7 @@ class HttpApi(HttpApiBase):
             spec_path_url = self._get_api_spec_path()
             response = (self.send_request(url_path=spec_path_url, http_method=HTTPMethod.GET))
             if response[ResponseParams.SUCCESS]:
-                self._api_spec = FmcSwaggerParser().parse_spec(response[ResponseParams.RESPONSE])
+                self._api_spec = FdmSwaggerParser().parse_spec(response[ResponseParams.RESPONSE])
             else:
                 raise ConnectionError('Failed to download API specification. Status code: %s. Response: %s' % (
                     response[ResponseParams.STATUS_CODE], (response[ResponseParams.RESPONSE]).encode('utf8')))
@@ -399,7 +399,7 @@ class HttpApi(HttpApiBase):
     @property
     def api_validator(self):
         if self._api_validator is None:
-            self._api_validator = FmcSwaggerValidator(self.api_spec)
+            self._api_validator = FdmSwaggerValidator(self.api_spec)
         return self._api_validator
 
 

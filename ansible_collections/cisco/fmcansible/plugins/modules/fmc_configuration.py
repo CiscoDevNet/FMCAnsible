@@ -29,9 +29,9 @@ ANSIBLE_METADATA = {'metadata_version': '1.1',
 DOCUMENTATION = """
 ---
 module: fmc_configuration
-short_description: Manages configuration on Cisco FTD devices over REST API
+short_description: Manages configuration on Cisco FMC devices over REST API
 description:
-  - Manages configuration on Cisco FTD devices including creating, updating, removing configuration objects,
+  - Manages configuration on Cisco FMC devices including creating, updating, removing configuration objects,
     scheduling and staring jobs, deploying pending changes, etc. All operation are performed over REST API.
 version_added: "2.7"
 author: "Cisco Systems, Inc."
@@ -56,7 +56,7 @@ options:
     type: dict
   register_as:
     description:
-      - Specifies Ansible fact name that is used to register received response from the FTD device.
+      - Specifies Ansible fact name that is used to register received response from the FMC device.
     type: string
   filters:
     description:
@@ -95,20 +95,10 @@ response:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
-try:
-    from ansible.module_utils.configuration import BaseConfigurationResource, CheckModeException, \
-        FmcInvalidOperationNameError
-    from ansible.module_utils.fmc_swagger_client import ValidationError
-    from ansible.module_utils.common import construct_ansible_facts, FmcConfigurationError, \
-        FmcServerError, FmcUnexpectedResponse
-except ImportError:
-    from module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
-    from module_utils.fmc_swagger_client import ValidationError
-    from module_utils.common import construct_ansible_facts, FmcConfigurationError, \
-        FmcServerError, FmcUnexpectedResponse
-# from module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
-# from module_utils.fmc_swagger_client import ValidationError
-# from module_utils.common import construct_ansible_facts, FmcConfigurationError, FmcServerError, FmcUnexpectedResponse
+from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fdm_swagger_client import ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcConfigurationError, \
+    FmcServerError, FmcUnexpectedResponse
 
 
 def main():
