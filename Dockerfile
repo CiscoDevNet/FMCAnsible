@@ -1,16 +1,17 @@
 ARG PYTHON_VERSION=3.6
 FROM python:${PYTHON_VERSION}
 ARG FMC_ANSIBLE_VERSION=v0.2.1
-ARG FMC_ANSIBLE_FOLDER=ftd-ansible
+ARG FMC_ANSIBLE_FOLDER=fmc-ansible
+
+RUN apt-get update && \
+    apt-get install -yq sshpass && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN wget https://github.com/CiscoDevNet/FMCAnsible/archive/${FMC_ANSIBLE_VERSION}.tar.gz && \
     tar -xvf ${FMC_ANSIBLE_VERSION}.tar.gz
 
 RUN mkdir /${FMC_ANSIBLE_FOLDER}/ && \
     export FMC_SOURCE_FOLDER=`find ./ -maxdepth 1 -type d -name '*FMCAnsible-*'` && \
-    mv $FMC_SOURCE_FOLDER/httpapi_plugins /${FMC_ANSIBLE_FOLDER} && \
-    mv $FMC_SOURCE_FOLDER/library /${FMC_ANSIBLE_FOLDER} && \
-    mv $FMC_SOURCE_FOLDER/module_utils /${FMC_ANSIBLE_FOLDER} && \
     mv $FMC_SOURCE_FOLDER/requirements.txt /${FMC_ANSIBLE_FOLDER} && \
     mv $FMC_SOURCE_FOLDER/ansible.cfg  /${FMC_ANSIBLE_FOLDER}
 

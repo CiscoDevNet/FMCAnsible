@@ -59,11 +59,10 @@ venv.bak/
 # Doc distribution folder
 docs/dist
 workspace/
-Dockerfile.py26 copy.tests
-inventory/sample_hosts copy
-Dockerfile copy
-logs
-requirements.py26.txt
-unit_test_results.txt
-Dockerfile.py26.tests
-.DS_Store
+tests/output/
+plugins/modules/ftd_configuration.py
+plugins/modules/ftd_file_download.py
+plugins/modules/ftd_file_upload.py
+plugins/modules/ftd_install.py
+plugins/module_utils/docker_swarm.py.000
+plugins/module_utils/fmc.py.000
