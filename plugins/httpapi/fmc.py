@@ -342,21 +342,6 @@ class HttpApi(HttpApiBase):
         # the API only supports v1
         return "v1"
 
-        # Try to fetch supported API version
-        http_method = HTTPMethod.GET
-
-        response, response_data = self._send_service_request(
-            path=GET_API_VERSIONS_PATH,
-            error_msg_prefix="Can't fetch list of supported api versions",
-            method=http_method,
-            headers=BASE_HEADERS
-        )
-
-        value = self._get_response_value(response_data)
-        self._display(http_method, 'response', value)
-        api_versions_info = self._response_to_json(value)
-        return api_versions_info["supportedVersions"]
-
     def _get_api_token_path(self):
         return self.get_option(API_TOKEN_PATH_OPTION_NAME)
 
