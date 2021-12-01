@@ -96,7 +96,9 @@ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_poli
 
 The project contains unit tests for Ansible modules, HTTP API plugin and util files. They can be found in `test/unit` directory. Ansible has many utils for mocking and running tests, so unit tests in this project also rely on them and including Ansible test module to the Python path is required.
 
-### Running Sanity Tests In Docker
+### Running Sanity Tests Using Docker
+
+When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/ftdansible).  
 
 ```
 rm -rf tests/output 
@@ -104,7 +106,10 @@ ansible-test sanity --docker -v --color --python 3.6
 ansible-test sanity --docker -v --color --python 3.7
 ```
 
-### Running Units Tests In Docker
+### Running Units Tests Using Docker
+
+When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/fmcansible)
+
 
 ```
 rm -rf tests/output 
@@ -121,17 +126,18 @@ ansible-test units --docker -v tests/unit/module_utils/test_upsert_functionality
 
 ### Integration Tests
 
-Integration tests are written in a form of playbooks. Thus, integration tests are written as sample playbooks with assertion and can be found in the `samples` folder. They start with `test_` prefix and can be run as usual playbooks.
+Integration tests are written in a form of playbooks. Thus, integration tests are written as sample playbooks with assertion and can be found in the `samples` folder. They start with `test_` prefix and can be run as usual playbooks.  The integration tests use a local Docker container which copies the necessary code and folders from your local path into a docker container for testing.
 
 1. Build the default Python 3.6, Ansible 2.10 Docker image:
     ```
-    docker build -t fmc-ansible .
+    docker build -t fmc-ansible:integration -f Dockerfile_integration .
     ```
-    **NOTE**: The default image is based on the release v0.4.0 of the [`FMC-Ansible`](https://github.com/CiscoDevNet/FMCAnsible) and Python 3.6. 
+    **NOTE**: The default image is based on the release v0.4.0 of the [`FTD-Ansible`](https://github.com/CiscoDevNet/FMCAnsible) and Python 3.6. 
 
 2. You can build the custom Docker image:
     ```
-    docker build -t fmc-ansible \
+    docker build -t fmc-ansible:integration \
+    -f Dockerfile_integration \
     --build-arg PYTHON_VERSION=<2.7|3.5|3.6|3.7> \
     --build-arg FMC_ANSIBLE_VERSION=<tag name | branch name> .
     ```
@@ -139,14 +145,15 @@ Integration tests are written in a form of playbooks. Thus, integration tests ar
 3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
 
 4. Run the playbook in Docker mounting playbook folder to `/fmc-ansible/playbooks` and inventory file to `/etc/ansible/hosts`:
-    ```
-    docker run -v $(pwd)/samples:/fmc-ansible/playbooks \
-    -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-    fmc-ansible playbooks/fmc_configuration/network_object.yml
 
-    docker run -v $(pwd)/samples:/fmc-ansible/playbooks \
-    -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-    fmc-ansible playbooks/fmc_configuration/access_policy.yml    
+    ```
+    docker run -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
+    -v $(pwd)/ansible.cfg:/root/ansible_collections/cisco/fmcansible/ansible.cfg \
+    fmc-ansible:integration /root/ansible_collections/cisco/fmcansible/samples/fmc_configuration/latest.yml
+
+    docker run -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
+    -v $(pwd)/ansible.cfg:/root/ansible_collections/cisco/fmcansible/ansible.cfg \
+    fmc-ansible:integration /root/ansible_collections/cisco/fmc/samples/fmc_configuration/user.yml
 
     ```
 
@@ -162,31 +169,31 @@ source ./all_sample_tests.sh
 1. Setup docker environment
 
 ```
-docker run -it -v $(pwd):/fmc-ansible \
+docker run -it -v $(pwd):/root/ansible_collections/ansible/fmcansible \
 python:3.6 bash
 ```
 
 2. Change to working directory
 
 ```
-cd /fmc-ansible
+cd /root/ansible_collections/ansible/fmcansible
 apt update && apt upgrade -y
 ```
 
 3. Clone [Ansible repository](https://github.com/ansible/ansible) from GitHub;
 ```
-cd /fmc-ansible
+cd /root/ansible_collections/ansible/fmcansible
 rm -rf ./ansible
 git clone https://github.com/ansible/ansible.git
 
 # check out the stable version
 # if you want to test with 2.9 specify that in the version below
-cd /fmc-ansible/ansible
+cd /root/ansible_collections/ansible/fmcansible/ansible
 git checkout stable-2.10
 ```
 
 ```
-cd /fmc-ansible
+cd /root/ansible_collections/ansible/fmcansible
 pip download $(grep ^ansible ./requirements.txt) --no-cache-dir --no-deps -d /tmp/pip 
 mkdir /tmp/ansible
 tar -C /tmp/ansible -xf /tmp/pip/ansible*
@@ -197,7 +204,7 @@ rm -rf /tmp/pip /tmp/ansible
 4. Install requirements and test dependencies:
 
 ```
-cd /fmc-ansible
+cd /root/ansible_collections/ansible/fmcansible
 export ANSIBLE_DIR=`pwd`/ansible
 pip install -r requirements.txt
 pip install -r $ANSIBLE_DIR/requirements.txt
