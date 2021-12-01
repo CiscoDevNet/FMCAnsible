@@ -74,8 +74,10 @@ BASE_HEADERS = {
 TOKEN_EXPIRATION_STATUS_CODE = 408
 UNAUTHORIZED_STATUS_CODE = 401
 API_TOKEN_PATH_OPTION_NAME = 'token_path'
-TOKEN_PATH_TEMPLATE = '/api/fdm/{}/fdm/token'
-GET_API_VERSIONS_PATH = '/api/versions'
+# TOKEN_PATH_TEMPLATE = '/api/fdm/{}/fdm/token'
+TOKEN_PATH_TEMPLATE = '/api/fmc_platform/v1/auth/generatetoken'
+# GET_API_VERSIONS_PATH = '/api/versions'
+GET_API_VERSIONS_PATH = '/info/versions'
 DEFAULT_API_VERSIONS = ['v1']
 
 INVALID_API_TOKEN_PATH_MSG = ('The API token path is incorrect. Please, check correctness of '
@@ -95,6 +97,7 @@ class HttpApi(HttpApiBase):
     def __init__(self, connection):
         super(HttpApi, self).__init__(connection)
         self.connection = connection
+
         self.access_token = None
         self.refresh_token = None
         self._api_spec = None
@@ -204,7 +207,6 @@ class HttpApi(HttpApiBase):
         url = self._get_api_token_path()
 
         self._display(HTTPMethod.POST, 'logout', url)
-
         self._send_auth_request(url, json.dumps(auth_payload), method=HTTPMethod.POST, headers=BASE_HEADERS)
         self.refresh_token = None
         self.access_token = None
@@ -238,6 +240,7 @@ class HttpApi(HttpApiBase):
     def send_request(self, url_path, http_method, body_params=None, path_params=None, query_params=None):
         url = construct_url_path(url_path, path_params, query_params)
         data = json.dumps(body_params) if body_params else None
+
         try:
             self._display(http_method, 'url', url)
             if data:
@@ -335,8 +338,13 @@ class HttpApi(HttpApiBase):
         :return: list of API versions suitable for device
         :rtype: list
         """
+
+        # the API only supports v1
+        return "v1"
+
         # Try to fetch supported API version
         http_method = HTTPMethod.GET
+
         response, response_data = self._send_service_request(
             path=GET_API_VERSIONS_PATH,
             error_msg_prefix="Can't fetch list of supported api versions",
