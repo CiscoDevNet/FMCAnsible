@@ -88,8 +88,8 @@ cat ansible.cfg
 Run the sample playbook.
 
 ```
-ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_rule_with_applications.yml
-ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_policy.yml
+ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/latest.yml
+ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/user.yml
 ```
 
 ## Tests
@@ -157,12 +157,6 @@ Integration tests are written in a form of playbooks. Thus, integration tests ar
 
     ```
 
-5. To run all of the integration tests
-
-```
-source ./all_sample_tests.sh
-```
-
 
 ## Developing Locally With Docker
 
@@ -180,56 +174,8 @@ cd /root/ansible_collections/ansible/fmcansible
 apt update && apt upgrade -y
 ```
 
-3. Clone [Ansible repository](https://github.com/ansible/ansible) from GitHub;
-```
-cd /root/ansible_collections/ansible/fmcansible
-rm -rf ./ansible
-git clone https://github.com/ansible/ansible.git
+3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
 
-# check out the stable version
-# if you want to test with 2.9 specify that in the version below
-cd /root/ansible_collections/ansible/fmcansible/ansible
-git checkout stable-2.10
-```
-
-```
-cd /root/ansible_collections/ansible/fmcansible
-pip download $(grep ^ansible ./requirements.txt) --no-cache-dir --no-deps -d /tmp/pip 
-mkdir /tmp/ansible
-tar -C /tmp/ansible -xf /tmp/pip/ansible*
-mv /tmp/ansible/ansible* /ansible
-rm -rf /tmp/pip /tmp/ansible
-```
-
-4. Install requirements and test dependencies:
-
-```
-cd /root/ansible_collections/ansible/fmcansible
-export ANSIBLE_DIR=`pwd`/ansible
-pip install -r requirements.txt
-pip install -r $ANSIBLE_DIR/requirements.txt
-pip install -r test-requirements.txt
-
-# used when running sanity tests
-ansible-galaxy collection install community.general
-ansible-galaxy collection install community.network
-```
-
-5. Add Ansible modules to the Python path:
-
-```
-cd /fmc-ansible
-export ANSIBLE_DIR=`pwd`/ansible
-export PYTHONPATH=$PYTHONPATH:.:$ANSIBLE_DIR/lib:$ANSIBLE_DIR/test
-```
-
-6. Run unit tests:
-
-See Secion Above
-
-7. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
-
-8. Run an integration playbook.
 
 See section Above 
 
@@ -239,7 +185,7 @@ See section Above
 
 2. Run `ansible-playbook` with `-vvvv`
     ```
-    $ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_rule_with_applications.yml -vvvv
+    $ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/user.yml -vvvv
     ```
 
 3. The log file will contain additional information (REST, etc.)
