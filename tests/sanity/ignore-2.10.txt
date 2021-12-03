@@ -1,3 +1,11 @@
+plugins/modules/utils.py ansible-doc!skip
+plugins/modules/utils.py validate-modules!skip
+plugins/modules/utils.py import-2.6
+plugins/modules/utils.py import-2.7
+plugins/modules/utils.py import-3.5
+plugins/modules/utils.py import-3.6
+plugins/modules/utils.py import-3.7
+plugins/modules/utils.py import-3.8
 plugins/module_utils/device.py import-2.7
 plugins/modules/fmc_install.py import-2.7
 plugins/module_utils/common.py import-2.6

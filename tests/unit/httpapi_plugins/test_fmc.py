@@ -20,7 +20,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-import json, unittest
+import json
+import unittest
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
