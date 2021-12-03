@@ -1,11 +1,11 @@
 coverage==4.5.4
 mock
-pycodestyle
+#pycodestyle
 # pylint
 pytest
 # pytest-cov==2.10.1
-pytest-xdist
-pytest-mock
+# pytest-xdist
+# pytest-mock
 six
 units
 urllib3
