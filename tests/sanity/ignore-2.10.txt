@@ -7,7 +7,6 @@ plugins/modules/utils.py import-3.6
 plugins/modules/utils.py import-3.7
 plugins/modules/utils.py import-3.8
 plugins/modules/utils.py import-3.9
-plugins/modules/utils.py import-3.10
 plugins/module_utils/device.py import-2.7
 plugins/modules/fmc_install.py import-2.7
 plugins/module_utils/common.py import-2.6
