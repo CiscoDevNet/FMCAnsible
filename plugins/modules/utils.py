@@ -26,6 +26,8 @@ __metaclass__ = type
 import json
 import unittest
 from unittest import mock
+from unittest.mock import patch
+
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
