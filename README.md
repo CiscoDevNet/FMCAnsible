@@ -88,8 +88,8 @@ cat ansible.cfg
 Run the sample playbook.
 
 ```
-ansible-playbook playbooks/fmc_configuration/user.yml
-ansible-playbook playbooks/fmc_configuration/latest.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/user.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/latest.yml
 ```
 
 ## Tests
