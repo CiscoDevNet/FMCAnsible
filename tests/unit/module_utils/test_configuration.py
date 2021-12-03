@@ -23,8 +23,8 @@ import json
 import unittest
 
 import pytest
-from units.compat import mock
-from units.compat.mock import call, patch
+from unittest import mock
+from unittest.mock import call, patch
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import iterate_over_pageable_resource, BaseConfigurationResource, \
     OperationChecker, OperationNamePrefix, ParamName, QueryParams

@@ -7,7 +7,7 @@ import json
 import unittest
 
 import pytest
-from units.compat import mock
+from unittest import mock
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import FmcServerError, HTTPMethod, ResponseParams, FmcConfigurationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import DUPLICATE_NAME_ERROR_MESSAGE, UNPROCESSABLE_ENTITY_STATUS, \

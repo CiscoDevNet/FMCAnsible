@@ -299,6 +299,23 @@ class BaseConfigurationResource(object):
         )
         return (i for i in item_generator if match_filters(filters, i))
 
+    def _stringify_name_filter(self, filters):
+        build_version = self.get_build_version()
+        if build_version >= '6.4.0':
+            return "fts~%s" % (filters['name'])
+        return "name:%s" % (filters['name'])
+
+    def _fetch_system_info(self):
+        if not self._system_info:
+            params = {ParamName.PATH_PARAMS: PATH_PARAMS_FOR_DEFAULT_OBJ}
+            self._system_info = self.send_general_request('getSystemInformation', params)
+
+        return self._system_info
+
+    def get_build_version(self):
+        system_info = self._fetch_system_info()
+        return system_info['databaseInfo']['buildVersion']
+
     def add_object(self, operation_name, params):
         def is_duplicate_name_error(err):
             return err.code == UNPROCESSABLE_ENTITY_STATUS and DUPLICATE_NAME_ERROR_MESSAGE in str(err)
