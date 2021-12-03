@@ -115,7 +115,7 @@ def _get_objects(base_object, key_names):
     return dict((_key, base_object[_key]) for _key in key_names)
 
 
-class TestFmcSwaggerParser(unittest.TestCase):
+# class TestFmcSwaggerParser(unittest.TestCase):
 
     # def test_simple_object(self):
     #     self._data = copy.deepcopy(base)
