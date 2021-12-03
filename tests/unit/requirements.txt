@@ -9,7 +9,7 @@ pytest-mock
 six
 units
 urllib3
-voluptuous
+# voluptuous
 yamllint
 enum34
 ordereddict
