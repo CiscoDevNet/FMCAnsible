@@ -2,9 +2,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import json
+import unittest
+from unittest import mock
 
-from ansible_collections.cisco.fmcansible.tests.unit.compat import unittest
-from ansible_collections.cisco.fmcansible.tests.unit.compat.mock import patch
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes
 
