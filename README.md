@@ -50,7 +50,7 @@ pip install -r requirements.txt
 2. Install the ansible collection
 
 ```
-ansible-galaxy collection install git+https://github.com/meignw2021/FMCAnsible.git#/cisco/
+ansible-galaxy collection install git+https://github.com/meignw2021/FMCAnsible.git,fmc-7
 
 Starting collection install process
 Installing 'cisco.fmcansible:3.3.3' to '/root/.ansible/collections/ansible_collections/cisco/fmcansible'
@@ -88,8 +88,8 @@ cat ansible.cfg
 Run the sample playbook.
 
 ```
-ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/latest.yml
-ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/user.yml
+ansible-playbook playbooks/fmc_configuration/user.yml
+ansible-playbook playbooks/fmc_configuration/latest.yml
 ```
 
 ## Tests
@@ -153,7 +153,7 @@ Integration tests are written in a form of playbooks. Thus, integration tests ar
 
     docker run -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
     -v $(pwd)/ansible.cfg:/root/ansible_collections/cisco/fmcansible/ansible.cfg \
-    fmc-ansible:integration /root/ansible_collections/cisco/fmc/samples/fmc_configuration/user.yml
+    fmc-ansible:integration /root/ansible_collections/cisco/fmcansible/samples/fmc_configuration/user.yml
 
     ```
 
