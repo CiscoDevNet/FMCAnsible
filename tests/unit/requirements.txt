@@ -2,7 +2,6 @@ mock
 pytest
 six
 units
-unittest
 urllib3
 #yamllint
 #enum34
