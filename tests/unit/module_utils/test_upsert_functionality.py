@@ -10,7 +10,7 @@ import pytest
 
 try:
     from unittest import mock
-except:
+except ImportError:
     # support for python 2.7
     import mock
 

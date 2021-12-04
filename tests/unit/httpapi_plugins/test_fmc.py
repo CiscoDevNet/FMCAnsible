@@ -27,10 +27,12 @@ from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
 from ansible.module_utils.six import BytesIO, PY3, StringIO
 from ansible.module_utils.six.moves.urllib.error import HTTPError
+
 try:
     from unittest import mock
     from unittest.mock import patch, mock_open
-except:
+except ImportError:
+    # support for python 2.7
     import mock
     from mock import patch, mock_open
     

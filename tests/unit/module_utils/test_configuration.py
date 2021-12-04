@@ -23,13 +23,11 @@ import json
 import unittest
 
 import pytest
-from unittest import mock
-from unittest.mock import call, patch
 
 try:
     from unittest import mock
     from unittest.mock import patch, mock_open
-except:
+except ImportError:
     # support for python 2.7
     import mock
     from mock import patch, mock_open
