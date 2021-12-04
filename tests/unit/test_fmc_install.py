@@ -6,7 +6,7 @@ import pytest
 from ansible.module_utils import basic
 from unittest.mock import PropertyMock
 
-from ansible_collections.cisco.fmcansible.plugins.modules.utils import set_module_args, exit_json, fail_json, AnsibleFailJson, AnsibleExitJson
+from ansible_collections.cisco.fmcansible.tests.unit.module_utils.utils import set_module_args, exit_json, fail_json, AnsibleFailJson, AnsibleExitJson
 
 from ansible_collections.cisco.fmcansible.plugins.modules import fmc_install
 from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcModel
