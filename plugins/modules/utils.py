@@ -29,7 +29,7 @@ import unittest
 try:
     from unittest import mock
     from unittest.mock import patch, mock_open
-except:
+except ImportError:
     # support for python 2.7
     import mock
     from mock import patch

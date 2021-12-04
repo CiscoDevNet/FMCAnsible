@@ -26,11 +26,11 @@ import pytest
 
 try:
     from unittest import mock
-    from unittest.mock import patch, mock_open
+    from unittest.mock import call, patch
 except ImportError:
     # support for python 2.7
     import mock
-    from mock import patch, mock_open
+    from mock import call, patch
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import iterate_over_pageable_resource, BaseConfigurationResource, \
     OperationChecker, OperationNamePrefix, ParamName, QueryParams

@@ -35,7 +35,6 @@ except ImportError:
     # support for python 2.7
     import mock
     from mock import patch, mock_open
-    
 
 from ansible_collections.cisco.fmcansible.plugins.httpapi.fmc import HttpApi, BASE_HEADERS, TOKEN_PATH_TEMPLATE, DEFAULT_API_VERSIONS
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
