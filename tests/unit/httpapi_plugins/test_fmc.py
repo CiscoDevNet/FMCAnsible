@@ -27,8 +27,13 @@ from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
 from ansible.module_utils.six import BytesIO, PY3, StringIO
 from ansible.module_utils.six.moves.urllib.error import HTTPError
-from unittest import mock
-from unittest.mock import patch, mock_open
+try:
+    from unittest import mock
+    from unittest.mock import patch, mock_open
+except:
+    import mock
+    from mock import patch, mock_open
+    
 
 from ansible_collections.cisco.fmcansible.plugins.httpapi.fmc import HttpApi, BASE_HEADERS, TOKEN_PATH_TEMPLATE, DEFAULT_API_VERSIONS
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams

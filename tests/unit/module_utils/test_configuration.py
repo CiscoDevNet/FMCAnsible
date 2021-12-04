@@ -26,6 +26,14 @@ import pytest
 from unittest import mock
 from unittest.mock import call, patch
 
+try:
+    from unittest import mock
+    from unittest.mock import patch, mock_open
+except:
+    # support for python 2.7
+    import mock
+    from mock import patch, mock_open
+
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import iterate_over_pageable_resource, BaseConfigurationResource, \
     OperationChecker, OperationNamePrefix, ParamName, QueryParams
 

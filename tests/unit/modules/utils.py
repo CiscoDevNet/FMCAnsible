@@ -3,8 +3,14 @@ __metaclass__ = type
 
 import json
 import unittest
-from unittest import mock
-from unittest.mock import patch
+
+try:
+    from unittest import mock
+    from unittest.mock import patch
+except:
+    # support for python 2.7
+    import mock
+    from mock import patch
 
 from ansible.module_utils import basic
 from ansible.module_utils._text import to_bytes

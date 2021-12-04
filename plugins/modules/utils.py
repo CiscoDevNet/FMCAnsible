@@ -25,8 +25,14 @@ __metaclass__ = type
 
 import json
 import unittest
-from unittest import mock
-from unittest.mock import patch
+
+try:
+    from unittest import mock
+    from unittest.mock import patch, mock_open
+except:
+    # support for python 2.7
+    import mock
+    from mock import patch
 
 
 from ansible.module_utils import basic
