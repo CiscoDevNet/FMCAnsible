@@ -58,7 +58,8 @@ PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
 
 
 class OperationNamePrefix:
-    ADD = 'add'
+    ADD = 'add',
+    CREATE = 'create',
     EDIT = 'edit'
     GET = 'get'
     DELETE = 'delete'
@@ -101,7 +102,9 @@ class OperationChecker(object):
         :rtype: bool
         """
         # Some endpoints have non-CRUD operations, so checking operation name is required in addition to the HTTP method
-        return operation_name.startswith(OperationNamePrefix.ADD) and is_post_request(operation_spec)
+        # Some op name use "add" others use "create" so support both
+        return (operation_name.startswith(OperationNamePrefix.ADD) or operation_name.startswith(OperationNamePrefix.CREATE)) \
+            and is_post_request(operation_spec)
 
     @classmethod
     def is_edit_operation(cls, operation_name, operation_spec):
