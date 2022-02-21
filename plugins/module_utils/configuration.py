@@ -58,8 +58,8 @@ PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
 
 
 class OperationNamePrefix:
-    ADD = 'add',
-    CREATE = 'create',
+    ADD = 'add'
+    CREATE = 'create'
     EDIT = 'edit'
     GET = 'get'
     DELETE = 'delete'
