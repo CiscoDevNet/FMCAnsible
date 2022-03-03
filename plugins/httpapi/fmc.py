@@ -220,7 +220,7 @@ class HttpApi(HttpApiBase):
         self._send_auth_request(url, json.dumps(auth_payload), method=HTTPMethod.POST, headers=BASE_HEADERS)
         self.refresh_token = None
         self.access_token = None
-    
+
     def _require_login(self):
         return self.access_token is None
 
@@ -350,7 +350,8 @@ class HttpApi(HttpApiBase):
         """
         Converts the JSON or JSON-RPC response to string.
         """
-        if response_data is None: return ''
+        if response_data is None:
+            return ''
         if hasattr(response_data, 'getvalue'):
             return to_text(response_data.getvalue())
         else:

@@ -45,10 +45,8 @@ class InternalHttpClient(object):
         """
         Sends a request to the endpoint and returns the response body.
         """
-        print(f'send({url_path}, {data}, {method}, {headers})')
         response = self._send_request(url_path, data, method, headers)
         response_body = self._parse_response_body(response)
-        print('response_body', response_body)
         self._handle_error(response_body)
         # return the tuple just like connection.send
         return response, response_body
@@ -61,17 +59,17 @@ class InternalHttpClient(object):
         encoded_creds = base64.b64encode(creds.encode())
         encoded_creds_str = encoded_creds.decode("utf-8")
         headers = {
-          'Content-Type': 'application/json',
-          'Authorization': 'Basic ' + encoded_creds_str
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + encoded_creds_str
         }
         res = self._send_request(self._login_url_path, None, "POST", headers)
         access_token = res.getheader("X-auth-access-token")
         refresh_token = res.getheader("X-auth-refresh-token")
         return {
-          'access_token': access_token,
-          'refresh_token': refresh_token
+            'access_token': access_token,
+            'refresh_token': refresh_token
         }
-        
+
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
         Sends a request to the endpoint and returns the raw http client response object.
@@ -104,6 +102,7 @@ class InternalHttpClient(object):
             msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
             # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
             raise Exception(f'FMC Error: {msg}')
+
 
 def iter_messages(messages):
     """
