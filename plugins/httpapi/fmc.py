@@ -105,14 +105,10 @@ class HttpApi(HttpApiBase):
         self._api_spec = None
         self._api_validator = None
         self._ignore_http_errors = False
-        #use_ansible_client = False #self.get_option('use_ansible_client') or True
-        #if not use_ansible_client:
-            # self._http_client = InternalHttpClient('self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
-        self._http_client = InternalHttpClient('104.198.5.232', TOKEN_PATH_TEMPLATE)
+        # create separate client to manage requests
+        self._http_client = InternalHttpClient(self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
 
     def login(self, username, password):
-        with open('/tmp/log.txt', 'a') as f:
-            f.write(f"\n login enter]")
         def request_token_payload(username, password):
             return {
                 'grant_type': 'password',
@@ -135,8 +131,6 @@ class HttpApi(HttpApiBase):
 
         response = self._lookup_login_url(payload)
 
-        with open('/tmp/log.txt', 'a') as f:
-            f.write(f"\n login before try.")
         # try:
         #     self.refresh_token = response['refresh_token']
         #     self.access_token = response['access_token']
@@ -145,12 +139,9 @@ class HttpApi(HttpApiBase):
         #     raise ConnectionError(
         #         'Server returned response without token info during connection authentication: %s' % response)
 
-        try:            
+        try:
             self.refresh_token = response['X-auth-refresh-token']
             self.access_token = response['X-auth-access-token']
-
-            with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n login self.access_token: {self.access_token}")
             self.global_domain = response['global']
             self.domains = response['DOMAINS']
             print('don_domains')
@@ -167,9 +158,6 @@ class HttpApi(HttpApiBase):
             print('don_domains1')
             BASE_HEADERS['X-auth-access-token'] = self.access_token
             print(BASE_HEADERS)
-
-            with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n login set up BASE_HEADERS['X-auth-access-token']: {self.access_token}")
         except KeyError:
             raise ConnectionError(
                 'Server returned response without token info during connection authentication: %s' % response)
@@ -182,16 +170,11 @@ class HttpApi(HttpApiBase):
         :return: token generation response
         """
         preconfigured_token_path = self._get_api_token_path()
-        with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n preconfigured_token_path: {preconfigured_token_path}")
-
         if preconfigured_token_path:
             token_paths = [preconfigured_token_path]
         else:
             token_paths = self._get_known_token_paths()
 
-        with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n token_paths: {token_paths}")
         for url in token_paths:
             try:
                 response = self._send_login_request(payload, url)
@@ -240,14 +223,12 @@ class HttpApi(HttpApiBase):
     
     def _require_login(self):
         return self.access_token is None
-    
+
     def _send_auth_request(self, path, data, **kwargs):
         error_msg_prefix = 'Server returned an error during authentication request'
         return self._send_service_request(path, error_msg_prefix, data=data, **kwargs)
 
     def _send_service_request(self, path, error_msg_prefix, data=None, **kwargs):
-        with open('/tmp/log.txt', 'a') as f:
-            f.write(f"\n _send_service_request self.access_token: {self.access_token}")
         try:
             self._ignore_http_errors = True
             return self._send(path, data, **kwargs)
@@ -269,12 +250,6 @@ class HttpApi(HttpApiBase):
         url = construct_url_path(url_path, path_params, query_params)
         data = json.dumps(body_params) if body_params else None
 
-        with open('/tmp/log.txt', 'a') as f:
-            f.write(f"\n send_request url: {url}")
-            f.write(f"\n send_request data: {data}")
-            f.write(f"\n send_request BASE_HEADERS: {BASE_HEADERS}")
-            f.write(f"\n send_request self.access_token: {self.access_token}")
-
         try:
             self._display(http_method, 'url', url)
             if data:
@@ -282,24 +257,12 @@ class HttpApi(HttpApiBase):
 
             # log in again if access_token not set
             if self._require_login():
-                # Peter: log remote_user and password
-                with open('/tmp/log.txt', 'a') as f:
-                    f.write(f"\n self.connection.get_option('remote_user'): {self.connection.get_option('remote_user')}")
-                    f.write(f"\n self.connection.get_option('password'): {self.connection.get_option('password')}")
-
-                self._login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
-                with open('/tmp/log.txt', 'a') as f:
-                    f.write(f"\n self.access_token: {self.access_token}")
+                self.login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
 
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
-            with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n send_request got response: ")
-                f.write(f"\n send_request got response_data: ")
             value = self._get_response_value(response_data)
             self._display(http_method, 'response', value)
-            # with open('/tmp/log.txt', 'a') as f:
-            #     f.write(f"\n value substr: {value.substr(0,30)}")
 
             return {
                 ResponseParams.SUCCESS: True,
@@ -359,30 +322,14 @@ class HttpApi(HttpApiBase):
         return {
             ResponseParams.SUCCESS: False,
             ResponseParams.STATUS_CODE: error_code,
-            ResponseParams.RESPONSE: { 'error': error_msg }
+            ResponseParams.RESPONSE: error_msg
         }
 
     def _send(self, url, data, **kwargs):
-        with open('/tmp/log.txt', 'a') as f:
-            f.write(f"\n _send url: {url}")
-            f.write(f"\n _send data: {data}")
-
         if self._http_client:
             return self._http_client.send(url, data, **kwargs)
         else:
             return self.connection.send(url, data, **kwargs)
-    
-    def _login(self, username, password):
-        if self._http_client:
-            login_obj = self._http_client.send_login(username, password)
-            with open('/tmp/log.txt', 'a') as f:
-                f.write(f"\n login_obj: {login_obj}")
-            self.access_token = login_obj['access_token']
-            self.refresh_token = login_obj['refresh_token']
-            BASE_HEADERS['X-auth-access-token'] = self.access_token
-
-        else:
-            return self.login(username, password)
 
     def _login(self, username, password):
         if self._http_client:
