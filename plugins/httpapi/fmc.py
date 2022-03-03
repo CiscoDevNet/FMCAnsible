@@ -110,6 +110,8 @@ class HttpApi(HttpApiBase):
         # use separate internal client to manage requests (if available)
         if InternalHttpClient and use_internal_client:
             self._http_client = InternalHttpClient(self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
+        else:
+            self._http_client = None
 
     def login(self, username, password):
         def request_token_payload(username, password):
@@ -270,7 +272,7 @@ class HttpApi(HttpApiBase):
             return {
                 ResponseParams.SUCCESS: True,
                 ResponseParams.STATUS_CODE: response.getcode(),
-                ResponseParams.RESPONSE: response_data
+                ResponseParams.RESPONSE: self._response_to_json(response_data)
             }
 
         # Being invoked via JSON-RPC, this method does not serialize and pass HTTPError correctly to the method caller.
@@ -325,7 +327,7 @@ class HttpApi(HttpApiBase):
         return {
             ResponseParams.SUCCESS: False,
             ResponseParams.STATUS_CODE: error_code,
-            ResponseParams.RESPONSE: error_msg
+            ResponseParams.RESPONSE: self._response_to_json(error_msg)
         }
 
     def _send(self, url, data, **kwargs):
