@@ -101,7 +101,7 @@ class InternalHttpClient(object):
             err = response.get('error')
             msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
             # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
-            raise Exception(f'FMC Error: {msg}')
+            raise Exception(f'FMC Error: {0}'.format(msg))
 
 
 def iter_messages(messages):
