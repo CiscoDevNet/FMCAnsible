@@ -64,8 +64,7 @@ from ansible.module_utils.connection import ConnectionError
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
-
-from plugins.httpapi.client import InternalHttpClient
+from ansible_collections.cisco.fmcansible.plugins.httpapi.client import InternalHttpClient
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
