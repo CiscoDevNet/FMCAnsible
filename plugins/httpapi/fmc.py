@@ -64,7 +64,10 @@ from ansible.module_utils.connection import ConnectionError
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
-from ansible_collections.cisco.fmcansible.plugins.httpapi.client import InternalHttpClient
+try:
+    from ansible_collections.cisco.fmcansible.plugins.httpapi.client import InternalHttpClient
+except ImportError:
+    InternalHttpClient = None
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
@@ -95,7 +98,7 @@ except ImportError:
 
 
 class HttpApi(HttpApiBase):
-    def __init__(self, connection):
+    def __init__(self, connection, use_internal_client=True):
         super(HttpApi, self).__init__(connection)
         self.connection = connection
 
@@ -104,8 +107,9 @@ class HttpApi(HttpApiBase):
         self._api_spec = None
         self._api_validator = None
         self._ignore_http_errors = False
-        # create separate client to manage requests
-        self._http_client = InternalHttpClient(self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
+        # use separate internal client to manage requests (if available)
+        if InternalHttpClient and use_internal_client:
+            self._http_client = InternalHttpClient(self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
 
     def login(self, username, password):
         def request_token_payload(username, password):

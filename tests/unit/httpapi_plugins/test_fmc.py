@@ -48,7 +48,7 @@ else:
 
 class FakeFmcHttpApiPlugin(HttpApi):
     def __init__(self, conn):
-        super(FakeFmcHttpApiPlugin, self).__init__(conn)
+        super(FakeFmcHttpApiPlugin, self).__init__(conn, False)
         self.hostvars = {
             'token_path': '/testLoginUrl',
             'spec_path': '/testSpecUrl'
