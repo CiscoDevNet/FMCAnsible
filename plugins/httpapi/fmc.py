@@ -399,7 +399,7 @@ class HttpApi(HttpApiBase):
     @staticmethod
     def _response_to_json(response_text):
         try:
-            return json.loads(response_text) if response_text else {}
+            return json.loads(str(response_text)) if response_text else {}
         # JSONDecodeError only available on Python 3.5+
         except getattr(json.decoder, 'JSONDecodeError', ValueError):
             raise ConnectionError('Invalid JSON response: %s' % response_text)
