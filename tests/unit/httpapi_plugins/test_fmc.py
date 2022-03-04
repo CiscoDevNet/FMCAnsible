@@ -245,7 +245,7 @@ class TestFmcHttpApi(unittest.TestCase):
         exp_headers = dict(BASE_HEADERS)
         exp_headers['Content-Length'] = len('--Encoded data--')
         exp_headers['Content-Type'] = 'multipart/form-data'
-        self.connection_mock.send.assert_called_once_with('/files', data='--Encoded data--',
+        self.connection_mock.send.assert_called_once_with('/files', '--Encoded data--',
                                                           headers=exp_headers, method=HTTPMethod.POST)
         open_mock.assert_called_once_with('/tmp/test.txt', 'rb')
 

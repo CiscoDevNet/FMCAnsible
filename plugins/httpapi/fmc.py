@@ -266,13 +266,14 @@ class HttpApi(HttpApiBase):
 
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
+            # response_data is bytearray, so convert to string
             value = self._get_response_value(response_data)
             self._display(http_method, 'response', value)
 
             return {
                 ResponseParams.SUCCESS: True,
                 ResponseParams.STATUS_CODE: response.getcode(),
-                ResponseParams.RESPONSE: self._response_to_json(response_data)
+                ResponseParams.RESPONSE: self._response_to_json(value)
             }
 
         # Being invoked via JSON-RPC, this method does not serialize and pass HTTPError correctly to the method caller.
