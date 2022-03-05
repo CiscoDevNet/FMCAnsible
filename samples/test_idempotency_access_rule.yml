@@ -1,0 +1,163 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: cra1
+
+    - name: create auxilary network object
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        data:
+          name: "ansible-test-network-mar3-pb2"
+          value: "192.22.22.0/24"
+          type: "networkobject"
+        register_as: "testNetworkObj"
+
+    - name: Find an intrusion policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllIntrusionPolicy
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        register_as: policies
+
+    - name: Allow traffic by default
+      cisco.fmcansible.fmc_configuration:
+        operation: createAccessPolicy
+        data:
+          name: NGFW-Access-Policy1
+          defaultAction:
+            action: PERMIT
+            intrusionPolicy:
+              id: "{{ policies[0].id }}"
+              type: "{{ policies[0].type }}"
+            type: defaultAction
+          type: AccessPolicy
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+
+    - name: get Access Policy to be updated
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicy
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        register_as: acp
+
+    - name: addAccessRule should create a new access rule
+      cisco.fmcansible.fmc_configuration:
+        operation: 'createMultipleAccessRule'
+        data:
+          name: "ansible-test-accessrule"
+          type: "AccessRule"
+          action: "ALLOW"
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+        register_as: "testRuleObj"
+      register: result
+    - assert:
+        that:
+          - result.changed == true
+          - testRuleObj['name'] == "ansible-test-accessrule"
+
+    - name: addAccessRule should raise an error when the rule with the same name exists
+      cisco.fmcansible.fmc_configuration:
+        operation: 'createMultipleAccessRule'
+        data:
+          name: "ansible-test-accessrule"
+          type: "accessrule"
+          action: "BLOCK"
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+      register: result
+      ignore_errors: yes
+    - assert:
+        that:
+          - result.changed == false
+          - result.failed == true
+          - "'already exists. Please enter with another name' in result.msg"
+
+    - name: updateAccessRule should update the existing rule
+      cisco.fmcansible.fmc_configuration:
+        operation: 'updateMultipleAccessRule'
+        data:
+          name: "ansible-test-accessrule21"
+          type: "AccessRule"
+          action: "BLOCK"
+        path_params:
+          objectId: "{{ testRuleObj.id }}"
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+        query_params:
+          bulk: False
+        register_as: "updatedRuleObj"
+      register: result
+    - assert:
+        that:
+          - result.changed == true
+          - updatedRuleObj['id'] == testRuleObj['id']
+
+
+    - name: editAccessRule should NOT update the rule if there are no changes
+      cisco.fmcansible.fmc_configuration:
+        operation: 'updateMultipleAccessRule'
+        data:
+          name: "ansible-test-accessrule14"
+          type: "accessrule"
+          action: "BLOCK"
+        path_params:
+          objectId: "{{ testRuleObj['id'] }}"
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+        register_as: "updatedRuleObj"
+      register: result
+    - assert:
+        that:
+          - result.changed == false
+          - updatedRuleObj['id'] == testRuleObj['id']
+
+    - name: upsertAccessRule should update the existing rule when it exists
+      cisco.fmcansible.fmc_configuration:
+        operation: 'upsertAccessRule'
+        data:
+          name: "ansible-test-accessrule5"
+          type: "accessrule"
+          destinationNetworks:
+            objects:
+              - name: "{{ testNetworkObj.name }}"
+                type: "network"
+                id:   "{{ testNetworkObj.id }}"
+          action: "ALLOW"
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+        register_as: "upsertedRuleObj"
+      register: result
+    - assert:
+        that:
+          - result.changed == true
+          - upsertedRuleObj['id'] == testRuleObj['id']
+          - upsertedRuleObj['ruleAction'] == "ALLOW"
+
+
+    - name: deleteAccessRule should delete the rule
+      cisco.fmcansible.fmc_configuration:
+        operation: 'deleteAccessRule'
+        path_params:
+          objectId: "{{ testRuleObj['id'] }}"
+          domainUUID: '{{ cra1[0].uuid }}'
+          containerUUID: '{{ acp[0].id }}'
+      register: result
+    - assert:
+        that:
+          - result.changed == true
+
+    - name: delete auxiliary network object
+      cisco.fmcansible.fmc_configuration:
+        operation: 'deleteNetworkObject'
+        path_params:
+          objId: "{{ testNetworkObj['id'] }}"
