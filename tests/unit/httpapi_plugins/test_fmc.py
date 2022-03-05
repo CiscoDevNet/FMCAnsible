@@ -175,10 +175,8 @@ class TestFmcHttpApi(unittest.TestCase):
 
         resp = self.fmc_plugin.send_request('/test', HTTPMethod.GET)
 
-        assert not ResponseParams.SUCCESS
-        assert ResponseParams.STATUS_CODE == 500
-        #assert {ResponseParams.SUCCESS: False, ResponseParams.STATUS_CODE: 500,
-        #        ResponseParams.RESPONSE: {'errorMessage': 'ERROR'}} == resp
+        assert {ResponseParams.SUCCESS: False, ResponseParams.STATUS_CODE: 500,
+                ResponseParams.RESPONSE: {'errorMessage': 'ERROR'}} == resp
 
     def test_send_request_raises_exception_when_invalid_response(self):
         self.connection_mock.send.return_value = self._connection_response('nonValidJson')
@@ -186,10 +184,10 @@ class TestFmcHttpApi(unittest.TestCase):
         assert not ResponseParams.SUCCESS
         assert ResponseParams.STATUS_CODE == 500
 
-        #with self.assertRaises(ConnectionError) as res:
+        # with self.assertRaises(ConnectionError) as res:
         #    self.fmc_plugin.send_request('/test', HTTPMethod.GET)
 
-        #assert 'Invalid JSON response' in str(res.exception)
+        # assert 'Invalid JSON response' in str(res.exception)
 
     # def test_handle_httperror_should_update_tokens_and_retry_on_auth_errors(self):
     #     self.fmc_plugin.refresh_token = 'REFRESH_TOKEN'

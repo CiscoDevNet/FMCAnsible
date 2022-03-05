@@ -293,7 +293,7 @@ class HttpApi(HttpApiBase):
         # Thus, in order to handle non-200 responses, we need to wrap them into a simple structure and pass explicitly.
         except HTTPError as e:
             error_msg = to_text(e.read())
-            return self._handle_send_error(http_method, error_msg, e.code)
+            return self._handle_send_error(http_method, self._response_to_json(error_msg), e.code)
         except Exception as e:
             return self._handle_send_error(http_method, e, 500)
 
@@ -341,7 +341,7 @@ class HttpApi(HttpApiBase):
         return {
             ResponseParams.SUCCESS: False,
             ResponseParams.STATUS_CODE: error_code,
-            ResponseParams.RESPONSE: str(error_msg)
+            ResponseParams.RESPONSE: error_msg if error_msg is dict else str(error_msg)
         }
 
     def _send(self, url, data, **kwargs):
