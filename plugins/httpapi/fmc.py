@@ -108,6 +108,7 @@ class HttpApi(HttpApiBase):
         self._api_validator = None
         self._ignore_http_errors = False
         self._use_internal_client = use_internal_client
+        self._http_client = None
 
     @property
     def http_client(self):
@@ -122,6 +123,7 @@ class HttpApi(HttpApiBase):
                 self._use_internal_client = False
                 self._http_client = None
         else:
+            self._use_internal_client = False
             self._http_client = None
 
     def login(self, username, password):
