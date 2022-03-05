@@ -429,9 +429,9 @@ class BaseConfigurationResource(object):
         def raise_for_failure(resp):
             if not resp[ResponseParams.SUCCESS]:
                 raise FmcServerError(resp[ResponseParams.RESPONSE], resp[ResponseParams.STATUS_CODE])
-              
+
         response = self._conn.send_request(url_path=url_path, http_method=http_method, body_params=body_params,
-                                        path_params=path_params, query_params=query_params)
+                                           path_params=path_params, query_params=query_params)
         raise_for_failure(response)
         if http_method != HTTPMethod.GET:
             self.config_changed = True
