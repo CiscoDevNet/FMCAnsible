@@ -107,9 +107,20 @@ class HttpApi(HttpApiBase):
         self._api_spec = None
         self._api_validator = None
         self._ignore_http_errors = False
+        self._use_internal_client = use_internal_client
+
+    @property
+    def http_client(self):
         # use separate internal client to manage requests (if available)
-        if InternalHttpClient and use_internal_client:
-            self._http_client = InternalHttpClient(self.get_option('network_value'), TOKEN_PATH_TEMPLATE)
+        if self._http_client is not None:
+            return self._http_client
+        if InternalHttpClient and self._use_internal_client:
+            try:
+                host = self.connection.get_option('remote_addr')
+                self._http_client = InternalHttpClient(host, TOKEN_PATH_TEMPLATE)
+            except Exception:
+                self._use_internal_client = False
+                self._http_client = None
         else:
             self._http_client = None
 
@@ -328,19 +339,19 @@ class HttpApi(HttpApiBase):
         return {
             ResponseParams.SUCCESS: False,
             ResponseParams.STATUS_CODE: error_code,
-            ResponseParams.RESPONSE: self._response_to_json(error_msg)
+            ResponseParams.RESPONSE: str(error_msg)
         }
 
     def _send(self, url, data, **kwargs):
-        if self._http_client:
-            return self._http_client.send(url, data, **kwargs)
+        if self.http_client:
+            return self.http_client.send(url, data, **kwargs)
         else:
             return self.connection.send(url, data, **kwargs)
 
     def _login(self, username, password):
-        if self._http_client:
+        if self.http_client:
             # login via http client
-            login_obj = self._http_client.send_login(username, password)
+            login_obj = self.http_client.send_login(username, password)
             self.access_token = login_obj['access_token']
             self.refresh_token = login_obj['refresh_token']
             BASE_HEADERS['X-auth-access-token'] = self.access_token
@@ -358,10 +369,11 @@ class HttpApi(HttpApiBase):
         """
         if response_data is None:
             return ''
-        if hasattr(response_data, 'getvalue'):
+        try:
             return to_text(response_data.getvalue())
-        else:
-            return json.dumps(response_data)
+        except AttributeError:
+            pass
+        return json.dumps(response_data)
 
     def _get_api_spec_path(self):
         return self.get_option('spec_path')
@@ -400,7 +412,7 @@ class HttpApi(HttpApiBase):
     @staticmethod
     def _response_to_json(response_text):
         try:
-            return json.loads(str(response_text)) if response_text else {}
+            return json.loads(response_text) if response_text else {}
         # JSONDecodeError only available on Python 3.5+
         except getattr(json.decoder, 'JSONDecodeError', ValueError):
             raise ConnectionError('Invalid JSON response: %s' % response_text)
