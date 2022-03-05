@@ -31,4 +31,3 @@
           objectId: '{{ device_group_1.id }}'
         data:
           id: '{{ device_group_1.id }}'
-
