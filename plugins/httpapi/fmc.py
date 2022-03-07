@@ -275,7 +275,7 @@ class HttpApi(HttpApiBase):
 
             # log in again if access_token not set
             if self._require_login():
-                self.login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
+                self._login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
 
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
