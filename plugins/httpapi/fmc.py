@@ -85,15 +85,14 @@ GET_API_VERSIONS_PATH = '/info/versions'
 DEFAULT_API_VERSIONS = ['v1']
 
 INVALID_API_TOKEN_PATH_MSG = ('The API token path is incorrect. Please, check correctness of '
-                              'the `ansible_httpapi_ftd_token_path` variable in the inventory file.')
+                              'the `ansible_httpapi_fmc_token_path` variable in the inventory file.')
 MISSING_API_TOKEN_PATH_MSG = ('Ansible could not determine the API token path automatically. Please, '
-                              'specify the `ansible_httpapi_ftd_token_path` variable in the inventory file.')
+                              'specify the `ansible_httpapi_fmc_token_path` variable in the inventory file.')
 
 try:
     import display
 except ImportError:
     from ansible.utils.display import Display
-
     display = Display()
 
 
@@ -117,7 +116,7 @@ class HttpApi(HttpApiBase):
             return self._http_client
         if InternalHttpClient and self._use_internal_client:
             try:
-                host = self.connection.get_option('remote_addr')
+                host = self.connection.get_option('host')
                 self._http_client = InternalHttpClient(host, TOKEN_PATH_TEMPLATE)
             except Exception:
                 self._use_internal_client = False
@@ -125,6 +124,7 @@ class HttpApi(HttpApiBase):
         else:
             self._use_internal_client = False
             self._http_client = None
+        return self._http_client
 
     def login(self, username, password):
         def request_token_payload(username, password):
