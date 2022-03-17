@@ -182,13 +182,13 @@ class TestUpsertOperationUnitTests(unittest.TestCase):
 
         result = self._resource.upsert_object('upsertFoo', params)
 
-        #assert result == existing_obj
+        # assert result == existing_obj
         self._conn.get_model_spec.assert_called_once_with('Foo')
         get_operation_mock.assert_called_once_with('Foo')
         is_upsert_supported_mock.assert_called_once_with(get_operation_mock.return_value)
         add_mock.assert_not_called()
-        #equal_objects_mock.assert_called_once_with(existing_obj, params[ParamName.DATA])
-        #edit_mock.assert_not_called()
+        # equal_objects_mock.assert_called_once_with(existing_obj, params[ParamName.DATA])
+        # edit_mock.assert_not_called()
 
     @mock.patch("ansible_collections.cisco.fmcansible.plugins.module_utils.configuration.OperationChecker.is_upsert_operation_supported")
     @mock.patch.object(BaseConfigurationResource, "get_operation_specs_by_model_name")
@@ -531,6 +531,11 @@ class TestUpsertOperationFunctionalTests(object):
                     ResponseParams.RESPONSE: DUPLICATE_NAME_ERROR_MESSAGE,
                     ResponseParams.STATUS_CODE: UNPROCESSABLE_ENTITY_STATUS
                 }
+            elif http_method == HTTPMethod.GET and url_path == url_with_id_templ:
+                assert url_path == url_with_id_templ
+                assert body_params == {}
+                assert query_params == {}
+                assert path_params == {}
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
@@ -554,8 +559,9 @@ class TestUpsertOperationFunctionalTests(object):
             'otherObjectOperation': {
                 'method': HTTPMethod.GET,
                 'modelName': 'Object',
-                'url': url,
-                'returnMultipleItems': False}
+                'url': url_with_id_templ,
+                'returnMultipleItems': False
+            }
         }
 
         def get_operation_spec(name):
