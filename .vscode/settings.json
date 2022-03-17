@@ -3,6 +3,7 @@
     "fmcansible",
     "httpapi",
     "rtype",
+    "templ",
     "vfmc"
   ]
 }

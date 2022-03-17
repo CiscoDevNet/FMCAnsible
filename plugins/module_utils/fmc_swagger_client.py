@@ -388,7 +388,7 @@ class FmcSwaggerParser:
         return model or schema
 
     def _resolve_model_name(self, model_name):
-        if model_name is None: 
+        if model_name is None:
             return None
         return model_name.replace(MODEL_LIST_SUFFIX, '') if model_name.endswith(MODEL_LIST_SUFFIX) else model_name
 
@@ -638,7 +638,7 @@ class FmcSwaggerValidator:
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
-            # intelligently resolve model if is has $ref 
+            # intelligently resolve model if is has $ref
             ref_model = self._get_model(model)
             #ref_model = self._get_model_by_ref(model)
 

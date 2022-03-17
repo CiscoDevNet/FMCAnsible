@@ -46,7 +46,7 @@ class InternalHttpClient(object):
         self._login_url_path = login_url_path or LOGIN_PATH
 
     def send(self, url_path, data=None, method="GET", headers=None):
-        """ 
+        """
         Sends a request to the endpoint and returns the response body.
         """
         response = self._send_request(url_path, data, method, headers)
