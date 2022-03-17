@@ -2,7 +2,7 @@
   connection: httpapi
 
   tasks:
-    - name: Create an network object for Cisco FMC
+    - name: Get all domain for Cisco FMC
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
         register_as: cra1

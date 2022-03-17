@@ -2,14 +2,14 @@
   connection: httpapi
 
   tasks:
-    - name: Create an network object for Cisco FMC
+    - name: Get all domain for Cisco FMC
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
         register_as: cra1
 
-    - name: 'query_params should contain valid data'
+    - name: getAllNetworkObject with invalid query_params should raise an error
       cisco.fmcansible.fmc_configuration:
-        operation: 'getAllNetworkObject'
+        operation: getAllNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         query_params:
@@ -29,9 +29,9 @@
           - '{"actually_value": 1.1, "expected_type": "string", "path": "filter"}
                               in result.msg["Invalid query_params provided"]["invalid_type"]'
 
-    - name: 'query_params should contain valid data'
+    - name: getAllNetworkObject with valid query_params should succeed
       cisco.fmcansible.fmc_configuration:
-        operation: 'getAllNetworkObject'
+        operation: getAllNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         query_params:
@@ -43,13 +43,13 @@
           - 'result.changed == false'
           - 'result.failed == false'
 
-    - name: 'add: path_params should contain all required params'
+    - name: createMultipleAccessRule with missing path_params should raise an error
       cisco.fmcansible.fmc_configuration:
-        operation: 'createMultipleAccessRule'
+        operation: createMultipleAccessRule
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: "ansible-test-accessrule"
+          name: "ansible-test-accessrule-val1"
           type: "accessrule"
           action: "PERMIT"
           eventLogAction: "LOG_BOTH"
@@ -62,11 +62,11 @@
           - 'result.failed == true'
           - 'result.msg == {"Invalid path_params provided": {"required": ["containerUUID"]}}'
 
-    - name: path_params should contain valid data
+    - name: createMultipleAccessRule with invalid path_params should raise an error
       cisco.fmcansible.fmc_configuration:
-        operation: 'createMultipleAccessRule'
+        operation: createMultipleAccessRule
         data:
-          name: "ansible-test-accessrule"
+          name: "ansible-test-accessrule-val2"
           type: "accessrule"
           action: "PERMIT"
           eventLogAction: "LOG_BOTH"
@@ -83,13 +83,13 @@
           - '1 == result.msg["Invalid path_params provided"] | length'
           - 'result.msg == {"Invalid path_params provided": {"required": ["containerUUID"]}}'
 
-    - name: 'edit: path_params should contain all required params'
+    - name: updateNetworkObject with missing path_params should raise an error
       cisco.fmcansible.fmc_configuration:
-        operation: 'updateNetworkObject'
+        operation: updateNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: "ansible-test-network"
+          name: "ansible-test-network-val1"
         register_as: "updatedTestObj"
       register: result
       ignore_errors: yes
@@ -99,9 +99,9 @@
           - 'result.failed == true'
           - 'result.msg == {"Invalid path_params provided": {"required": ["objectId"]}}'
 
-    - name: 'delete: path_params should contain all required params'
+    - name: deleteNetworkObject with missing path_params should raise an error
       cisco.fmcansible.fmc_configuration:
-        operation: 'deleteNetworkObject'
+        operation: deleteNetworkObject
         path_params:
           test: "testId"
           domainUUID: '{{ cra1[0].uuid }}'
@@ -113,13 +113,13 @@
           - 'result.failed == true'
           - 'result.msg == {"Invalid path_params provided": {"required": ["objectId"]}}'
 
-    - name: is_not_exist operation should be present in the swagger api
+    - name: is_not_exist operation should NOT be present in the Swagger API
       cisco.fmcansible.fmc_configuration:
-        operation: 'is_not_exist'
+        operation: is_not_exist
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: "ansible-test-network"
+          name: "ansible-test-network-val2"
           description: "Ansible Integration tests in action"
           value: "192.22.22.24"
           type: "networkobject"
@@ -153,9 +153,9 @@
 #           - 'result.msg == {"Invalid data provided": {"required": ["name", "type", "value"]}}'
 #       tags: skip-on-6.2.3
 
-    - name: data should contain valid data
+    - name: createMultipleNetworkObject should raise an error when invalid data provided
       cisco.fmcansible.fmc_configuration:
-        operation: 'createMultipleNetworkObject'
+        operation: createMultipleNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
@@ -180,9 +180,9 @@
           - '{"actually_value": 1, "expected_type": "string", "path": "type"}
                               in result.msg["Invalid data provided"]["invalid_type"]'
 
-    - name: data should contain valid data
+    - name: createMultipleNetworkObject should raise an error when invalid data provided
       cisco.fmcansible.fmc_configuration:
-        operation: 'createMultipleNetworkObject'
+        operation: createMultipleNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:

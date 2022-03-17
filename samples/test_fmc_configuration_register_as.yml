@@ -2,7 +2,7 @@
   connection: httpapi
 
   tasks:
-    - name: Create an network object for Cisco FMC
+    - name: Get all domain for Cisco FMC
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
         register_as: cra1
@@ -13,13 +13,13 @@
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: test-network6
+          name: test-network15
           value: 3.3.3.0/24
           type: networkobject
     - assert:
         that:
-          - Network_test_network6 != None
-          - Network_test_network6.name == "test-network6"
+          - Network_test_network15 != None
+          - Network_test_network15.name == "test-network15"
 
     - name: Single-object response must be registered as 'register_as' value when 'register_as' is present
       cisco.fmcansible.fmc_configuration:
@@ -27,14 +27,14 @@
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         data:
-          name: test-network7
+          name: test-network16
           value: 192.23.23.0/24
           type: networkobject
         register_as: test_network
     - assert:
         that:
           - test_network != None
-          - test_network.name  == "test-network7"
+          - test_network.name  == "test-network16"
 
     - name: List-object response must be ignored when 'register_as' is absent
       cisco.fmcansible.fmc_configuration:
@@ -42,7 +42,7 @@
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         query_params:
-          filter: "nameOrValue:test-network6"
+          filter: "nameOrValue:test-network15"
 
     - name: List-object response must be registered as 'register_as' value when 'register_as' is present
       cisco.fmcansible.fmc_configuration:
@@ -50,13 +50,13 @@
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
         query_params:
-          filter: "nameOrValue:test-network7"
+          filter: "nameOrValue:test-network16"
         register_as: networks
     - assert:
        that:
          - networks != None
          - networks | length == 1
-         - networks.0.name == "test-network7"
+         - networks.0.name == "test-network16"
 
     - name: Delete created Network Object
       cisco.fmcansible.fmc_configuration:
@@ -64,3 +64,19 @@
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
           objectId: "{{ test_network.id }}"
+
+    - name: Get network object that was created without register_as
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllNetworkObject
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        query_params:
+          filter: "nameOrValue:test-network15"
+        register_as: "getObjs"
+
+    - name: Delete created Network Object that was created without register_as
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteNetworkObject
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+          objectId: "{{ getObjs[0].id }}"

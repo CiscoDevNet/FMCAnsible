@@ -6,7 +6,7 @@
         operation: getAllDomain
         register_as: cra1
 
-    - name: Find an intrustion policy
+    - name: Find an intrusion policy
       cisco.fmcansible.fmc_configuration:
         operation: getAllIntrusionPolicy
         path_params:
