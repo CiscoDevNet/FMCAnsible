@@ -535,7 +535,7 @@ class TestUpsertOperationFunctionalTests(object):
                 assert url_path == url_with_id_templ
                 assert body_params == {}
                 assert query_params == {}
-                assert path_params == {}
+                assert path_params == {'objectId': 'test_id'}
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
