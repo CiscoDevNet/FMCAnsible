@@ -12,7 +12,7 @@ author: Cisco
 httpapi : fmc
 short_description: Internal client for FMC
 description:
-  - WRaps urllib to make specific requests to FMC endpoint and parse the responses.
+  - Wraps urllib to make specific requests to FMC endpoint and parse the responses.
 version_added: "2.7.0"
 options:
   host:
@@ -31,6 +31,10 @@ from urllib.parse import urlencode
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
 
+class InternalHttpClientError(Exception):
+    def __init__(self, message, status_code):
+        super(InternalHttpClientError, self).__init__(message)
+        self.status_code = status_code
 
 class InternalHttpClient(object):
     """
@@ -42,12 +46,12 @@ class InternalHttpClient(object):
         self._login_url_path = login_url_path or LOGIN_PATH
 
     def send(self, url_path, data=None, method="GET", headers=None):
-        """
+        """ 
         Sends a request to the endpoint and returns the response body.
         """
         response = self._send_request(url_path, data, method, headers)
         response_body = self._parse_response_body(response)
-        self._handle_error(response_body)
+        self._handle_error(response_body, response.status)
         # return the tuple just like connection.send
         return response, response_body
 
@@ -93,7 +97,7 @@ class InternalHttpClient(object):
         respobject = json.loads(response)
         return respobject
 
-    def _handle_error(self, response):
+    def _handle_error(self, response, status_code):
         """
         Handles an error by parsing the response, and raising an error if found in response body.
         """
@@ -101,7 +105,8 @@ class InternalHttpClient(object):
             err = response.get('error')
             msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
             # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
-            raise Exception('FMC Error: {0}'.format(msg))
+            # raise InternalHttpClientError('FMC Error: {0}'.format(msg), status_code)
+            raise InternalHttpClientError(msg, status_code)
 
 
 def iter_messages(messages):

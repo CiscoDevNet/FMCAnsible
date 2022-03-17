@@ -55,12 +55,14 @@ ADD_OPERATION_NOT_SUPPORTED_ERROR = (
 )
 
 PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
+PATH_IDENTITY_PARAM = 'objectId'
 
-
+# Note: FMC uses create/update; FTD uses add/edit
 class OperationNamePrefix:
     ADD = 'add'
     CREATE = 'create'
     EDIT = 'edit'
+    UPDATE = 'update'
     GET = 'get'
     DELETE = 'delete'
     UPSERT = 'upsert'
@@ -119,7 +121,9 @@ class OperationChecker(object):
         :rtype: bool
         """
         # Some endpoints have non-CRUD operations, so checking operation name is required in addition to the HTTP method
-        return operation_name.startswith(OperationNamePrefix.EDIT) and is_put_request(operation_spec)
+        # Some op name use "edit" others use "update" so support both
+        return (operation_name.startswith(OperationNamePrefix.EDIT) or operation_name.startswith(OperationNamePrefix.UPDATE)) \
+            and is_put_request(operation_spec)
 
     @classmethod
     def is_delete_operation(cls, operation_name, operation_spec):
@@ -293,9 +297,11 @@ class BaseConfigurationResource(object):
         url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
 
         filters = params.get(ParamName.FILTERS) or {}
-        if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
+        # commented out for FMC
+        # unfortunately endpoints are not consistent on filter=name, and some endpoints throw an error
+        # if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
             # most endpoints only support filtering by name, so remaining `filters` are applied on returned objects
-            url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
+        #    url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
 
         item_generator = iterate_over_pageable_resource(
             partial(self.send_general_request, operation_name=operation_name), url_params
@@ -398,7 +404,12 @@ class BaseConfigurationResource(object):
 
     def edit_object(self, operation_name, params):
         data, __, path_params = _get_user_params(params)
+        # normalize id between path_params and data.id (path params takes precedence)
+        objectId = path_params.get(PATH_IDENTITY_PARAM)
+        if data is not None:
+            data['id'] = objectId
 
+        # lookup get operation to check equality
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
         get_operation = self._find_get_operation(model_name)
 
@@ -429,9 +440,9 @@ class BaseConfigurationResource(object):
         def raise_for_failure(resp):
             if not resp[ResponseParams.SUCCESS]:
                 raise FmcServerError(resp[ResponseParams.RESPONSE], resp[ResponseParams.STATUS_CODE])
-
+              
         response = self._conn.send_request(url_path=url_path, http_method=http_method, body_params=body_params,
-                                           path_params=path_params, query_params=query_params)
+                                        path_params=path_params, query_params=query_params)
         raise_for_failure(response)
         if http_method != HTTPMethod.GET:
             self.config_changed = True
@@ -471,13 +482,22 @@ class BaseConfigurationResource(object):
         return self.add_object(add_op_name, params)
 
     def _edit_upserted_object(self, model_operations, existing_object, params):
-        edit_op_name = self._get_operation_name(self._operation_checker.is_edit_operation, model_operations)
-        _set_default(params, 'path_params', {})
-        _set_default(params, 'data', {})
+        edit_op_name = self._get_operation_name(self._is_upsertable_edit_operation, model_operations)
+        _set_default(params, ParamName.PATH_PARAMS, {})
+        _set_default(params, ParamName.DATA, {})
+        # note FMC uses objectId, FTD uses objId
+        params[ParamName.PATH_PARAMS][PATH_IDENTITY_PARAM] = existing_object['id']
+        copy_identity_properties(existing_object, params[ParamName.DATA])
 
-        params['path_params']['objId'] = existing_object['id']
-        copy_identity_properties(existing_object, params['data'])
         return self.edit_object(edit_op_name, params)
+
+    def _is_upsertable_edit_operation(self, operation_name, operation_spec):
+        """
+        Determines if the edit operation begins with 'edit' or 'update', and contains
+        the identity param (i.e. objectId) in its url path
+        """
+        return self._operation_checker.is_edit_operation(operation_name, operation_spec) and \
+            operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None
 
     def upsert_object(self, op_name, params):
         """
@@ -493,6 +513,7 @@ class BaseConfigurationResource(object):
         :rtype: dict
         """
 
+        # strips the model name from op name (i.e. upsertAccessPolicy -> AccessPolicy)
         def extract_and_validate_model():
             model = op_name[len(OperationNamePrefix.UPSERT):]
             if not self._conn.get_model_spec(model):
@@ -505,11 +526,15 @@ class BaseConfigurationResource(object):
         if not self._operation_checker.is_upsert_operation_supported(model_operations):
             raise FmcInvalidOperationNameError(op_name)
 
+        # retrieve object via list operation, create or update it
         existing_obj = self._find_object_matching_params(model_name, params)
         if existing_obj:
-            equal_to_existing_obj = equal_objects(existing_obj, params[ParamName.DATA])
-            return existing_obj if equal_to_existing_obj \
-                else self._edit_upserted_object(model_operations, existing_obj, params)
+            # equal_to_existing_obj = equal_objects(existing_obj, params[ParamName.DATA])
+            # return existing_obj if equal_to_existing_obj \
+            #    else self._edit_upserted_object(model_operations, existing_obj, params)
+            # Note: for FMC we cannot check equality here because the list operation just returns name and type
+            # edit_object will do a deeper check equality check on the exact object
+            return self._edit_upserted_object(model_operations, existing_obj, params)
         else:
             return self._add_upserted_object(model_operations, params)
 

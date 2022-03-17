@@ -157,7 +157,7 @@ class HttpApi(HttpApiBase):
         #     raise ConnectionError(
         #         'Server returned response without token info during connection authentication: %s' % response)
 
-        try:
+        try:            
             self.refresh_token = response['X-auth-refresh-token']
             self.access_token = response['X-auth-access-token']
             self.global_domain = response['global']
@@ -241,7 +241,7 @@ class HttpApi(HttpApiBase):
 
     def _require_login(self):
         return self.access_token is None
-
+    
     def _send_auth_request(self, path, data, **kwargs):
         error_msg_prefix = 'Server returned an error during authentication request'
         return self._send_service_request(path, error_msg_prefix, data=data, **kwargs)
@@ -295,7 +295,8 @@ class HttpApi(HttpApiBase):
             error_msg = to_text(e.read())
             return self._handle_send_error(http_method, self._response_to_json(error_msg), e.code)
         except Exception as e:
-            return self._handle_send_error(http_method, e, 500)
+            status_code = getattr(e, 'status_code') or 500
+            return self._handle_send_error(http_method, e, status_code)
 
     def upload_file(self, from_path, to_url):
         url = construct_url_path(to_url)
@@ -349,7 +350,7 @@ class HttpApi(HttpApiBase):
             return self.http_client.send(url, data, **kwargs)
         else:
             return self.connection.send(url, data, **kwargs)
-
+    
     def _login(self, username, password):
         if self.http_client:
             # login via http client

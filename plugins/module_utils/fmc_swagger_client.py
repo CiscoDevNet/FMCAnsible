@@ -33,7 +33,7 @@ from ansible.module_utils.six import integer_types, string_types, iteritems
 FILE_MODEL_NAME = '_File'
 SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
-
+MODEL_LIST_SUFFIX = 'ListContainer'
 
 class OperationField:
     URL = 'url'
@@ -197,6 +197,8 @@ class FmcSwaggerParser:
         model_operations = {}
         for operations_name, params in iteritems(operations):
             model_name = params[OperationField.MODEL_NAME]
+            # FMC uses separate model names for list operations, so strip out "ListContainer" and merge into main model ops object
+            model_name = self._resolve_model_name(model_name)
             model_operations.setdefault(model_name, {})[operations_name] = params
         return model_operations
 
@@ -261,8 +263,7 @@ class FmcSwaggerParser:
         else:
             return None
 
-    @staticmethod
-    def _return_multiple_items(op_params):
+    def _return_multiple_items(self, op_params):
         """
         Defines if the operation returns one item or a list of items.
 
@@ -271,7 +272,9 @@ class FmcSwaggerParser:
         """
         try:
             schema = op_params[PropName.RESPONSES][SUCCESS_RESPONSE_CODE][PropName.SCHEMA]
-            return PropName.ITEMS in schema[PropName.PROPERTIES]
+            # handle $ref case - get actual model schema from ref
+            model = self._resolve_schema_or_ref(schema)
+            return PropName.ITEMS in model[PropName.PROPERTIES]
         except KeyError:
             return False
 
@@ -369,6 +372,25 @@ class FmcSwaggerParser:
             return self._get_model_name_byschema_ref(model_def[PropName.ALL_OF][0][PropName.REF])
         else:
             return model_name
+
+    def _resolve_schema_or_ref(self, schema):
+        """
+        Returns the schema itself, or the resolved reference to the schema elsewhere in the doc (if it contains a $ref property).
+
+        :param schema: schema object
+        :return: model object
+        """
+        schema_ref = schema.get(PropName.REF)
+        if schema_ref is None:
+            return schema
+        model_name = self._get_model_name_byschema_ref(schema_ref)
+        model = self._definitions.get(model_name)
+        return model or schema
+
+    def _resolve_model_name(self, model_name):
+        if model_name is None: 
+            return None
+        return model_name.replace(MODEL_LIST_SUFFIX, '') if model_name.endswith(MODEL_LIST_SUFFIX) else model_name
 
 
 class FmcSwaggerValidator:
@@ -616,7 +638,9 @@ class FmcSwaggerValidator:
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
-            ref_model = self._get_model_by_ref(model)
+            # intelligently resolve model if is has $ref 
+            ref_model = self._get_model(model)
+            #ref_model = self._get_model_by_ref(model)
 
             self._validate_object(status, ref_model, actually_value,
                                   path=self._create_path_to_field(path, prop_name))
@@ -630,6 +654,12 @@ class FmcSwaggerValidator:
         model = _get_model_name_from_url(model_prop_val[PropName.REF])
         return self._models[model]
 
+    def _get_model(self, model):
+        model_ref = model.get(PropName.REF)
+        if model_ref is None:
+            return model
+        return self._get_model_by_ref(model)
+
     def _check_required_fields(self, status, required_fields, data, path):
         missed_required_fields = [self._create_path_to_field(path, field) for field in
                                   required_fields if field not in data.keys() or data[field] is None]
@@ -642,7 +672,7 @@ class FmcSwaggerValidator:
         elif not isinstance(data, list):
             self._add_invalid_type_report(status, path, '', PropType.ARRAY, data)
         else:
-            item_model = model[PropName.ITEMS]
+            item_model = self._get_model(model[PropName.ITEMS])
             for i, item_data in enumerate(data):
                 self._check_types(status, item_data, item_model[PropName.TYPE], item_model, "{0}[{1}]".format(path, i),
                                   '')
