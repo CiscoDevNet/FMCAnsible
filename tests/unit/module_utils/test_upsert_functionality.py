@@ -536,12 +536,16 @@ class TestUpsertOperationFunctionalTests(object):
                 assert body_params == {}
                 assert query_params == {}
                 assert path_params == {'objectId': 'test_id'}
+                return {
+                    ResponseParams.SUCCESS: True,
+                    ResponseParams.RESPONSE: expected_val,
+                    ResponseParams.STATUS_CODE: 200,
+                }
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
                 assert query_params == {'limit': 10, 'offset': 0}
                 assert path_params == {}
-
                 return {
                     ResponseParams.SUCCESS: True,
                     ResponseParams.RESPONSE: {
