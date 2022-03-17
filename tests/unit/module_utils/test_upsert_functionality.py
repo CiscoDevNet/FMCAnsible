@@ -318,11 +318,11 @@ class TestUpsertOperationFunctionalTests(object):
             'editObject': {
                 'method': HTTPMethod.PUT,
                 'modelName': 'Object',
-                'url': '/test/{objId}'},
+                'url': '/test/{objectId}'},
             'otherObjectOperation': {
                 'method': HTTPMethod.GET,
                 'modelName': 'Object',
-                'url': '/test/{objId}',
+                'url': '/test/{objectId}',
                 'returnMultipleItems': False
             }}
 
@@ -356,7 +356,7 @@ class TestUpsertOperationFunctionalTests(object):
         params = {
             'operation': 'upsertObject',
             'data': {'id': '123', 'name': 'testObject', 'type': 'object'},
-            'path_params': {'objId': '123'},
+            'path_params': {'objectId': '123'},
             'register_as': 'test_var'
         }
 
@@ -369,7 +369,7 @@ class TestUpsertOperationFunctionalTests(object):
         params = {
             'operation': 'upsertObject',
             'data': {'id': '123', 'name': 'testObject', 'type': 'object'},
-            'path_params': {'objId': '123'},
+            'path_params': {'objectId': '123'},
             'register_as': 'test_var'
         }
 
@@ -389,11 +389,11 @@ class TestUpsertOperationFunctionalTests(object):
             'editObject': {
                 'method': HTTPMethod.PUT,
                 'modelName': 'Object',
-                'url': '/test/{objId}'},
+                'url': '/test/{objectId}'},
             'otherObjectOperation': {
                 'method': HTTPMethod.GET,
                 'modelName': 'Object',
-                'url': '/test/{objId}',
+                'url': '/test/{objectId}',
                 'returnMultipleItems': False
             }}
 
@@ -411,7 +411,7 @@ class TestUpsertOperationFunctionalTests(object):
         params = {
             'operation': 'upsertObject',
             'data': {'id': '123', 'name': 'testObject', 'type': 'object'},
-            'path_params': {'objId': '123'},
+            'path_params': {'objectId': '123'},
             'register_as': 'test_var'
         }
 
@@ -424,7 +424,7 @@ class TestUpsertOperationFunctionalTests(object):
         url = '/test'
         obj_id = '456'
         version = 'test_version'
-        url_with_id_templ = '{0}/{1}'.format(url, '{objId}')
+        url_with_id_templ = '{0}/{1}'.format(url, '{objectId}')
 
         new_value = '0000'
         old_value = '1111'
@@ -452,12 +452,12 @@ class TestUpsertOperationFunctionalTests(object):
 
                 if is_get_list_req:
                     assert body_params == {}
-                    assert query_params == {QueryParams.FILTER: 'name:testObject', 'limit': 10, 'offset': 0}
+                    assert query_params == {'limit': 10, 'offset': 0}
                     assert path_params == {}
                 elif is_get_req:
                     assert body_params == {}
                     assert query_params == {}
-                    assert path_params == {'objId': obj_id}
+                    assert path_params == {'objectId': obj_id}
 
                 return {
                     ResponseParams.SUCCESS: True,
@@ -507,7 +507,7 @@ class TestUpsertOperationFunctionalTests(object):
     def test_module_should_not_update_object_when_upsert_operation_and_object_exists_with_the_same_fields(
             self, connection_mock):
         url = '/test'
-        url_with_id_templ = '{0}/{1}'.format(url, '{objId}')
+        url_with_id_templ = '{0}/{1}'.format(url, '{objectId}')
 
         params = {
             'operation': 'upsertObject',
@@ -533,7 +533,7 @@ class TestUpsertOperationFunctionalTests(object):
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
-                assert query_params == {QueryParams.FILTER: 'name:testObject', 'limit': 10, 'offset': 0}
+                assert query_params == {'limit': 10, 'offset': 0}
                 assert path_params == {}
 
                 return {
@@ -650,18 +650,18 @@ class TestUpsertOperationFunctionalTests(object):
     def test_module_should_fail_when_upsert_operation_is_not_supported(self, connection_mock):
         connection_mock.get_operation_specs_by_model_name.return_value = {
             'addObject': {'method': HTTPMethod.POST, 'modelName': 'Object', 'url': '/test'},
-            'editObject': {'method': HTTPMethod.PUT, 'modelName': 'Object', 'url': '/test/{objId}'},
+            'editObject': {'method': HTTPMethod.PUT, 'modelName': 'Object', 'url': '/test/{objectId}'},
             'otherObjectOperation': {
                 'method': HTTPMethod.GET,
                 'modelName': 'Object',
-                'url': '/test/{objId}',
+                'url': '/test/{objectId}',
                 'returnMultipleItems': False}
         }
         operation_name = 'upsertObject'
         params = {
             'operation': operation_name,
             'data': {'id': '123', 'name': 'testObject', 'type': 'object'},
-            'path_params': {'objId': '123'},
+            'path_params': {'objectId': '123'},
             'register_as': 'test_var'
         }
 
@@ -675,7 +675,7 @@ class TestUpsertOperationFunctionalTests(object):
     # when create operation raised FmcConfigurationError exception without id and version
     def test_module_should_fail_when_upsert_operation_and_failed_create_without_id_and_version(self, connection_mock):
         url = '/test'
-        url_with_id_templ = '{0}/{1}'.format(url, '{objId}')
+        url_with_id_templ = '{0}/{1}'.format(url, '{objectId}')
 
         params = {
             'operation': 'upsertObject',
@@ -697,7 +697,7 @@ class TestUpsertOperationFunctionalTests(object):
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
-                assert query_params == {QueryParams.FILTER: 'name:testObject', 'limit': 10, 'offset': 0}
+                assert query_params == {'limit': 10, 'offset': 0}
                 assert path_params == {}
 
                 return {
@@ -771,11 +771,11 @@ class TestUpsertOperationFunctionalTests(object):
 
                 if is_get_list_req:
                     assert body_params == {}
-                    assert query_params == {QueryParams.FILTER: 'name:testObject', 'limit': 10, 'offset': 0}
+                    assert query_params == {'limit': 10, 'offset': 0}
                 elif is_get_req:
                     assert body_params == {}
                     assert query_params == {}
-                    assert path_params == {'objId': obj_id}
+                    assert path_params == {'objectId': obj_id}
 
                 return {
                     ResponseParams.SUCCESS: True,
@@ -898,7 +898,7 @@ class TestUpsertOperationFunctionalTests(object):
             elif http_method == HTTPMethod.GET:
                 assert url_path == url
                 assert body_params == {}
-                assert query_params == {QueryParams.FILTER: 'name:testObject', 'limit': 10, 'offset': 0}
+                assert query_params == {'limit': 10, 'offset': 0}
                 assert path_params == {}
 
                 return {
