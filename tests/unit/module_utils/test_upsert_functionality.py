@@ -739,7 +739,7 @@ class TestUpsertOperationFunctionalTests(object):
         url = '/test'
         obj_id = '456'
         version = 'test_version'
-        url_with_id_templ = '{0}/{1}'.format(url, '{objId}')
+        url_with_id_templ = '{0}/{1}'.format(url, '{objectId}')
 
         error_code = 404
 

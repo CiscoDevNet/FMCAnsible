@@ -35,6 +35,7 @@ SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
 MODEL_LIST_SUFFIX = 'ListContainer'
 
+
 class OperationField:
     URL = 'url'
     METHOD = 'method'
@@ -640,7 +641,6 @@ class FmcSwaggerValidator:
         if expected_type == PropType.OBJECT:
             # intelligently resolve model if is has $ref
             ref_model = self._get_model(model)
-            #ref_model = self._get_model_by_ref(model)
 
             self._validate_object(status, ref_model, actually_value,
                                   path=self._create_path_to_field(path, prop_name))

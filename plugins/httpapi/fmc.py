@@ -295,7 +295,7 @@ class HttpApi(HttpApiBase):
             error_msg = to_text(e.read())
             return self._handle_send_error(http_method, self._response_to_json(error_msg), e.code)
         except Exception as e:
-            status_code = getattr(e, 'status_code') or 500
+            status_code = getattr(e, 'status_code') if hasattr(e, 'status_code') else 500
             return self._handle_send_error(http_method, e, status_code)
 
     def upload_file(self, from_path, to_url):

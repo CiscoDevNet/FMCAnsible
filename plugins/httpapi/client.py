@@ -31,10 +31,12 @@ from urllib.parse import urlencode
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
 
+
 class InternalHttpClientError(Exception):
     def __init__(self, message, status_code):
         super(InternalHttpClientError, self).__init__(message)
         self.status_code = status_code
+
 
 class InternalHttpClient(object):
     """
