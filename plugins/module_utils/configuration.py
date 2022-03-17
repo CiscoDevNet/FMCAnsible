@@ -299,7 +299,8 @@ class BaseConfigurationResource(object):
 
         filters = params.get(ParamName.FILTERS) or {}
         # commented out for FMC
-        # unfortunately endpoints are not consistent on filter=name, and some endpoints throw an error
+        # unfortunately endpoints are not consistent on filter=name:xx, and some endpoints throw an error
+        # most endpoint use nameOrValue and this conflicts with the client-side filtering
         # if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
         # most endpoints only support filtering by name, so remaining `filters` are applied on returned objects
         #    url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
@@ -498,8 +499,8 @@ class BaseConfigurationResource(object):
         the identity param (i.e. objectId) in its url path
         """
         return self._operation_checker.is_edit_operation(operation_name, operation_spec) and \
-            (operation_spec.get(OperationField.PARAMETERS) is None or \
-            operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None)
+            (operation_spec.get(OperationField.PARAMETERS) is None or
+             operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None)
 
     def upsert_object(self, op_name, params):
         """

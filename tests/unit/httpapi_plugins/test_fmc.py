@@ -150,9 +150,9 @@ class TestFmcHttpApi(unittest.TestCase):
         exp_resp = {'id': '123', 'name': 'foo'}
         self.connection_mock.send.return_value = self._connection_response(exp_resp)
 
-        resp = self.fmc_plugin.send_request('/test/{objId}', HTTPMethod.PUT,
+        resp = self.fmc_plugin.send_request('/test/{objectId}', HTTPMethod.PUT,
                                             body_params={'name': 'foo'},
-                                            path_params={'objId': '123'},
+                                            path_params={'objectId': '123'},
                                             query_params={'at': 0})
 
         assert {ResponseParams.SUCCESS: True, ResponseParams.STATUS_CODE: 200,
