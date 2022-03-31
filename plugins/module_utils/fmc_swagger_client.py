@@ -409,7 +409,7 @@ class FmcSwaggerValidator:
         :param operation_name: string
                             The value must be non empty string.
                             The operation name is used to get a model specification
-        :param data: dict
+        :param data: dict or list
                     The value must be in the format that the model(from operation) expects
         :rtype: (bool, string|dict)
         :return:
@@ -423,7 +423,7 @@ class FmcSwaggerValidator:
                 ],
                 'invalid_type':[ #list of the fields with invalid data
                         {
-                           'path': 'objId', #field name or path to the field. Ex. objects[3].id, parent.name
+                           'path': 'objectId', #field name or path to the field. Ex. objects[3].id, parent.name
                            'expected_type': 'string',# expected type. Ex. 'object', 'array', 'string', 'integer',
                                                      # 'boolean', 'number'
                            'actually_value': 1 # the value that user passed
@@ -432,7 +432,7 @@ class FmcSwaggerValidator:
             })
         :raises IllegalArgumentException
             'The operation_name parameter must be a non-empty string' if operation_name is not valid
-            'The data parameter must be a dict' if data neither dict or None
+            'The data parameter must be a dict or list' if data neither dict or list or None
             '{operation_name} operation does not support' if the spec does not contain the operation
         """
         if data is None:

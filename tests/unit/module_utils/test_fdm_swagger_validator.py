@@ -470,10 +470,7 @@ class TestFmcSwaggerValidator(unittest.TestCase):
         assert {'required': ['objId']} == rez
 
         self.check_illegal_argument_exception(lambda: getattr(validator, method)('getNetwork', ''),
-                                              "The params parameter must be a dict or list")
-        # FMC: list is now valid as data, removing test for now
-        # self.check_illegal_argument_exception(lambda: getattr(validator, method)('getNetwork', []),
-        #                                      "The params parameter must be a dict")
+                                              "The params parameter must be a dict")
 
         valid, rez = getattr(validator, method)('getNetwork', {})
         assert not valid
