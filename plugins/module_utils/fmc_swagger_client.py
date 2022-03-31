@@ -445,7 +445,7 @@ class FmcSwaggerValidator:
         model = self._models[model_name]
         status = self._init_report()
 
-        self._validate_object(status, model, data, '')
+        self._validate_root_object(status, model, data, '')
 
         if len(status[PropName.REQUIRED]) > 0 or len(status[PropName.INVALID_TYPE]) > 0:
             return False, self._delete_empty_field_from_report(status)
@@ -595,7 +595,10 @@ class FmcSwaggerValidator:
         #         if prop_name in params and not self._is_correct_simple_types(expected_type, value, allow_null=False):
         #             self._add_invalid_type_report(status, '', prop_name, expected_type, value)
 
-    def _validate_object(self, status, model, data, path):
+    def _validate_root_object(self, status, model, data, path):
+        """
+        Validates the root object "data" is either a enum, object, or list.
+        """
         if self._is_enum(model):
             self._check_enum(status, model, data, path)
         elif self._is_object(model):
@@ -604,6 +607,12 @@ class FmcSwaggerValidator:
                 self._check_objects(status, model, data, path)
             else:
                 self._check_object(status, model, data, path)
+
+    def _validate_object(self, status, model, data, path):
+        if self._is_enum(model):
+            self._check_enum(status, model, data, path)
+        elif self._is_object(model):
+            self._check_object(status, model, data, path)
 
     def _is_enum(self, model):
         return self._is_string_type(model) and PropName.ENUM in model
