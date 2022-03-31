@@ -82,7 +82,7 @@
         that:
           - result.changed == false
           - result.failed == true
-          - "'already exists. Please enter with another name' in result.msg"
+          - "'An object with the same name but different parameters already exists' in result.msg"
 
     # Note: prefer using updateAccessRule over updateMultipleAccessRule for single object
     - name: updateAccessRule should update the existing rule
@@ -130,7 +130,7 @@
         data:
           name: "ansible-test-accessrule-ar1"
           type: "accessrule"
-          action: "BLOCK"
+          action: "ALLOW"
           id: "{{ testRuleObj.id }}"
           badProperty: true
         path_params:
@@ -156,7 +156,7 @@
           destinationNetworks:
             objects:
               - name: "{{ testNetworkObj.name }}"
-                type: "network"
+                # type: "Network"
                 id: "{{ testNetworkObj.id }}"
           action: "ALLOW"
         register_as: "upsertedRuleObj"

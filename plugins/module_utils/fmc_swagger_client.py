@@ -409,7 +409,7 @@ class FmcSwaggerValidator:
         :param operation_name: string
                             The value must be non empty string.
                             The operation name is used to get a model specification
-        :param data: dict
+        :param data: dict or list
                     The value must be in the format that the model(from operation) expects
         :rtype: (bool, string|dict)
         :return:
@@ -423,7 +423,7 @@ class FmcSwaggerValidator:
                 ],
                 'invalid_type':[ #list of the fields with invalid data
                         {
-                           'path': 'objId', #field name or path to the field. Ex. objects[3].id, parent.name
+                           'path': 'objectId', #field name or path to the field. Ex. objects[3].id, parent.name
                            'expected_type': 'string',# expected type. Ex. 'object', 'array', 'string', 'integer',
                                                      # 'boolean', 'number'
                            'actually_value': 1 # the value that user passed
@@ -432,7 +432,7 @@ class FmcSwaggerValidator:
             })
         :raises IllegalArgumentException
             'The operation_name parameter must be a non-empty string' if operation_name is not valid
-            'The data parameter must be a dict' if data neither dict or None
+            'The data parameter must be a dict or list' if data neither dict or list or None
             '{operation_name} operation does not support' if the spec does not contain the operation
         """
         if data is None:
@@ -441,10 +441,11 @@ class FmcSwaggerValidator:
         self._check_validate_data_params(data, operation_name)
 
         operation = self._operations[operation_name]
-        model = self._models[operation[OperationField.MODEL_NAME]]
+        model_name = operation[OperationField.MODEL_NAME]
+        model = self._models[model_name]
         status = self._init_report()
 
-        self._validate_object(status, model, data, '')
+        self._validate_root_object(status, model, data, '')
 
         if len(status[PropName.REQUIRED]) > 0 or len(status[PropName.INVALID_TYPE]) > 0:
             return False, self._delete_empty_field_from_report(status)
@@ -453,8 +454,8 @@ class FmcSwaggerValidator:
     def _check_validate_data_params(self, data, operation_name):
         if not operation_name or not isinstance(operation_name, string_types):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
-        if not isinstance(data, dict):
-            raise IllegalArgumentException("The data parameter must be a dict")
+        if not isinstance(data, dict) and not isinstance(data, list):
+            raise IllegalArgumentException("The data parameter must be a dict or list")
         if operation_name not in self._operations:
             raise IllegalArgumentException("{0} operation does not support".format(operation_name))
 
@@ -594,6 +595,19 @@ class FmcSwaggerValidator:
         #         if prop_name in params and not self._is_correct_simple_types(expected_type, value, allow_null=False):
         #             self._add_invalid_type_report(status, '', prop_name, expected_type, value)
 
+    def _validate_root_object(self, status, model, data, path):
+        """
+        Validates the root object "data" is either a enum, object, or list.
+        """
+        if self._is_enum(model):
+            self._check_enum(status, model, data, path)
+        elif self._is_object(model):
+            # For FMC, data is sometimes a list for multiple/bulk
+            if isinstance(data, list):
+                self._check_objects(status, model, data, path)
+            else:
+                self._check_object(status, model, data, path)
+
     def _validate_object(self, status, model, data, path):
         if self._is_enum(model):
             self._check_enum(status, model, data, path)
@@ -613,6 +627,10 @@ class FmcSwaggerValidator:
             'expected_type': expected_type,
             'actually_value': actually_value
         })
+
+    def _check_objects(self, status, model, data, path):
+        for i, item_data in enumerate(data):
+            self._check_object(status, model, item_data, "{0}[{1}]".format(path, i))
 
     def _check_object(self, status, model, data, path):
         if data is None:
