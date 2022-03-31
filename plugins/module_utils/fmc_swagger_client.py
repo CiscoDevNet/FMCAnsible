@@ -647,7 +647,7 @@ class FmcSwaggerValidator:
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
-            # intelligently resolve model if is has $ref 
+            # intelligently resolve model if is has $ref
             ref_model = self._get_model(model)
 
             self._validate_object(status, ref_model, actually_value,

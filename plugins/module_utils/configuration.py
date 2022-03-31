@@ -348,7 +348,7 @@ class BaseConfigurationResource(object):
         and data passed is a list.
         """
         data, query_params, path_params = _get_user_params(params)
-        is_bulk = query_params.get(BULK) == True
+        is_bulk = query_params.get(BULK) is True
         is_data_list = isinstance(data, list)
         return is_bulk or is_data_list
 
@@ -676,6 +676,6 @@ def are_objects_equal(obj1, obj2):
     """
     # because FMC can be inconsistent on type name, remove from source dict for comparison
     d1 = obj1.copy()
-    d1.pop('type')
+    d1.pop('type', '')
     d2 = obj2
     return equal_objects(d1, d2)

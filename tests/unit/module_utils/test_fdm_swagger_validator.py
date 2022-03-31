@@ -471,9 +471,9 @@ class TestFmcSwaggerValidator(unittest.TestCase):
 
         self.check_illegal_argument_exception(lambda: getattr(validator, method)('getNetwork', ''),
                                               "The params parameter must be a dict")
-
-        self.check_illegal_argument_exception(lambda: getattr(validator, method)('getNetwork', []),
-                                              "The params parameter must be a dict")
+        # FMC: list is now valid as data, removing test for now
+        # self.check_illegal_argument_exception(lambda: getattr(validator, method)('getNetwork', []),
+        #                                      "The params parameter must be a dict")
 
         valid, rez = getattr(validator, method)('getNetwork', {})
         assert not valid
@@ -505,9 +505,10 @@ class TestFmcSwaggerValidator(unittest.TestCase):
 
         self.check_illegal_argument_exception(lambda: validator.validate_data('getNetworkObjectList', ''),
                                               "The data parameter must be a dict")
+        # FMC: list is now valid as data, removing test for now
+        # self.check_illegal_argument_exception(lambda: validator.validate_data('getNetworkObjectList', []),
+        #                                      "The data parameter must be a dict")
 
-        self.check_illegal_argument_exception(lambda: validator.validate_data('getNetworkObjectList', []),
-                                              "The data parameter must be a dict")
         valid, rez = validator.validate_data('getNetworkObjectList', {})
         assert not valid
         assert sort_validator_rez({

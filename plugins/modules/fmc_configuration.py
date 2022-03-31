@@ -46,8 +46,8 @@ options:
     type: str
   data:
     description:
-      - Key-value pairs that should be sent as body parameters in a REST API call
-    type: dict
+      - JSON-like object or array that should be sent as body parameters in a REST API call
+    type: raw
   query_params:
     description:
       - Key-value pairs that should be sent as query parameters in a REST API call.
