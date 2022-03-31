@@ -35,7 +35,6 @@ SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
 MODEL_LIST_SUFFIX = 'ListContainer'
 
-
 class OperationField:
     URL = 'url'
     METHOD = 'method'
@@ -441,7 +440,8 @@ class FmcSwaggerValidator:
         self._check_validate_data_params(data, operation_name)
 
         operation = self._operations[operation_name]
-        model = self._models[operation[OperationField.MODEL_NAME]]
+        model_name = operation[OperationField.MODEL_NAME]
+        model = self._models[model_name]
         status = self._init_report()
 
         self._validate_object(status, model, data, '')
@@ -453,8 +453,8 @@ class FmcSwaggerValidator:
     def _check_validate_data_params(self, data, operation_name):
         if not operation_name or not isinstance(operation_name, string_types):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
-        if not isinstance(data, dict):
-            raise IllegalArgumentException("The data parameter must be a dict")
+        if not isinstance(data, dict) and not isinstance(data, list):
+            raise IllegalArgumentException("The data parameter must be a dict or list")
         if operation_name not in self._operations:
             raise IllegalArgumentException("{0} operation does not support".format(operation_name))
 
@@ -598,7 +598,11 @@ class FmcSwaggerValidator:
         if self._is_enum(model):
             self._check_enum(status, model, data, path)
         elif self._is_object(model):
-            self._check_object(status, model, data, path)
+            # For FMC, data is sometimes a list for multiple/bulk
+            if isinstance(data, list):
+                self._check_objects(status, model, data, path)
+            else:
+                self._check_object(status, model, data, path)
 
     def _is_enum(self, model):
         return self._is_string_type(model) and PropName.ENUM in model
@@ -613,6 +617,10 @@ class FmcSwaggerValidator:
             'expected_type': expected_type,
             'actually_value': actually_value
         })
+
+    def _check_objects(self, status, model, data, path):
+        for i, item_data in enumerate(data):
+            self._check_object(status, model, item_data, "{0}[{1}]".format(path, i))
 
     def _check_object(self, status, model, data, path):
         if data is None:
@@ -639,7 +647,7 @@ class FmcSwaggerValidator:
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
-            # intelligently resolve model if is has $ref
+            # intelligently resolve model if is has $ref 
             ref_model = self._get_model(model)
 
             self._validate_object(status, ref_model, actually_value,

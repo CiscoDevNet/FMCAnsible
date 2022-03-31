@@ -106,7 +106,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import con
 def main():
     fields = dict(
         operation=dict(type='str', required=True),
-        data=dict(type='dict'),
+        data=dict(type='raw'), # FMC supports dict or list
         query_params=dict(type='dict'),
         path_params=dict(type='dict'),
         register_as=dict(type='str'),
