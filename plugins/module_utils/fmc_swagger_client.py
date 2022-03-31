@@ -35,6 +35,7 @@ SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
 MODEL_LIST_SUFFIX = 'ListContainer'
 
+
 class OperationField:
     URL = 'url'
     METHOD = 'method'

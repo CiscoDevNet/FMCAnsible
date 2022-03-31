@@ -64,6 +64,7 @@ PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
 PATH_IDENTITY_PARAM = 'objectId'
 BULK = "bulk"
 
+
 # Note: FMC uses create/update; FTD uses add/edit
 class OperationNamePrefix:
     ADD = 'add'
@@ -366,7 +367,7 @@ class BaseConfigurationResource(object):
         def is_duplicate_name_error(err):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
-                    and DUPLICATE_NAME_ERROR_STR in str(err)
+                   and DUPLICATE_NAME_ERROR_STR in str(err)
             # return err.code == UNPROCESSABLE_ENTITY_STATUS and DUPLICATE_NAME_ERROR_MESSAGE in str(err)
 
         params = self.ensure_bulk_data_params(params)
@@ -624,6 +625,7 @@ def _get_user_params(params):
     return params.get(ParamName.DATA) or {}, params.get(ParamName.QUERY_PARAMS) or {}, params.get(
         ParamName.PATH_PARAMS) or {}
 
+
 def iterate_over_pageable_resource(resource_func, params):
     """
     A generator function that iterates over a resource that supports pagination and lazily returns present items
@@ -668,6 +670,7 @@ def iterate_over_pageable_resource(resource_func, params):
         params = copy.deepcopy(params)
         query_params = params[ParamName.QUERY_PARAMS]
         query_params['offset'] = int(query_params['offset']) + limit
+
 
 def are_objects_equal(obj1, obj2):
     """
