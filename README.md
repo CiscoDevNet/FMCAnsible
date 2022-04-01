@@ -98,7 +98,7 @@ The project contains unit tests for Ansible modules, HTTP API plugin and util fi
 
 ### Running Sanity Tests Using Docker
 
-When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/ftdansible).  
+When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/fmcansible).  
 
 ```
 rm -rf tests/output 
