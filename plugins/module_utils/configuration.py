@@ -37,9 +37,11 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_clien
 DEFAULT_PAGE_SIZE = 10
 DEFAULT_OFFSET = 0
 
+BAD_REQUEST_STATUS = 400
 UNPROCESSABLE_ENTITY_STATUS = 422
 INVALID_UUID_ERROR_MESSAGE = "Validation failed due to an invalid UUID"
 DUPLICATE_NAME_ERROR_MESSAGE = "Validation failed due to a duplicate name"
+DUPLICATE_NAME_ERROR_STR = "already exists."
 
 MULTIPLE_DUPLICATES_FOUND_ERROR = (
     "Multiple objects matching specified filters are found. "
@@ -53,14 +55,22 @@ ADD_OPERATION_NOT_SUPPORTED_ERROR = (
     "Cannot add a new object while executing an upsert request. "
     "Creation of objects with this type is not supported."
 )
+BULK_UPSERT_ERROR = (
+    "Cannot upsert with bulk. "
+    "Upsert is only supported for single objects."
+)
 
 PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
+PATH_IDENTITY_PARAM = 'objectId'
+BULK = "bulk"
 
 
+# Note: FMC uses create/update; FTD uses add/edit
 class OperationNamePrefix:
     ADD = 'add'
     CREATE = 'create'
     EDIT = 'edit'
+    UPDATE = 'update'
     GET = 'get'
     DELETE = 'delete'
     UPSERT = 'upsert'
@@ -119,7 +129,9 @@ class OperationChecker(object):
         :rtype: bool
         """
         # Some endpoints have non-CRUD operations, so checking operation name is required in addition to the HTTP method
-        return operation_name.startswith(OperationNamePrefix.EDIT) and is_put_request(operation_spec)
+        # Some op name use "edit" others use "update" so support both
+        return (operation_name.startswith(OperationNamePrefix.EDIT) or operation_name.startswith(OperationNamePrefix.UPDATE)) \
+            and is_put_request(operation_spec)
 
     @classmethod
     def is_delete_operation(cls, operation_name, operation_spec):
@@ -293,14 +305,26 @@ class BaseConfigurationResource(object):
         url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
 
         filters = params.get(ParamName.FILTERS) or {}
-        if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
-            # most endpoints only support filtering by name, so remaining `filters` are applied on returned objects
-            url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
+        # commented out for FMC
+        # unfortunately endpoints are not consistent on filter=name, and some endpoints throw an error
+        # if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
+        # most endpoints only support filtering by name, so remaining `filters` are applied on returned objects
+        #    url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
 
         item_generator = iterate_over_pageable_resource(
             partial(self.send_general_request, operation_name=operation_name), url_params
         )
         return (i for i in item_generator if match_filters(filters, i))
+
+    def _find_existing_object(self, model_name, path_params, object_id):
+        get_operation = self._find_get_operation(model_name)
+        if not get_operation:
+            return None
+        path_params_for_find = (path_params or {}).copy()
+        # only set objectId if it has a value - this is so validation will fail
+        if object_id is not None:
+            path_params_for_find[PATH_IDENTITY_PARAM] = object_id
+        return self.send_general_request(get_operation, {ParamName.PATH_PARAMS: path_params_for_find})
 
     def _stringify_name_filter(self, filters):
         build_version = self.get_build_version()
@@ -319,14 +343,39 @@ class BaseConfigurationResource(object):
         system_info = self._fetch_system_info()
         return system_info['databaseInfo']['buildVersion']
 
+    def is_bulk_operation(self, params):
+        """
+        Determines if operations is a bulk operation by checking if query param bulk=true
+        and data passed is a list.
+        """
+        data, query_params, path_params = _get_user_params(params)
+        is_bulk = query_params.get(BULK) is True
+        is_data_list = isinstance(data, list)
+        return is_bulk or is_data_list
+
+    def ensure_bulk_data_params(self, params):
+        """
+        If operation is a bulk operation, ensures and/or converts the data into a list.
+        """
+        if self.is_bulk_operation(params):
+            data = params[ParamName.DATA] or None
+            if data is not None and not isinstance(data, list):
+                params[ParamName.DATA] = [data]
+        return params
+
     def add_object(self, operation_name, params):
         def is_duplicate_name_error(err):
-            return err.code == UNPROCESSABLE_ENTITY_STATUS and DUPLICATE_NAME_ERROR_MESSAGE in str(err)
+            # note: FMC normally returns 400 for duplicates, but sometimes 422
+            return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
+                and DUPLICATE_NAME_ERROR_STR in str(err)
+            # return err.code == UNPROCESSABLE_ENTITY_STATUS and DUPLICATE_NAME_ERROR_MESSAGE in str(err)
 
+        params = self.ensure_bulk_data_params(params)
         try:
             return self.send_general_request(operation_name, params)
         except FmcServerError as e:
-            if is_duplicate_name_error(e):
+            if is_duplicate_name_error(e) and not self.is_bulk_operation(params):
+                # only support equality check in non-bulk scenario
                 return self._check_equality_with_existing_object(operation_name, params, e)
             else:
                 raise e
@@ -341,12 +390,17 @@ class BaseConfigurationResource(object):
 
         When the existing object is not equal to the object being created or
         several objects are returned, an exception is raised.
+
+        For FMC, this function only supports checking against a single object.
         """
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
-        existing_obj = self._find_object_matching_params(model_name, params)
+        # get list object first - this only contains id, name, type
+        existing_list_obj = self._find_object_matching_params(model_name, params)
 
-        if existing_obj is not None:
-            if equal_objects(existing_obj, params[ParamName.DATA]):
+        if existing_list_obj is not None:
+            # get full existing object
+            existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], existing_list_obj['id'])
+            if are_objects_equal(existing_obj, params[ParamName.DATA]):
                 return existing_obj
             else:
                 raise FmcConfigurationError(DUPLICATE_ERROR, existing_obj)
@@ -354,6 +408,10 @@ class BaseConfigurationResource(object):
         raise e
 
     def _find_object_matching_params(self, model_name, params):
+        """
+        Attempts to find existing, equivalent objects matching the parameters
+        Returns the existing objects if it exists, or None if not found.
+        """
         get_list_operation = self._find_get_list_operation(model_name)
         if not get_list_operation:
             return None
@@ -398,16 +456,32 @@ class BaseConfigurationResource(object):
 
     def edit_object(self, operation_name, params):
         data, __, path_params = _get_user_params(params)
+        is_bulk = self.is_bulk_operation(params)
 
+        # for bulk operation, skip equality check since there are multiple
+        if is_bulk:
+            params = self.ensure_bulk_data_params(params)
+            return self.send_general_request(operation_name, params)
+
+        # normalize id between path_params and data.id (path params takes precedence)
+        objectId = path_params.get(PATH_IDENTITY_PARAM)
+        if data is not None:
+            data['id'] = objectId
+
+        # lookup get operation to check equality
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
-        get_operation = self._find_get_operation(model_name)
+        existing_object = self._find_existing_object(model_name, path_params, objectId)
+        if not existing_object:
+            raise FmcConfigurationError('Referenced object does not exist')
+        elif are_objects_equal(existing_object, data):
+            return existing_object
 
-        if get_operation:
-            existing_object = self.send_general_request(get_operation, {ParamName.PATH_PARAMS: path_params})
-            if not existing_object:
-                raise FmcConfigurationError('Referenced object does not exist')
-            elif equal_objects(existing_object, data):
-                return existing_object
+        # if get_operation:
+        #     existing_object = self.send_general_request(get_operation, {ParamName.PATH_PARAMS: path_params})
+        #     if not existing_object:
+        #         raise FmcConfigurationError('Referenced object does not exist')
+        #     elif equal_objects(existing_object, data):
+        #         return existing_object
 
         return self.send_general_request(operation_name, params)
 
@@ -471,13 +545,24 @@ class BaseConfigurationResource(object):
         return self.add_object(add_op_name, params)
 
     def _edit_upserted_object(self, model_operations, existing_object, params):
-        edit_op_name = self._get_operation_name(self._operation_checker.is_edit_operation, model_operations)
-        _set_default(params, 'path_params', {})
-        _set_default(params, 'data', {})
+        edit_op_name = self._get_operation_name(self._is_upsertable_edit_operation, model_operations)
+        _set_default(params, ParamName.PATH_PARAMS, {})
+        _set_default(params, ParamName.DATA, {})
 
-        params['path_params']['objId'] = existing_object['id']
-        copy_identity_properties(existing_object, params['data'])
+        # note FMC uses objectId, FTD uses objId
+        params[ParamName.PATH_PARAMS][PATH_IDENTITY_PARAM] = existing_object['id']
+        copy_identity_properties(existing_object, params[ParamName.DATA])
+
         return self.edit_object(edit_op_name, params)
+
+    def _is_upsertable_edit_operation(self, operation_name, operation_spec):
+        """
+        Determines if the edit operation begins with 'edit' or 'update', and contains
+        the identity param (i.e. objectId) in its url path
+        """
+        return self._operation_checker.is_edit_operation(operation_name, operation_spec) and \
+            (operation_spec.get(OperationField.PARAMETERS) is None or
+             operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None)
 
     def upsert_object(self, op_name, params):
         """
@@ -493,6 +578,7 @@ class BaseConfigurationResource(object):
         :rtype: dict
         """
 
+        # strips the model name from op name (i.e. upsertAccessPolicy -> AccessPolicy)
         def extract_and_validate_model():
             model = op_name[len(OperationNamePrefix.UPSERT):]
             if not self._conn.get_model_spec(model):
@@ -505,11 +591,19 @@ class BaseConfigurationResource(object):
         if not self._operation_checker.is_upsert_operation_supported(model_operations):
             raise FmcInvalidOperationNameError(op_name)
 
+        # ensure that bulk data was not passed
+        if self.is_bulk_operation(params):
+            raise FmcConfigurationError(BULK_UPSERT_ERROR)
+
+        # retrieve object via list operation, create or update it
         existing_obj = self._find_object_matching_params(model_name, params)
         if existing_obj:
-            equal_to_existing_obj = equal_objects(existing_obj, params[ParamName.DATA])
-            return existing_obj if equal_to_existing_obj \
-                else self._edit_upserted_object(model_operations, existing_obj, params)
+            # equal_to_existing_obj = equal_objects(existing_obj, params[ParamName.DATA])
+            # return existing_obj if equal_to_existing_obj \
+            #    else self._edit_upserted_object(model_operations, existing_obj, params)
+            # Note: for FMC we cannot check equality here because the list operation just returns name and type
+            # edit_object will do a deeper equality check on the exact object
+            return self._edit_upserted_object(model_operations, existing_obj, params)
         else:
             return self._add_upserted_object(model_operations, params)
 
@@ -576,3 +670,15 @@ def iterate_over_pageable_resource(resource_func, params):
         params = copy.deepcopy(params)
         query_params = params[ParamName.QUERY_PARAMS]
         query_params['offset'] = int(query_params['offset']) + limit
+
+
+def are_objects_equal(obj1, obj2):
+    """
+    Wrapper call to equal_objects(), strips type from obj1 first since type names will be slightly different
+    based on origin from FMC API.
+    """
+    # because FMC can be inconsistent on type name, remove from source dict for comparison
+    d1 = obj1.copy()
+    d1.pop('type', '')
+    d2 = obj2
+    return equal_objects(d1, d2)

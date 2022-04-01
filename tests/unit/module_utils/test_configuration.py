@@ -89,7 +89,7 @@ class TestBaseConfigurationResource(object):
         assert [objects[0]] == list(resource.get_objects_by_filter('test', {ParamName.FILTERS: {'name': 'obj1'}}))
         send_request_mock.assert_has_calls(
             [
-                mock.call('/object/', 'get', {}, {}, {QueryParams.FILTER: 'name:obj1', 'limit': 10, 'offset': 0})
+                mock.call('/object/', 'get', {}, {}, {'limit': 10, 'offset': 0})
             ]
         )
 
@@ -103,7 +103,7 @@ class TestBaseConfigurationResource(object):
 
         send_request_mock.assert_has_calls(
             [
-                mock.call('/object/', 'get', {}, {}, {QueryParams.FILTER: 'name:obj2', 'limit': 10, 'offset': 0})
+                mock.call('/object/', 'get', {}, {}, {'limit': 10, 'offset': 0})
             ]
         )
 

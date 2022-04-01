@@ -33,6 +33,7 @@ from ansible.module_utils.six import integer_types, string_types, iteritems
 FILE_MODEL_NAME = '_File'
 SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
+MODEL_LIST_SUFFIX = 'ListContainer'
 
 
 class OperationField:
@@ -197,6 +198,8 @@ class FmcSwaggerParser:
         model_operations = {}
         for operations_name, params in iteritems(operations):
             model_name = params[OperationField.MODEL_NAME]
+            # FMC uses separate model names for list operations, so strip out "ListContainer" and merge into main model ops object
+            model_name = self._resolve_model_name(model_name)
             model_operations.setdefault(model_name, {})[operations_name] = params
         return model_operations
 
@@ -261,8 +264,7 @@ class FmcSwaggerParser:
         else:
             return None
 
-    @staticmethod
-    def _return_multiple_items(op_params):
+    def _return_multiple_items(self, op_params):
         """
         Defines if the operation returns one item or a list of items.
 
@@ -271,7 +273,9 @@ class FmcSwaggerParser:
         """
         try:
             schema = op_params[PropName.RESPONSES][SUCCESS_RESPONSE_CODE][PropName.SCHEMA]
-            return PropName.ITEMS in schema[PropName.PROPERTIES]
+            # handle $ref case - get actual model schema from ref
+            model = self._resolve_schema_or_ref(schema)
+            return PropName.ITEMS in model[PropName.PROPERTIES]
         except KeyError:
             return False
 
@@ -370,6 +374,25 @@ class FmcSwaggerParser:
         else:
             return model_name
 
+    def _resolve_schema_or_ref(self, schema):
+        """
+        Returns the schema itself, or the resolved reference to the schema elsewhere in the doc (if it contains a $ref property).
+
+        :param schema: schema object
+        :return: model object
+        """
+        schema_ref = schema.get(PropName.REF)
+        if schema_ref is None:
+            return schema
+        model_name = self._get_model_name_byschema_ref(schema_ref)
+        model = self._definitions.get(model_name)
+        return model or schema
+
+    def _resolve_model_name(self, model_name):
+        if model_name is None:
+            return None
+        return model_name.replace(MODEL_LIST_SUFFIX, '') if model_name.endswith(MODEL_LIST_SUFFIX) else model_name
+
 
 class FmcSwaggerValidator:
     def __init__(self, spec):
@@ -386,7 +409,7 @@ class FmcSwaggerValidator:
         :param operation_name: string
                             The value must be non empty string.
                             The operation name is used to get a model specification
-        :param data: dict
+        :param data: dict or list
                     The value must be in the format that the model(from operation) expects
         :rtype: (bool, string|dict)
         :return:
@@ -400,7 +423,7 @@ class FmcSwaggerValidator:
                 ],
                 'invalid_type':[ #list of the fields with invalid data
                         {
-                           'path': 'objId', #field name or path to the field. Ex. objects[3].id, parent.name
+                           'path': 'objectId', #field name or path to the field. Ex. objects[3].id, parent.name
                            'expected_type': 'string',# expected type. Ex. 'object', 'array', 'string', 'integer',
                                                      # 'boolean', 'number'
                            'actually_value': 1 # the value that user passed
@@ -409,7 +432,7 @@ class FmcSwaggerValidator:
             })
         :raises IllegalArgumentException
             'The operation_name parameter must be a non-empty string' if operation_name is not valid
-            'The data parameter must be a dict' if data neither dict or None
+            'The data parameter must be a dict or list' if data neither dict or list or None
             '{operation_name} operation does not support' if the spec does not contain the operation
         """
         if data is None:
@@ -418,10 +441,11 @@ class FmcSwaggerValidator:
         self._check_validate_data_params(data, operation_name)
 
         operation = self._operations[operation_name]
-        model = self._models[operation[OperationField.MODEL_NAME]]
+        model_name = operation[OperationField.MODEL_NAME]
+        model = self._models[model_name]
         status = self._init_report()
 
-        self._validate_object(status, model, data, '')
+        self._validate_root_object(status, model, data, '')
 
         if len(status[PropName.REQUIRED]) > 0 or len(status[PropName.INVALID_TYPE]) > 0:
             return False, self._delete_empty_field_from_report(status)
@@ -430,8 +454,8 @@ class FmcSwaggerValidator:
     def _check_validate_data_params(self, data, operation_name):
         if not operation_name or not isinstance(operation_name, string_types):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
-        if not isinstance(data, dict):
-            raise IllegalArgumentException("The data parameter must be a dict")
+        if not isinstance(data, dict) and not isinstance(data, list):
+            raise IllegalArgumentException("The data parameter must be a dict or list")
         if operation_name not in self._operations:
             raise IllegalArgumentException("{0} operation does not support".format(operation_name))
 
@@ -571,6 +595,19 @@ class FmcSwaggerValidator:
         #         if prop_name in params and not self._is_correct_simple_types(expected_type, value, allow_null=False):
         #             self._add_invalid_type_report(status, '', prop_name, expected_type, value)
 
+    def _validate_root_object(self, status, model, data, path):
+        """
+        Validates the root object "data" is either a enum, object, or list.
+        """
+        if self._is_enum(model):
+            self._check_enum(status, model, data, path)
+        elif self._is_object(model):
+            # For FMC, data is sometimes a list for multiple/bulk
+            if isinstance(data, list):
+                self._check_objects(status, model, data, path)
+            else:
+                self._check_object(status, model, data, path)
+
     def _validate_object(self, status, model, data, path):
         if self._is_enum(model):
             self._check_enum(status, model, data, path)
@@ -590,6 +627,10 @@ class FmcSwaggerValidator:
             'expected_type': expected_type,
             'actually_value': actually_value
         })
+
+    def _check_objects(self, status, model, data, path):
+        for i, item_data in enumerate(data):
+            self._check_object(status, model, item_data, "{0}[{1}]".format(path, i))
 
     def _check_object(self, status, model, data, path):
         if data is None:
@@ -616,7 +657,8 @@ class FmcSwaggerValidator:
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
-            ref_model = self._get_model_by_ref(model)
+            # intelligently resolve model if is has $ref
+            ref_model = self._get_model(model)
 
             self._validate_object(status, ref_model, actually_value,
                                   path=self._create_path_to_field(path, prop_name))
@@ -630,6 +672,12 @@ class FmcSwaggerValidator:
         model = _get_model_name_from_url(model_prop_val[PropName.REF])
         return self._models[model]
 
+    def _get_model(self, model):
+        model_ref = model.get(PropName.REF)
+        if model_ref is None:
+            return model
+        return self._get_model_by_ref(model)
+
     def _check_required_fields(self, status, required_fields, data, path):
         missed_required_fields = [self._create_path_to_field(path, field) for field in
                                   required_fields if field not in data.keys() or data[field] is None]
@@ -642,7 +690,7 @@ class FmcSwaggerValidator:
         elif not isinstance(data, list):
             self._add_invalid_type_report(status, path, '', PropType.ARRAY, data)
         else:
-            item_model = model[PropName.ITEMS]
+            item_model = self._get_model(model[PropName.ITEMS])
             for i, item_data in enumerate(data):
                 self._check_types(status, item_data, item_model[PropName.TYPE], item_model, "{0}[{1}]".format(path, i),
                                   '')

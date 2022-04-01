@@ -1,0 +1,33 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get Domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: cra1
+
+    - name: Get all device groups
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDeviceGroup
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        register_as: device_groups
+
+    - name: Create a device group
+      cisco.fmcansible.fmc_configuration:
+        operation: createDeviceGroup
+        register_as: device_group_1
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+        data:
+          type: DeviceGroup
+          name: my-device-group-1
+
+    - name: Delete a device group
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteDeviceGroup
+        path_params:
+          domainUUID: '{{ cra1[0].uuid }}'
+          objectId: '{{ device_group_1.id }}'
+        data:
+          id: '{{ device_group_1.id }}'

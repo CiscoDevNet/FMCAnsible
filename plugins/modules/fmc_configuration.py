@@ -46,8 +46,8 @@ options:
     type: str
   data:
     description:
-      - Key-value pairs that should be sent as body parameters in a REST API call
-    type: dict
+      - JSON-like object or array that should be sent as body parameters in a REST API call
+    type: raw
   query_params:
     description:
       - Key-value pairs that should be sent as query parameters in a REST API call.
@@ -106,7 +106,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import con
 def main():
     fields = dict(
         operation=dict(type='str', required=True),
-        data=dict(type='dict'),
+        data=dict(type='raw'),  # FMC supports dict or list
         query_params=dict(type='dict'),
         path_params=dict(type='dict'),
         register_as=dict(type='str'),

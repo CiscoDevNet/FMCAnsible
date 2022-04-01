@@ -64,6 +64,10 @@ from ansible.module_utils.connection import ConnectionError
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
+try:
+    from ansible_collections.cisco.fmcansible.plugins.httpapi.client import InternalHttpClient
+except ImportError:
+    InternalHttpClient = None
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
@@ -81,20 +85,19 @@ GET_API_VERSIONS_PATH = '/info/versions'
 DEFAULT_API_VERSIONS = ['v1']
 
 INVALID_API_TOKEN_PATH_MSG = ('The API token path is incorrect. Please, check correctness of '
-                              'the `ansible_httpapi_ftd_token_path` variable in the inventory file.')
+                              'the `ansible_httpapi_fmc_token_path` variable in the inventory file.')
 MISSING_API_TOKEN_PATH_MSG = ('Ansible could not determine the API token path automatically. Please, '
-                              'specify the `ansible_httpapi_ftd_token_path` variable in the inventory file.')
+                              'specify the `ansible_httpapi_fmc_token_path` variable in the inventory file.')
 
 try:
     import display
 except ImportError:
     from ansible.utils.display import Display
-
     display = Display()
 
 
 class HttpApi(HttpApiBase):
-    def __init__(self, connection):
+    def __init__(self, connection, use_internal_client=True):
         super(HttpApi, self).__init__(connection)
         self.connection = connection
 
@@ -103,6 +106,25 @@ class HttpApi(HttpApiBase):
         self._api_spec = None
         self._api_validator = None
         self._ignore_http_errors = False
+        self._use_internal_client = use_internal_client
+        self._http_client = None
+
+    @property
+    def http_client(self):
+        # use separate internal client to manage requests (if available)
+        if self._http_client is not None:
+            return self._http_client
+        if InternalHttpClient and self._use_internal_client:
+            try:
+                host = self.connection.get_option('host')
+                self._http_client = InternalHttpClient(host, TOKEN_PATH_TEMPLATE)
+            except Exception:
+                self._use_internal_client = False
+                self._http_client = None
+        else:
+            self._use_internal_client = False
+            self._http_client = None
+        return self._http_client
 
     def login(self, username, password):
         def request_token_payload(username, password):
@@ -204,12 +226,21 @@ class HttpApi(HttpApiBase):
             'token_to_revoke': self.refresh_token
         }
 
-        url = self._get_api_token_path()
+        # lookup login url
+        urls = self._get_api_token_path()
+        if urls:
+            token_paths = [urls]
+        else:
+            token_paths = self._get_known_token_paths()
+        url = token_paths[0]
 
         self._display(HTTPMethod.POST, 'logout', url)
         self._send_auth_request(url, json.dumps(auth_payload), method=HTTPMethod.POST, headers=BASE_HEADERS)
         self.refresh_token = None
         self.access_token = None
+
+    def _require_login(self):
+        return self.access_token is None
 
     def _send_auth_request(self, path, data, **kwargs):
         error_msg_prefix = 'Server returned an error during authentication request'
@@ -218,18 +249,14 @@ class HttpApi(HttpApiBase):
     def _send_service_request(self, path, error_msg_prefix, data=None, **kwargs):
         try:
             self._ignore_http_errors = True
-            # return self.connection.send(path, data, **kwargs)
-            # x, y = self.connection.send('/api/fmc_platform/v1/auth/generatetoken', data=None, method=HTTPMethod.POST,
-            #                             headers=BASE_HEADERS, url_username='admin', url_password='firepower',
-            #                             force_basic_auth=True)
-            return self.connection.send('/api/fmc_platform/v1/auth/generatetoken', data=None, method=HTTPMethod.POST,
-                                        headers=BASE_HEADERS, url_username='admin', url_password='firepower',
-                                        force_basic_auth=True)
+            return self._send(path, data, **kwargs)
         except HTTPError as e:
             # HttpApi connection does not read the error response from HTTPError, so we do it here and wrap it up in
             # ConnectionError, so the actual error message is displayed to the user.
             error_msg = json.loads(to_text(e.read()))
             raise ConnectionError('%s: %s' % (error_msg_prefix, error_msg), http_code=e.code)
+        except Exception as e:
+            raise ConnectionError('%s: %s' % (error_msg_prefix, e), http_code=500)
         finally:
             self._ignore_http_errors = False
 
@@ -246,8 +273,13 @@ class HttpApi(HttpApiBase):
             if data:
                 self._display(http_method, 'data', data)
 
-            response, response_data = self.connection.send(url, data, method=http_method, headers=BASE_HEADERS)
+            # log in again if access_token not set
+            if self._require_login():
+                self._login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
 
+            response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
+
+            # response_data is bytearray, so convert to string
             value = self._get_response_value(response_data)
             self._display(http_method, 'response', value)
 
@@ -256,16 +288,15 @@ class HttpApi(HttpApiBase):
                 ResponseParams.STATUS_CODE: response.getcode(),
                 ResponseParams.RESPONSE: self._response_to_json(value)
             }
+
         # Being invoked via JSON-RPC, this method does not serialize and pass HTTPError correctly to the method caller.
         # Thus, in order to handle non-200 responses, we need to wrap them into a simple structure and pass explicitly.
         except HTTPError as e:
             error_msg = to_text(e.read())
-            self._display(http_method, 'error', error_msg)
-            return {
-                ResponseParams.SUCCESS: False,
-                ResponseParams.STATUS_CODE: e.code,
-                ResponseParams.RESPONSE: self._response_to_json(error_msg)
-            }
+            return self._handle_send_error(http_method, self._response_to_json(error_msg), e.code)
+        except Exception as e:
+            status_code = getattr(e, 'status_code') if hasattr(e, 'status_code') else 500
+            return self._handle_send_error(http_method, e, status_code)
 
     def upload_file(self, from_path, to_url):
         url = construct_url_path(to_url)
@@ -279,7 +310,7 @@ class HttpApi(HttpApiBase):
             headers['Content-Type'] = content_type
             headers['Content-Length'] = len(body)
 
-            dummy, response_data = self.connection.send(url, data=body, method=HTTPMethod.POST, headers=headers)
+            dummy, response_data = self._send(url, data=body, method=HTTPMethod.POST, headers=headers)
             value = self._get_response_value(response_data)
             self._display(HTTPMethod.POST, 'upload:response', value)
             return self._response_to_json(value)
@@ -287,7 +318,7 @@ class HttpApi(HttpApiBase):
     def download_file(self, from_url, to_path, path_params=None):
         url = construct_url_path(from_url, path_params=path_params)
         self._display(HTTPMethod.GET, 'download', url)
-        response, response_data = self.connection.send(url, data=None, method=HTTPMethod.GET, headers=BASE_HEADERS)
+        response, response_data = self._send(url, data=None, method=HTTPMethod.GET, headers=BASE_HEADERS)
 
         if os.path.isdir(to_path):
             filename = extract_filename_from_headers(response.info())
@@ -306,12 +337,46 @@ class HttpApi(HttpApiBase):
         # None means that the exception will be passed further to the caller
         return None
 
+    def _handle_send_error(self, http_method, error_msg, error_code):
+        self._display(http_method, 'error', error_msg)
+        return {
+            ResponseParams.SUCCESS: False,
+            ResponseParams.STATUS_CODE: error_code,
+            ResponseParams.RESPONSE: error_msg if error_msg is dict else str(error_msg)
+        }
+
+    def _send(self, url, data, **kwargs):
+        if self.http_client:
+            return self.http_client.send(url, data, **kwargs)
+        else:
+            return self.connection.send(url, data, **kwargs)
+
+    def _login(self, username, password):
+        if self.http_client:
+            # login via http client
+            login_obj = self.http_client.send_login(username, password)
+            self.access_token = login_obj['access_token']
+            self.refresh_token = login_obj['refresh_token']
+            BASE_HEADERS['X-auth-access-token'] = self.access_token
+        else:
+            # login using default approach
+            return self.login(username, password)
+
     def _display(self, http_method, title, msg=''):
         display.vvvv('REST:{0}:{1}:{2}\n{3}'.format(http_method, self.connection._url, title, msg))
 
     @staticmethod
     def _get_response_value(response_data):
-        return to_text(response_data.getvalue())
+        """
+        Converts the JSON or JSON-RPC response to string.
+        """
+        if response_data is None:
+            return ''
+        try:
+            return to_text(response_data.getvalue())
+        except AttributeError:
+            pass
+        return json.dumps(response_data)
 
     def _get_api_spec_path(self):
         return self.get_option('spec_path')
@@ -338,7 +403,6 @@ class HttpApi(HttpApiBase):
         :return: list of API versions suitable for device
         :rtype: list
         """
-
         # the API only supports v1
         return "v1"
 

@@ -1,8 +1,8 @@
 [all:vars]
 ansible_network_os=cisco.fmcansible.fmc
 
-[vftd]
-3.215.49.139 ansible_user=admin ansible_password=Lekki!2014 ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=False network_value=3.215.49.139
+[vfmc]
+127.0.0.1 ansible_user=admin ansible_password=admin ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=False
 
-[vftd:vars]
+[vfmc:vars]
 network_type=HOST
