@@ -39,6 +39,10 @@ DEFAULT_OFFSET = 0
 
 BAD_REQUEST_STATUS = 400
 UNPROCESSABLE_ENTITY_STATUS = 422
+NOT_FOUND_STATUS = 404
+
+NOT_EXISTS_ERROR_STR = "Referenced object does not exist"
+NOT_FOUND_ERROR_MESSAGE = "Resource Not Found"
 INVALID_UUID_ERROR_MESSAGE = "Validation failed due to an invalid UUID"
 DUPLICATE_NAME_ERROR_MESSAGE = "Validation failed due to a duplicate name"
 DUPLICATE_NAME_ERROR_STR = "already exists."
@@ -275,6 +279,8 @@ class BaseConfigurationResource(object):
             resp = self.delete_object(op_name, params)
         elif self._operation_checker.is_find_by_filter_operation(op_name, params, op_spec):
             resp = list(self.get_objects_by_filter(op_name, params))
+        elif self._operation_checker.is_get_list_operation(op_name, op_spec):
+            resp = self.list_objects(op_name, params)
         else:
             resp = self.send_general_request(op_name, params)
         return resp
@@ -368,7 +374,6 @@ class BaseConfigurationResource(object):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
                 and DUPLICATE_NAME_ERROR_STR in str(err)
-            # return err.code == UNPROCESSABLE_ENTITY_STATUS and DUPLICATE_NAME_ERROR_MESSAGE in str(err)
 
         params = self.ensure_bulk_data_params(params)
         try:
@@ -443,14 +448,15 @@ class BaseConfigurationResource(object):
             if self._operation_checker.is_get_operation(op, op_spec)), None)
 
     def delete_object(self, operation_name, params):
-        def is_invalid_uuid_error(err):
-            return err.code == UNPROCESSABLE_ENTITY_STATUS and INVALID_UUID_ERROR_MESSAGE in str(err)
+        def is_not_found_error(err):
+            # note: FMC normally returns 404 for not found
+            return err.code == NOT_FOUND_STATUS or NOT_FOUND_ERROR_MESSAGE in str(err)
 
         try:
             return self.send_general_request(operation_name, params)
         except FmcServerError as e:
-            if is_invalid_uuid_error(e):
-                return {'status': 'Referenced object does not exist'}
+            if is_not_found_error(e):
+                return {'status': NOT_EXISTS_ERROR_STR}
             else:
                 raise e
 
@@ -472,18 +478,22 @@ class BaseConfigurationResource(object):
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
         existing_object = self._find_existing_object(model_name, path_params, objectId)
         if not existing_object:
-            raise FmcConfigurationError('Referenced object does not exist')
+            raise FmcConfigurationError(NOT_EXISTS_ERROR_STR)
         elif are_objects_equal(existing_object, data):
             return existing_object
 
-        # if get_operation:
-        #     existing_object = self.send_general_request(get_operation, {ParamName.PATH_PARAMS: path_params})
-        #     if not existing_object:
-        #         raise FmcConfigurationError('Referenced object does not exist')
-        #     elif equal_objects(existing_object, data):
-        #         return existing_object
-
         return self.send_general_request(operation_name, params)
+
+    def list_objects(self, operation_name, params):
+        """
+        Executes a "get all" operation and normalizes the list.
+        """
+        list_obj = self.send_general_request(operation_name, params)
+        if list_obj is None:
+            return list_obj
+        if list_obj.get('items') is None:
+            list_obj['items'] = []
+        return list_obj
 
     def send_general_request(self, operation_name, params):
         def stop_if_check_mode():
@@ -659,11 +669,16 @@ def iterate_over_pageable_resource(resource_func, params):
 
     while True:
         result = resource_func(params=params)
+        items = result.get('items')
 
-        for item in result['items']:
+        # When there are no items, FMC sometimes omits the property completely
+        if items is None:
+            break
+
+        for item in items:
             yield item
 
-        if received_less_items_than_requested(len(result['items']), limit):
+        if received_less_items_than_requested(len(items), limit):
             break
 
         # creating a copy not to mutate existing dict

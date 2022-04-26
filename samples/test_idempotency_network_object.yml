@@ -74,16 +74,13 @@
         that:
           - result.changed == true
 
-    - name: deleteNetworkObject should fail when the referenced network does not exist
+    - name: deleteNetworkObject should quietly succeed when the referenced network does not exist
       cisco.fmcansible.fmc_configuration:
         operation: deleteNetworkObject
         path_params:
           domainUUID: '{{ cra1[0].uuid }}'
           objectId: '{{ testObj.id }}'
       register: result
-      ignore_errors: yes
     - assert:
         that:
           - result.changed == false
-          - result.failed == true
-          - "'Resource Not Found.' in result.msg"

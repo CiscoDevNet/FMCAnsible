@@ -19,7 +19,7 @@
       register: result
     - assert:
         that:
-          - getObjs['paging'].count == 0
+          - getObjs | length == 0
 
     # create NetworkObject via upsert
     - name: upsertNetworkObject should create a new network

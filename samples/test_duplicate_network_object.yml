@@ -20,7 +20,7 @@
       register: result
     - assert:
         that:
-          - getObjs['paging'].count == 0
+          - getObjs | length == 7
 
     - name: createMultipleNetworkObject should create multiple new networks
       cisco.fmcansible.fmc_configuration:
@@ -83,6 +83,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: updateNetworkObject
         path_params:
+          objectId: '{{ createdObjs[0].id }}'
           domainUUID: '{{ cra1[0].uuid }}'
         data:
           name: "ansible-test-dup-no1"
