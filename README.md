@@ -13,9 +13,6 @@ the user documentation, please check [FMC Ansible docs on DevNet](https://develo
 The collection contains four Ansible modules:
 
 * [`fmc_configuration.py`](./ansible_collections/plugins/modules/fmc_configuration.py) - manages device configuration via REST API. The module configures virtual and physical devices by sending HTTPS calls formatted according to the REST API specification;
-* [`fmc_file_download.py`](./ansible_collections/plugins/modules//fmc_file_download.py) - downloads files from FMC devices via HTTPS protocol;
-* [`fmc_file_upload.py`](./ansible_collections/plugins/modules//fmc_file_upload.py) - uploads files to FMC devices via HTTPS protocol;
-* [`fmc_install.py`](./ansible_collections/plugins/modules//fmc_install.py) - installs FMC images on hardware devices. The module performs a complete reimage of the Firepower system by downloading the new software image and installing it. 
 
 Sample playbooks are located in the [`samples`](./samples) folder.
 
