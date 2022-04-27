@@ -1,21 +1,22 @@
 ARG PYTHON_VERSION=3.6
 FROM python:${PYTHON_VERSION}
-ARG FTD_ANSIBLE_VERSION=v0.2.1
-ARG FTD_ANSIBLE_FOLDER=ftd-ansible
+ARG FMC_ANSIBLE_VERSION=v0.2.1
+ARG FMC_ANSIBLE_FOLDER=fmc-ansible
 
-RUN wget https://github.com/CiscoDevNet/FTDAnsible/archive/${FTD_ANSIBLE_VERSION}.tar.gz && \
-    tar -xvf ${FTD_ANSIBLE_VERSION}.tar.gz
+RUN apt-get update && \
+    apt-get install -yq sshpass && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-RUN mkdir /${FTD_ANSIBLE_FOLDER}/ && \
-    export FTD_SOURCE_FOLDER=`find ./ -maxdepth 1 -type d -name '*FTDAnsible-*'` && \
-    mv $FTD_SOURCE_FOLDER/httpapi_plugins /${FTD_ANSIBLE_FOLDER} && \
-    mv $FTD_SOURCE_FOLDER/library /${FTD_ANSIBLE_FOLDER} && \
-    mv $FTD_SOURCE_FOLDER/module_utils /${FTD_ANSIBLE_FOLDER} && \
-    mv $FTD_SOURCE_FOLDER/requirements.txt /${FTD_ANSIBLE_FOLDER} && \
-    mv $FTD_SOURCE_FOLDER/ansible.cfg  /${FTD_ANSIBLE_FOLDER}
+RUN wget https://github.com/CiscoDevNet/FMCAnsible/archive/${FMC_ANSIBLE_VERSION}.tar.gz && \
+    tar -xvf ${FMC_ANSIBLE_VERSION}.tar.gz
 
-RUN pip install --no-cache-dir -r /${FTD_ANSIBLE_FOLDER}/requirements.txt
+RUN mkdir /${FMC_ANSIBLE_FOLDER}/ && \
+    export FMC_SOURCE_FOLDER=`find ./ -maxdepth 1 -type d -name '*FMCAnsible-*'` && \
+    mv $FMC_SOURCE_FOLDER/requirements.txt /${FMC_ANSIBLE_FOLDER} && \
+    mv $FMC_SOURCE_FOLDER/ansible.cfg  /${FMC_ANSIBLE_FOLDER}
 
-ENV PYTHONPATH="$PYTHONPATH:/${FTD_ANSIBLE_FOLDER}/"
-WORKDIR /${FTD_ANSIBLE_FOLDER}
+RUN pip install --no-cache-dir -r /${FMC_ANSIBLE_FOLDER}/requirements.txt
+
+ENV PYTHONPATH="$PYTHONPATH:/${FMC_ANSIBLE_FOLDER}/"
+WORKDIR /${FMC_ANSIBLE_FOLDER}
 ENTRYPOINT ["ansible-playbook"]

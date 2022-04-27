@@ -1,0 +1,27 @@
+ARG PYTHON_VERSION=3.6
+FROM python:${PYTHON_VERSION}
+ARG FMC_ANSIBLE_VERSION=v0.4.1236
+ARG FMC_ANSIBLE_FOLDER=/root/ansible_collections/cisco/fmcansible
+
+RUN apt-get update && \
+    apt-get install -yq sshpass && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+RUN mkdir -p ${FMC_ANSIBLE_FOLDER}/ 
+
+RUN ls -al /tmp
+
+COPY requirements.txt ${FMC_ANSIBLE_FOLDER}/
+RUN pip install --no-cache-dir -r /${FMC_ANSIBLE_FOLDER}/requirements.txt
+
+COPY test-requirements.txt ${FMC_ANSIBLE_FOLDER}/
+COPY galaxy.yml ${FMC_ANSIBLE_FOLDER}/
+COPY meta ${FMC_ANSIBLE_FOLDER}/meta
+COPY plugins ${FMC_ANSIBLE_FOLDER}/plugins
+COPY samples ${FMC_ANSIBLE_FOLDER}/samples
+COPY tests ${FMC_ANSIBLE_FOLDER}/tests
+
+
+ENV PYTHONPATH="$PYTHONPATH:/${FMC_ANSIBLE_FOLDER}/"
+WORKDIR /${FMC_ANSIBLE_FOLDER}
+ENTRYPOINT ["ansible-playbook"]

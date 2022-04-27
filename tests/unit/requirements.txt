@@ -1,0 +1,9 @@
+backports.unittest_mock; python_version < '3'
+mock; python_version > '3'
+pytest
+six
+units
+urllib3
+#yamllint
+#enum34
+#ordereddict
