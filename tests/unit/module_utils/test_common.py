@@ -291,6 +291,83 @@ def test_equal_objects_return_true_with_reference_list_containing_duplicates():
         }
     )
 
+def test_equal_objects_additive_sanity():
+    assert equal_objects(
+        {
+            'foo': 1,
+            'bar': 2
+        },
+        {
+            'foo': 1,
+            'bar': 2
+        }
+    )
+
+def test_equal_objects_additive_leftside():
+    # false: left side has properties not on right side
+    assert not equal_objects(
+        {
+            'foo': 1,
+            'bar': 2
+        },
+        {
+            'foo': 1
+        }
+    )
+
+def test_equal_objects_additive_rightside():
+    # true: right side has properties not on right side, this is okay
+    assert not equal_objects(
+        {
+            'foo': 1
+        },
+        {
+            'foo': 1,
+            'bar': 2
+        }
+    )
+
+def test_equal_objects_additive_objects():
+    # false: left side has object properties not on right side
+    assert not equal_objects(
+        {
+            "name": "foo",
+            "action": "ALLOW",
+            "type": "AccessRule",
+            "sourceNetworks": {
+                "objects": [
+                    {
+                        "type": "Network",
+                        "name": "bar",
+                        "id": "123"
+                    }
+                ]
+            },
+            "destinationNetworks": {
+                "objects": [
+                    {
+                        "type": "Network",
+                        "name": "bax",
+                        "id": "456"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "foo",
+            "action": "ALLOW",
+            "type": "AccessRule",
+            "sourceNetworks": {
+                "objects": [
+                    {
+                        "type": "Network",
+                        "name": "bar",
+                        "id": "123"
+                    }
+                ]
+            }
+        }
+    )
 
 def test_delete_ref_duplicates_with_none():
     assert delete_ref_duplicates(None) is None
