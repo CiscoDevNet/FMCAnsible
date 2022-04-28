@@ -20,7 +20,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, delete_ref_duplicates, construct_ansible_facts
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, equal_objects_additive, delete_ref_duplicates, construct_ansible_facts
 
 
 # simple objects
@@ -292,7 +292,7 @@ def test_equal_objects_return_true_with_reference_list_containing_duplicates():
     )
 
 def test_equal_objects_additive_sanity():
-    assert equal_objects(
+    assert equal_objects_additive(
         {
             'foo': 1,
             'bar': 2
@@ -305,7 +305,7 @@ def test_equal_objects_additive_sanity():
 
 def test_equal_objects_additive_leftside():
     # false: left side has properties not on right side
-    assert not equal_objects(
+    assert not equal_objects_additive(
         {
             'foo': 1,
             'bar': 2
@@ -317,7 +317,7 @@ def test_equal_objects_additive_leftside():
 
 def test_equal_objects_additive_rightside():
     # true: right side has properties not on right side, this is okay
-    assert not equal_objects(
+    assert not equal_objects_additive(
         {
             'foo': 1
         },
@@ -329,7 +329,7 @@ def test_equal_objects_additive_rightside():
 
 def test_equal_objects_additive_objects():
     # false: left side has object properties not on right side
-    assert not equal_objects(
+    assert not equal_objects_additive(
         {
             "name": "foo",
             "action": "ALLOW",
