@@ -27,7 +27,7 @@ from functools import partial
 
 from ansible.module_utils.six import iteritems
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects_additive, FmcConfigurationError, \
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, equal_objects_additive, FmcConfigurationError, \
     FmcServerError, ResponseParams, copy_identity_properties, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
