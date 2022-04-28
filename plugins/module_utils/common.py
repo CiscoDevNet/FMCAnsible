@@ -34,7 +34,7 @@ from ansible.module_utils.common.collections import is_string
 INVALID_IDENTIFIER_SYMBOLS = r'[^a-zA-Z0-9_]'
 
 IDENTITY_PROPERTIES = ['id', 'version', 'ruleId']
-NON_COMPARABLE_PROPERTIES = IDENTITY_PROPERTIES + ['isSystemDefined', 'links', 'token']
+NON_COMPARABLE_PROPERTIES = IDENTITY_PROPERTIES + ['isSystemDefined', 'links', 'token', 'metadata', 'type']
 
 
 class HTTPMethod:
@@ -218,6 +218,44 @@ def equal_objects(d1, d2, compare_common_fields_only=True):
     d1 = prepare_data_for_comparison(d1, common_keys)
     d2 = prepare_data_for_comparison(d2, common_keys)
     return equal_dicts(d1, d2, compare_by_reference=False)
+
+
+def equal_objects_additive(d1, d2):
+    """
+    Checks whether two objects are equal using the additive approach. This means that d1 can contain less
+    properties than d2, but not vice versa. Similar to equal_objects() except compare_common_fields_only
+    true for the left side (d2) only.
+
+    :type d1: dict
+    :type d2: dict
+    :return: True if passed objects and their properties are equal. Otherwise, returns False.
+    """
+    additive_keys = d1.keys()
+    d2_keys = d2.keys()
+    d2 = dict(d2)
+    # copy empty values to right side before comparison
+    # this will force equal_objects() to false if left side has more properties
+    for key in additive_keys:
+        if key not in d2_keys:
+            new_obj = empty_value(d1[key])
+            d2[key] = new_obj
+    # now compare additive object with right-side object
+    return equal_objects(d1, d2, True)
+
+
+def empty_value(val):
+    """
+    Returns an empty value for specified value i.e. [], {} or None
+    """
+    value_type = type(val)
+    if value_type == list:
+        return []
+    elif value_type == dict:
+        return {}
+    elif val is None:
+        return None
+    else:
+        return 0
 
 
 def delete_ref_duplicates(d):
