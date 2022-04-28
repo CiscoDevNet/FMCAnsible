@@ -20,7 +20,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, equal_objects_additive, delete_ref_duplicates, construct_ansible_facts
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, equal_objects_additive, delete_ref_duplicates, \
+    construct_ansible_facts
 
 
 # simple objects
@@ -320,7 +321,7 @@ def test_equal_objects_additive_leftside():
 
 def test_equal_objects_additive_rightside():
     # true: right side has properties not on right side, this is okay
-    assert not equal_objects_additive(
+    assert equal_objects_additive(
         {
             'foo': 1
         },
