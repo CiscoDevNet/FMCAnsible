@@ -27,7 +27,7 @@ from functools import partial
 
 from ansible.module_utils.six import iteritems
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, \
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, equal_objects_additive, FmcConfigurationError, \
     FmcServerError, ResponseParams, copy_identity_properties, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
@@ -404,8 +404,9 @@ class BaseConfigurationResource(object):
 
         if existing_list_obj is not None:
             # get full existing object
+            playbook_obj = params[ParamName.DATA]
             existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], existing_list_obj['id'])
-            if are_objects_equal(existing_obj, params[ParamName.DATA]):
+            if is_playbook_obj_equal_to_api_obj(playbook_obj, existing_obj):
                 return existing_obj
             else:
                 raise FmcConfigurationError(DUPLICATE_ERROR, existing_obj)
@@ -479,7 +480,7 @@ class BaseConfigurationResource(object):
         existing_object = self._find_existing_object(model_name, path_params, objectId)
         if not existing_object:
             raise FmcConfigurationError(NOT_EXISTS_ERROR_STR)
-        elif are_objects_equal(existing_object, data):
+        elif is_playbook_obj_equal_to_api_obj(data, existing_object):
             return existing_object
 
         return self.send_general_request(operation_name, params)
@@ -687,13 +688,13 @@ def iterate_over_pageable_resource(resource_func, params):
         query_params['offset'] = int(query_params['offset']) + limit
 
 
-def are_objects_equal(obj1, obj2):
+def is_playbook_obj_equal_to_api_obj(obj_client, obj_server):
     """
     Wrapper call to equal_objects(), strips type from obj1 first since type names will be slightly different
     based on origin from FMC API.
     """
     # because FMC can be inconsistent on type name, remove from source dict for comparison
-    d1 = obj1.copy()
-    d1.pop('type', '')
-    d2 = obj2
-    return equal_objects(d1, d2)
+    # d1 = obj1.copy()
+    # d1.pop('type', '')
+    # d2 = obj2
+    return equal_objects_additive(obj_client, obj_server)
