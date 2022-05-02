@@ -490,10 +490,23 @@ class TestUpsertOperationFunctionalTests(object):
                 'url': url_with_id_templ,
                 'returnMultipleItems': False}
         }
+        model = {
+            'properties': {
+                'id': { "type": "string" },
+                'name': { "type": "string" },
+                'value': { "type": "string" },
+                'type': { "type": "string" },
+                'version': { "type": "string" },
+            }
+        }
 
         def get_operation_spec(name):
             return operations[name]
 
+        def get_model_spec(name):
+            return model
+
+        connection_mock.get_model_spec = get_model_spec
         connection_mock.get_operation_spec = get_operation_spec
         connection_mock.get_operation_specs_by_model_name.return_value = operations
 
@@ -814,10 +827,23 @@ class TestUpsertOperationFunctionalTests(object):
                 'url': url_with_id_templ,
                 'returnMultipleItems': False}
         }
+        model = {
+            'properties': {
+                'id': { "type": "string" },
+                'name': { "type": "string" },
+                'value': { "type": "string" },
+                'type': { "type": "string" },
+                'version': { "type": "string" },
+            }
+        }
 
         def get_operation_spec(name):
             return operations[name]
 
+        def get_model_spec(name):
+            return model
+
+        connection_mock.get_model_spec = get_model_spec
         connection_mock.get_operation_spec = get_operation_spec
         connection_mock.get_operation_specs_by_model_name.return_value = operations
         connection_mock.send_request = request_handler

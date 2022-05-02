@@ -69,6 +69,7 @@ PATH_IDENTITY_PARAM = 'objectId'
 BULK = "bulk"
 NAME = "name"
 
+
 # Note: FMC uses create/update; FTD uses add/edit
 class OperationNamePrefix:
     ADD = 'add'
@@ -445,7 +446,7 @@ class BaseConfigurationResource(object):
         data = params[ParamName.DATA]
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
-        #if not params.get(ParamName.FILTERS):
+        # if not params.get(ParamName.FILTERS):
         #    params[ParamName.FILTERS] = {'name': data['name']}
 
         obj = None
