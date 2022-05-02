@@ -492,11 +492,11 @@ class TestUpsertOperationFunctionalTests(object):
         }
         model = {
             'properties': {
-                'id': { "type": "string" },
-                'name': { "type": "string" },
-                'value': { "type": "string" },
-                'type': { "type": "string" },
-                'version': { "type": "string" },
+                'id': {"type": "string"},
+                'name': {"type": "string"},
+                'value': {"type": "string"},
+                'type': {"type": "string"},
+                'version': {"type": "string"}
             }
         }
 
@@ -829,11 +829,11 @@ class TestUpsertOperationFunctionalTests(object):
         }
         model = {
             'properties': {
-                'id': { "type": "string" },
-                'name': { "type": "string" },
-                'value': { "type": "string" },
-                'type': { "type": "string" },
-                'version': { "type": "string" },
+                'id': {"type": "string"},
+                'name': {"type": "string"},
+                'value': {"type": "string"},
+                'type': {"type": "string"},
+                'version': {"type": "string"}
             }
         }
 
