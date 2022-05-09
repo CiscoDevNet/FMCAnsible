@@ -67,6 +67,7 @@ BULK_UPSERT_ERROR = (
 PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
 PATH_IDENTITY_PARAM = 'objectId'
 BULK = "bulk"
+NAME = "name"
 
 
 # Note: FMC uses create/update; FTD uses add/edit
@@ -299,28 +300,36 @@ class BaseConfigurationResource(object):
         return self._models_operations_specs_cache[model_name]
 
     def get_objects_by_filter(self, operation_name, params):
-
-        def match_filters(filter_params, obj):
+        """
+        Gets a list of list objects using the specified filter params (i.e. filters: in playbook)
+        """
+        # filter func that filters by params, usually name
+        def match_filters(obj):
             for k, v in iteritems(filter_params):
                 if k not in obj or obj[k] != v:
                     return False
             return True
 
-        __, query_params, path_params = _get_user_params(params)
-        # copy required params to avoid mutation of passed `params` dict
-        url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
-
-        filters = params.get(ParamName.FILTERS) or {}
+        filter_params = params.get(ParamName.FILTERS) or {}
         # commented out for FMC
         # unfortunately endpoints are not consistent on filter=name, and some endpoints throw an error
         # if QueryParams.FILTER not in url_params[ParamName.QUERY_PARAMS] and 'name' in filters:
         # most endpoints only support filtering by name, so remaining `filters` are applied on returned objects
         #    url_params[ParamName.QUERY_PARAMS][QueryParams.FILTER] = 'name:%s' % filters['name']
 
+        return self.get_objects_by_filter_func(operation_name, params, match_filters)
+
+    def get_objects_by_filter_func(self, operation_name, params, filter_func):
+        # extract query and path params for list operation
+        __, query_params, path_params = _get_user_params(params)
+        # copy required params to avoid mutation of passed `params` dict
+        url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
+
+        # load list items
         item_generator = iterate_over_pageable_resource(
             partial(self.send_general_request, operation_name=operation_name), url_params
         )
-        return (i for i in item_generator if match_filters(filters, i))
+        return (i for i in item_generator if filter_func(i))
 
     def _find_existing_object(self, model_name, path_params, object_id):
         get_operation = self._find_get_operation(model_name)
@@ -406,7 +415,8 @@ class BaseConfigurationResource(object):
             # get full existing object
             playbook_obj = params[ParamName.DATA]
             existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], existing_list_obj['id'])
-            if is_playbook_obj_equal_to_api_obj(playbook_obj, existing_obj):
+            model = self._conn.get_model_spec(model_name)
+            if is_playbook_obj_equal_to_api_obj(playbook_obj, existing_obj, model):
                 return existing_obj
             else:
                 raise FmcConfigurationError(DUPLICATE_ERROR, existing_obj)
@@ -418,16 +428,29 @@ class BaseConfigurationResource(object):
         Attempts to find existing, equivalent objects matching the parameters
         Returns the existing objects if it exists, or None if not found.
         """
+        def filter_on_name_or_whole_object(obj):
+            # if no name provided on either client or server object, must match whole object
+            if NAME not in obj or data_name is None:
+                if 'id' not in obj:
+                    return False
+                existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
+                return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
+            elif obj[NAME] == data_name:
+                return True
+            return False
+
         get_list_operation = self._find_get_list_operation(model_name)
         if not get_list_operation:
             return None
 
         data = params[ParamName.DATA]
-        if not params.get(ParamName.FILTERS):
-            params[ParamName.FILTERS] = {'name': data['name']}
+        data_name = data.get(NAME)
+        model = self._conn.get_model_spec(model_name)
+        # if not params.get(ParamName.FILTERS):
+        #    params[ParamName.FILTERS] = {'name': data['name']}
 
         obj = None
-        filtered_objs = self.get_objects_by_filter(get_list_operation, params)
+        filtered_objs = self.get_objects_by_filter_func(get_list_operation, params, filter_on_name_or_whole_object)
 
         for i, obj in enumerate(filtered_objs):
             if i > 0:
@@ -471,16 +494,17 @@ class BaseConfigurationResource(object):
             return self.send_general_request(operation_name, params)
 
         # normalize id between path_params and data.id (path params takes precedence)
-        objectId = path_params.get(PATH_IDENTITY_PARAM)
+        object_id = path_params.get(PATH_IDENTITY_PARAM)
         if data is not None:
-            data['id'] = objectId
+            data['id'] = object_id
 
         # lookup get operation to check equality
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
-        existing_object = self._find_existing_object(model_name, path_params, objectId)
+        model = self._conn.get_model_spec(model_name)
+        existing_object = self._find_existing_object(model_name, path_params, object_id)
         if not existing_object:
             raise FmcConfigurationError(NOT_EXISTS_ERROR_STR)
-        elif is_playbook_obj_equal_to_api_obj(data, existing_object):
+        elif is_playbook_obj_equal_to_api_obj(data, existing_object, model):
             return existing_object
 
         return self.send_general_request(operation_name, params)
@@ -688,13 +712,30 @@ def iterate_over_pageable_resource(resource_func, params):
         query_params['offset'] = int(query_params['offset']) + limit
 
 
-def is_playbook_obj_equal_to_api_obj(obj_client, obj_server):
+def remove_props_not_in_model(obj, model):
+    obj_to_check = dict(obj)
+    # remove properties from obj_client not in model
+    props = model.get("properties")
+    if props is None:
+        return obj
+    for key in obj:
+        if key not in props:
+            del obj_to_check[key]
+    return obj_to_check
+
+
+def is_playbook_obj_equal_to_api_obj(obj_client, obj_server, model=None):
     """
     Wrapper call to equal_objects(), strips type from obj1 first since type names will be slightly different
     based on origin from FMC API.
+    If model is passed (from API spec), will also sanitize both objects to ensure only properties in the model are compared.
     """
+    # remove properties not in model
+    # this prevents comparison fails due to misspelled/invalid properties used in playbook
+    if model and model.get("properties"):
+        # remove properties from obj_client not in model
+        obj_client = remove_props_not_in_model(obj_client, model)
+        # remove properties from obj_client not in model (note: this should never happen but check to be sure)
+        obj_server = remove_props_not_in_model(obj_server, model)
     # because FMC can be inconsistent on type name, remove from source dict for comparison
-    # d1 = obj1.copy()
-    # d1.pop('type', '')
-    # d2 = obj2
     return equal_objects_additive(obj_client, obj_server)
