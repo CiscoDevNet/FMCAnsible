@@ -112,10 +112,10 @@ def test_equal_objects_return_true_with_different_ref_ids():
     )
 
 
-def test_equal_objects_return_true_with_different_ref_types():
+def test_equal_objects_return_true_with_only_right_ref_id():
     assert not equal_objects(
-        {'foo': {'id': '1', 'type': 'network', 'ignored_field': 'foo'}},
-        {'foo': {'id': '1', 'type': 'accessRule', 'ignored_field': 'bar'}}
+        {'foo': {'name': 'network-1'}},
+        {'foo': {'id': '1', 'name': 'network-1'}}
     )
 
 
