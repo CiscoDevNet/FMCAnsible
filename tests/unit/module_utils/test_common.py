@@ -113,9 +113,10 @@ def test_equal_objects_return_true_with_different_ref_ids():
 
 
 def test_equal_objects_return_true_with_only_right_ref_id():
-    assert not equal_objects(
-        {'foo': {'name': 'network-1'}},
-        {'foo': {'id': '1', 'name': 'network-1'}}
+    # because id missing from server obj, compare on common properties
+    assert equal_objects(
+        {'foo': {'name': 'network-1', 'some_val': 3}},
+        {'foo': {'id': '1', 'name': 'network-1', 'some_val': 3}}
     )
 
 
