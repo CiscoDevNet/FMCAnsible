@@ -99,7 +99,7 @@ def is_object_ref(d):
     :type d: dict
     :return: True if passed dictionary is a reference object, otherwise False
     """
-    has_id =  'id' in d.keys() and d['id']
+    has_id = 'id' in d.keys() and d['id']
     return has_id
     # commented out, types may not match between client and server due to formatting
     # id is sufficient to compare
@@ -117,11 +117,10 @@ def equal_object_refs(d1, d2):
     :return: True if passed references point to the same object, otherwise False
     """
     # compare by type not supported, see is_object_ref()
-    have_equal_ids = d1['id'] == d2['id']
-    have_equal_names = d1['name'] == d2['name']
-    return have_equal_ids or have_equal_names
+    have_equal_ids = d1.get('id') == d2.get('id')
+    # have_equal_names = d1.get('name') == d2.get('name')
+    return have_equal_ids
     # have_equal_types = d1['type'] == d2['type']
-    return have_equal_ids # and have_equal_types
 
 
 def equal_lists(l1, l2):
@@ -156,7 +155,7 @@ def equal_dicts(d1, d2, compare_by_reference=True):
         if is_object_ref(d1) and is_object_ref(d2):
             return equal_object_refs(d1, d2)
         elif is_object_ref(d2):
-            # if right side has id but not left side, compare common properties only
+            # if right side (from server) has id but not left side, compare common properties only
             return equal_objects(d1, d2, True)
 
     if len(d1) != len(d2):

@@ -384,7 +384,7 @@ class BaseConfigurationResource(object):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
                 and DUPLICATE_NAME_ERROR_STR in str(err)
-                
+
         is_bulk = self.is_bulk_operation(params)
         # for bulk operation, skip equality check since there are multiple
         if is_bulk:
@@ -419,7 +419,7 @@ class BaseConfigurationResource(object):
 
         For FMC, this function only supports checking against a single object.
         """
-        model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
+        model_name = self.get_operation_spec(operation_name).get(OperationField.MODEL_NAME)
         # get list object first - this only contains id, name, type
         existing_list_obj = self._find_object_matching_params(model_name, params)
 

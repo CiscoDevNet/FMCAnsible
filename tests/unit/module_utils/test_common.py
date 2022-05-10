@@ -313,7 +313,7 @@ def test_add_missing_properties_left_to_right_leftside():
         'foo': 1
     }
     add_missing_properties_left_to_right(d1, d2)
-    assert d2.get('bar') and d2.get('bar') == 0
+    assert d2.get('bar') == 0
 
 
 def test_add_missing_properties_left_to_right_rightside():
