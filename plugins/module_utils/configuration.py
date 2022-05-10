@@ -27,8 +27,8 @@ from functools import partial
 
 from ansible.module_utils.six import iteritems
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, equal_objects_additive, FmcConfigurationError, \
-    FmcServerError, ResponseParams, copy_identity_properties, FmcUnexpectedResponse
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, delete_props_not_in_model, \
+    FmcServerError, ResponseParams, copy_identity_properties, add_missing_properties_left_to_right, FmcUnexpectedResponse, FmcConfigurationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
 #   copy_identity_properties, FmcUnexpectedResponse
@@ -45,7 +45,7 @@ NOT_EXISTS_ERROR_STR = "Referenced object does not exist"
 NOT_FOUND_ERROR_MESSAGE = "Resource Not Found"
 INVALID_UUID_ERROR_MESSAGE = "Validation failed due to an invalid UUID"
 DUPLICATE_NAME_ERROR_MESSAGE = "Validation failed due to a duplicate name"
-DUPLICATE_NAME_ERROR_STR = "already exists."
+DUPLICATE_NAME_ERROR_STR = "already exists"
 
 MULTIPLE_DUPLICATES_FOUND_ERROR = (
     "Multiple objects matching specified filters are found. "
@@ -68,6 +68,7 @@ PATH_PARAMS_FOR_DEFAULT_OBJ = {'objId': 'default'}
 PATH_IDENTITY_PARAM = 'objectId'
 BULK = "bulk"
 NAME = "name"
+IF_NAME = "ifname"
 
 
 # Note: FMC uses create/update; FTD uses add/edit
@@ -383,18 +384,29 @@ class BaseConfigurationResource(object):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
                 and DUPLICATE_NAME_ERROR_STR in str(err)
+                
+        is_bulk = self.is_bulk_operation(params)
+        # for bulk operation, skip equality check since there are multiple
+        if is_bulk:
+            params = self.ensure_bulk_data_params(params)
+        else:
+            # some API calls do not raise a duplicate error, so check for duplicate beforehand
+            existing_obj = self._check_equality_with_existing_object(operation_name, params)
+            if existing_obj is not None:
+                return existing_obj
 
-        params = self.ensure_bulk_data_params(params)
         try:
             return self.send_general_request(operation_name, params)
         except FmcServerError as e:
             if is_duplicate_name_error(e) and not self.is_bulk_operation(params):
                 # only support equality check in non-bulk scenario
-                return self._check_equality_with_existing_object(operation_name, params, e)
+                existing_obj = self._check_equality_with_existing_object(operation_name, params)
+                if existing_obj is None:
+                    raise e
             else:
                 raise e
 
-    def _check_equality_with_existing_object(self, operation_name, params, e):
+    def _check_equality_with_existing_object(self, operation_name, params):
         """
         Looks for an existing object that caused "object duplicate" error and
         checks whether it corresponds to the one specified in `params`.
@@ -421,7 +433,7 @@ class BaseConfigurationResource(object):
             else:
                 raise FmcConfigurationError(DUPLICATE_ERROR, existing_obj)
 
-        raise e
+        return None
 
     def _find_object_matching_params(self, model_name, params):
         """
@@ -429,8 +441,11 @@ class BaseConfigurationResource(object):
         Returns the existing objects if it exists, or None if not found.
         """
         def filter_on_name_or_whole_object(obj):
+            # if both objects contain 'ifname', compare on that
+            if obj.get(IF_NAME) is not None and data.get(IF_NAME) is not None:
+                return data.get(IF_NAME) == obj.get(IF_NAME)
             # if no name provided on either client or server object, must match whole object
-            if NAME not in obj or data_name is None:
+            if obj.get(NAME) is None or data_name is None:
                 if 'id' not in obj:
                     return False
                 existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
@@ -444,6 +459,7 @@ class BaseConfigurationResource(object):
             return None
 
         data = params[ParamName.DATA]
+        # some objects is 'ifname' as unique name
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
         # if not params.get(ParamName.FILTERS):
@@ -712,30 +728,23 @@ def iterate_over_pageable_resource(resource_func, params):
         query_params['offset'] = int(query_params['offset']) + limit
 
 
-def remove_props_not_in_model(obj, model):
-    obj_to_check = dict(obj)
-    # remove properties from obj_client not in model
-    props = model.get("properties")
-    if props is None:
-        return obj
-    for key in obj:
-        if key not in props:
-            del obj_to_check[key]
-    return obj_to_check
-
-
 def is_playbook_obj_equal_to_api_obj(obj_client, obj_server, model=None):
     """
     Wrapper call to equal_objects(), strips type from obj1 first since type names will be slightly different
     based on origin from FMC API.
     If model is passed (from API spec), will also sanitize both objects to ensure only properties in the model are compared.
     """
+    # clone objects
+    d1 = dict(obj_client)
+    d2 = dict(obj_server)
     # remove properties not in model
     # this prevents comparison fails due to misspelled/invalid properties used in playbook
     if model and model.get("properties"):
         # remove properties from obj_client not in model
-        obj_client = remove_props_not_in_model(obj_client, model)
+        d1 = delete_props_not_in_model(d1, model)
         # remove properties from obj_client not in model (note: this should never happen but check to be sure)
-        obj_server = remove_props_not_in_model(obj_server, model)
+        d2 = delete_props_not_in_model(d2, model)
+    # copy missing properties to d2, to compare using additive approach
+    add_missing_properties_left_to_right(d1, d2)
     # because FMC can be inconsistent on type name, remove from source dict for comparison
-    return equal_objects_additive(obj_client, obj_server)
+    return equal_objects(d1, d2)
