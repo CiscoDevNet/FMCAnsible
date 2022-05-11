@@ -20,8 +20,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, equal_objects_additive, delete_ref_duplicates, \
-    construct_ansible_facts
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import equal_objects, add_missing_properties_left_to_right, \
+    construct_ansible_facts, delete_ref_duplicates
 
 
 # simple objects
@@ -112,10 +112,11 @@ def test_equal_objects_return_true_with_different_ref_ids():
     )
 
 
-def test_equal_objects_return_true_with_different_ref_types():
-    assert not equal_objects(
-        {'foo': {'id': '1', 'type': 'network', 'ignored_field': 'foo'}},
-        {'foo': {'id': '1', 'type': 'accessRule', 'ignored_field': 'bar'}}
+def test_equal_objects_return_true_with_only_right_ref_id():
+    # because id missing from server obj, compare on common properties
+    assert equal_objects(
+        {'foo': {'name': 'network-1', 'some_val': 3}},
+        {'foo': {'id': '1', 'name': 'network-1', 'some_val': 3}}
     )
 
 
@@ -293,86 +294,84 @@ def test_equal_objects_return_true_with_reference_list_containing_duplicates():
     )
 
 
-def test_equal_objects_additive_sanity():
-    assert equal_objects_additive(
-        {
-            'foo': 1,
-            'bar': 2
-        },
-        {
-            'foo': 1,
-            'bar': 2
-        }
-    )
+def test_add_missing_properties_left_to_right_sanity():
+    d1 = {
+        'foo': 1,
+        'bar': 2
+    }
+    d2 = dict(d1)
+    add_missing_properties_left_to_right(d1, d2)
+    assert d1 == d2
 
 
-def test_equal_objects_additive_leftside():
-    # false: left side has properties not on right side
-    assert not equal_objects_additive(
-        {
-            'foo': 1,
-            'bar': 2
-        },
-        {
-            'foo': 1
-        }
-    )
+def test_add_missing_properties_left_to_right_leftside():
+    # left side has properties not on right side, copied as empty properties
+    d1 = {
+        'foo': 1,
+        'bar': 2
+    }
+    d2 = {
+        'foo': 1
+    }
+    add_missing_properties_left_to_right(d1, d2)
+    assert d2.get('bar') == 0
 
 
-def test_equal_objects_additive_rightside():
-    # true: right side has properties not on right side, this is okay
-    assert equal_objects_additive(
-        {
-            'foo': 1
-        },
-        {
-            'foo': 1,
-            'bar': 2
-        }
-    )
+def test_add_missing_properties_left_to_right_rightside():
+    # right side has properties not on right side, nothing copied
+    d1 = {
+        'foo': 1
+    }
+    d2 = {
+        'foo': 1,
+        'bar': 2
+    }
+    add_missing_properties_left_to_right(d1, d2)
+    assert d1.get('bar') is None
 
 
-def test_equal_objects_additive_objects():
+def test_add_missing_properties_left_to_right_complex_objects():
     # false: left side has object properties not on right side
-    assert not equal_objects_additive(
-        {
-            "name": "foo",
-            "action": "ALLOW",
-            "type": "AccessRule",
-            "sourceNetworks": {
-                "objects": [
-                    {
-                        "type": "Network",
-                        "name": "bar",
-                        "id": "123"
-                    }
-                ]
-            },
-            "destinationNetworks": {
-                "objects": [
-                    {
-                        "type": "Network",
-                        "name": "bax",
-                        "id": "456"
-                    }
-                ]
-            }
+    d1 = {
+        "name": "foo",
+        "action": "ALLOW",
+        "type": "AccessRule",
+        "sourceNetworks": {
+            "objects": [
+                {
+                    "type": "Network",
+                    "name": "bar",
+                    "id": "123"
+                }
+            ]
         },
-        {
-            "name": "foo",
-            "action": "ALLOW",
-            "type": "AccessRule",
-            "sourceNetworks": {
-                "objects": [
-                    {
-                        "type": "Network",
-                        "name": "bar",
-                        "id": "123"
-                    }
-                ]
-            }
+        "destinationNetworks": {
+            "objects": [
+                {
+                    "type": "Network",
+                    "name": "bax",
+                    "id": "456"
+                }
+            ]
         }
-    )
+    }
+    d2 = {
+        "name": "foo",
+        "action": "ALLOW",
+        "type": "AccessRule",
+        "sourceNetworks": {
+            "objects": [
+                {
+                    "type": "Network",
+                    "name": "bar",
+                    "id": "123"
+                }
+            ]
+        }
+    }
+    add_missing_properties_left_to_right(d1, d2)
+    assert type(d2.get('destinationNetworks')) == dict
+    assert len(d2.get('destinationNetworks')) == 0
 
 
 def test_delete_ref_duplicates_with_none():

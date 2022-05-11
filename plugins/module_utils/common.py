@@ -100,8 +100,12 @@ def is_object_ref(d):
     :return: True if passed dictionary is a reference object, otherwise False
     """
     has_id = 'id' in d.keys() and d['id']
-    has_type = 'type' in d.keys() and d['type']
-    return has_id and has_type
+    return has_id
+    # commented out, types may not match between client and server due to formatting
+    # id is sufficient to compare
+    # has_id = 'id' in d.keys() and d['id']
+    # has_type = 'type' in d.keys() and d['type']
+    # return has_id # and has_type
 
 
 def equal_object_refs(d1, d2):
@@ -112,9 +116,11 @@ def equal_object_refs(d1, d2):
     :type d2: dict
     :return: True if passed references point to the same object, otherwise False
     """
-    have_equal_ids = d1['id'] == d2['id']
-    have_equal_types = d1['type'] == d2['type']
-    return have_equal_ids and have_equal_types
+    # compare by type not supported, see is_object_ref()
+    have_equal_ids = d1.get('id') == d2.get('id')
+    # have_equal_names = d1.get('name') == d2.get('name')
+    return have_equal_ids
+    # have_equal_types = d1['type'] == d2['type']
 
 
 def equal_lists(l1, l2):
@@ -145,8 +151,12 @@ def equal_dicts(d1, d2, compare_by_reference=True):
     :param compare_by_reference: if True, dictionaries referencing objects are compared using `equal_object_refs` method
     :return: True if passed dicts are equal. Otherwise, returns False.
     """
-    if compare_by_reference and is_object_ref(d1) and is_object_ref(d2):
-        return equal_object_refs(d1, d2)
+    if compare_by_reference:
+        if is_object_ref(d1) and is_object_ref(d2):
+            return equal_object_refs(d1, d2)
+        elif is_object_ref(d2):
+            # if right side (from server) has id but not left side, compare common properties only
+            return equal_objects(d1, d2, True)
 
     if len(d1) != len(d2):
         return False
@@ -220,7 +230,7 @@ def equal_objects(d1, d2, compare_common_fields_only=True):
     return equal_dicts(d1, d2, compare_by_reference=False)
 
 
-def equal_objects_additive(d1, d2):
+def add_missing_properties_left_to_right(d1, d2):
     """
     Checks whether two objects are equal using the additive approach. This means that d1 can contain less
     properties than d2, but not vice versa. Similar to equal_objects() except compare_common_fields_only
@@ -232,15 +242,19 @@ def equal_objects_additive(d1, d2):
     """
     additive_keys = d1.keys()
     d2_keys = d2.keys()
-    d2 = dict(d2)
-    # copy empty values to right side before comparison
+    # d2 = dict(d2)
+    # copy empty values to right side recursively before comparison
     # this will force equal_objects() to false if left side has more properties
     for key in additive_keys:
         if key not in d2_keys:
-            new_obj = empty_value(d1[key])
+            # special case: name - if in d1 and not in d2, then ignore (set d2 so they match)
+            if key == "name":
+                new_obj = d1[key]
+            else:
+                new_obj = empty_value(d1[key])
             d2[key] = new_obj
-    # now compare additive object with right-side object
-    return equal_objects(d1, d2, True)
+        elif type(d1[key]) == dict and type(d2[key]) == dict:
+            add_missing_properties_left_to_right(d1[key], d2[key])
 
 
 def empty_value(val):
@@ -291,3 +305,18 @@ def delete_ref_duplicates(d):
         else:
             modified_d[k] = v
     return modified_d
+
+
+def delete_props_not_in_model(obj, model):
+    """
+    Deletes properties from an object that do not match its corresponding model
+    """
+    obj_to_check = dict(obj)
+    # remove properties from obj_client not in model
+    props = model.get("properties")
+    if props is None:
+        return obj
+    for key in obj:
+        if key not in props:
+            del obj_to_check[key]
+    return obj_to_check
