@@ -440,18 +440,25 @@ class BaseConfigurationResource(object):
         Attempts to find existing, equivalent objects matching the parameters
         Returns the existing objects if it exists, or None if not found.
         """
+        def compare_whole_object(obj):
+            if 'id' not in obj:
+                return False
+            existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
+            return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
+        
         def filter_on_name_or_whole_object(obj):
-            # if both objects contain 'ifname', compare on that
-            if obj.get(IF_NAME) is not None and data.get(IF_NAME) is not None:
-                return data.get(IF_NAME) == obj.get(IF_NAME)
-            # if no name provided on either client or server object, must match whole object
-            if obj.get(NAME) is None or data_name is None:
-                if 'id' not in obj:
-                    return False
-                existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
-                return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
-            elif obj[NAME] == data_name:
-                return True
+            # if model contains ifname, compare both objects on that
+            if use_if_name:
+                if obj.get(IF_NAME) is not None and data.get(IF_NAME) is not None:
+                    return data.get(IF_NAME) == obj.get(IF_NAME)
+                else:
+                    return compare_whole_object(obj)
+            else:
+                # if no name provided on either client or server object, must match whole object
+                if obj.get(NAME) is None or data_name is None:
+                    return compare_whole_object(obj)
+                elif obj[NAME] == data_name:
+                    return True
             return False
 
         get_list_operation = self._find_get_list_operation(model_name)
@@ -462,6 +469,7 @@ class BaseConfigurationResource(object):
         # some objects is 'ifname' as unique name
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
+        use_if_name = model.get('properties') and model.get('properties').get(IF_NAME) is not None
         # if not params.get(ParamName.FILTERS):
         #    params[ParamName.FILTERS] = {'name': data['name']}
 
