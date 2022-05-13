@@ -469,9 +469,7 @@ class BaseConfigurationResource(object):
         # some objects is 'ifname' as unique name
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
-        use_if_name = model and model.get('properties') is not None and model.get('properties').get(IF_NAME) is not None
-        # if not params.get(ParamName.FILTERS):
-        #    params[ParamName.FILTERS] = {'name': data['name']}
+        use_if_name = model_has_property(model, IF_NAME)
 
         obj = None
         filtered_objs = self.get_objects_by_filter_func(get_list_operation, params, filter_on_name_or_whole_object)
@@ -734,6 +732,13 @@ def iterate_over_pageable_resource(resource_func, params):
         params = copy.deepcopy(params)
         query_params = params[ParamName.QUERY_PARAMS]
         query_params['offset'] = int(query_params['offset']) + limit
+
+
+def model_has_property(model, prop_name):
+    """
+    Gets whether the model spec object contains the specified property name.
+    """
+    return model and type(model) == dict and model.get('properties') is not None and model.get('properties').get(prop_name) is not None
 
 
 def is_playbook_obj_equal_to_api_obj(obj_client, obj_server, model=None):
