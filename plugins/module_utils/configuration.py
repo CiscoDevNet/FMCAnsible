@@ -445,7 +445,7 @@ class BaseConfigurationResource(object):
                 return False
             existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
             return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
-        
+
         def filter_on_name_or_whole_object(obj):
             # if model contains ifname, compare both objects on that
             if use_if_name:
@@ -469,7 +469,7 @@ class BaseConfigurationResource(object):
         # some objects is 'ifname' as unique name
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
-        use_if_name = model.get('properties') and model.get('properties').get(IF_NAME) is not None
+        use_if_name = model and model.get('properties') is not None and model.get('properties').get(IF_NAME) is not None
         # if not params.get(ParamName.FILTERS):
         #    params[ParamName.FILTERS] = {'name': data['name']}
 

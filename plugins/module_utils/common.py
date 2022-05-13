@@ -287,8 +287,8 @@ def delete_ref_duplicates(d):
             unique_reference_map = OrderedDict()
             for i in refs:
                 # some nested objects do not include type, so supply fallback value just in case
-                type = i.get('type') or 'Unknown'
-                unique_key = (i['id'], type)
+                obj_type = i.get('type') or 'Unknown'
+                unique_key = (i['id'], obj_type)
                 unique_reference_map[unique_key] = i
             return list(unique_reference_map.values())
         else:
