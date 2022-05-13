@@ -383,7 +383,7 @@ class BaseConfigurationResource(object):
         def is_duplicate_name_error(err):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
-                and DUPLICATE_NAME_ERROR_STR in str(err)
+                and (DUPLICATE_NAME_ERROR_STR in str(err) or str(err) == DUPLICATE_NAME_ERROR_MESSAGE)
 
         is_bulk = self.is_bulk_operation(params)
         # for bulk operation, skip equality check since there are multiple
