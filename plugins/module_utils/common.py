@@ -286,7 +286,10 @@ def delete_ref_duplicates(d):
         if all(type(i) == dict and is_object_ref(i) for i in refs):
             unique_reference_map = OrderedDict()
             for i in refs:
-                unique_reference_map[(i['id'], i['type'])] = i
+                # some nested objects do not include type, so supply fallback value just in case
+                obj_type = i.get('type') or 'Unknown'
+                unique_key = (i['id'], obj_type)
+                unique_reference_map[unique_key] = i
             return list(unique_reference_map.values())
         else:
             return refs

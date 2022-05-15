@@ -383,7 +383,7 @@ class BaseConfigurationResource(object):
         def is_duplicate_name_error(err):
             # note: FMC normally returns 400 for duplicates, but sometimes 422
             return (err.code == BAD_REQUEST_STATUS or err.code == UNPROCESSABLE_ENTITY_STATUS) \
-                and DUPLICATE_NAME_ERROR_STR in str(err)
+                and (DUPLICATE_NAME_ERROR_STR in str(err) or str(err) == DUPLICATE_NAME_ERROR_MESSAGE)
 
         is_bulk = self.is_bulk_operation(params)
         # for bulk operation, skip equality check since there are multiple
@@ -440,18 +440,25 @@ class BaseConfigurationResource(object):
         Attempts to find existing, equivalent objects matching the parameters
         Returns the existing objects if it exists, or None if not found.
         """
+        def compare_whole_object(obj):
+            if 'id' not in obj:
+                return False
+            existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
+            return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
+
         def filter_on_name_or_whole_object(obj):
-            # if both objects contain 'ifname', compare on that
-            if obj.get(IF_NAME) is not None and data.get(IF_NAME) is not None:
-                return data.get(IF_NAME) == obj.get(IF_NAME)
-            # if no name provided on either client or server object, must match whole object
-            if obj.get(NAME) is None or data_name is None:
-                if 'id' not in obj:
-                    return False
-                existing_obj = self._find_existing_object(model_name, params[ParamName.PATH_PARAMS], obj['id'])
-                return is_playbook_obj_equal_to_api_obj(data, existing_obj, model)
-            elif obj[NAME] == data_name:
-                return True
+            # if model contains ifname, compare both objects on that
+            if use_if_name:
+                if obj.get(IF_NAME) is not None and data.get(IF_NAME) is not None:
+                    return data.get(IF_NAME) == obj.get(IF_NAME)
+                else:
+                    return compare_whole_object(obj)
+            else:
+                # if no name provided on either client or server object, must match whole object
+                if obj.get(NAME) is None or data_name is None:
+                    return compare_whole_object(obj)
+                elif obj[NAME] == data_name:
+                    return True
             return False
 
         get_list_operation = self._find_get_list_operation(model_name)
@@ -462,8 +469,7 @@ class BaseConfigurationResource(object):
         # some objects is 'ifname' as unique name
         data_name = data.get(NAME)
         model = self._conn.get_model_spec(model_name)
-        # if not params.get(ParamName.FILTERS):
-        #    params[ParamName.FILTERS] = {'name': data['name']}
+        use_if_name = model_has_property(model, IF_NAME)
 
         obj = None
         filtered_objs = self.get_objects_by_filter_func(get_list_operation, params, filter_on_name_or_whole_object)
@@ -726,6 +732,13 @@ def iterate_over_pageable_resource(resource_func, params):
         params = copy.deepcopy(params)
         query_params = params[ParamName.QUERY_PARAMS]
         query_params['offset'] = int(query_params['offset']) + limit
+
+
+def model_has_property(model, prop_name):
+    """
+    Gets whether the model spec object contains the specified property name.
+    """
+    return model and type(model) == dict and model.get('properties') is not None and model.get('properties').get(prop_name) is not None
 
 
 def is_playbook_obj_equal_to_api_obj(obj_client, obj_server, model=None):
