@@ -435,7 +435,7 @@ This example demonstartes how to query newtwork object using filters
 
 ## **Known issues/limitations**
 
-* Some endpoints use 'name' vs others that use “nameOrValue”
+* Some endpoints use 'name' vs others that use 'nameOrValue'
  For example: /object/networks?filter=nameOrValue:ansible-test
 * if description parameter is specified for the security zone object ansible will return **"changed"** on each run even if values are not changed.
 * Inconsistent error message and HTTP status for duplicate object error
