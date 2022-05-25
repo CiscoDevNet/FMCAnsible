@@ -4,26 +4,26 @@
     - name: Get Domain UUID
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
-        register_as: cra1
+        register_as: domain
 
-    - name: Find an intrusion policy
+    - name: Find an intrustion policy
       cisco.fmcansible.fmc_configuration:
         operation: getAllIntrusionPolicy
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: '{{ domain[0].uuid }}'
         register_as: policies
 
     - name: Allow traffic by default
       cisco.fmcansible.fmc_configuration:
-        operation: createAccessPolicy
+        operation: upsertAccessPolicy
         data:
-          name: NGFW-Access-Policy
+          name: NGFW-Access-Policy28
           defaultAction:
-            action: PERMIT
+            action: BLOCK
             intrusionPolicy:
               id: "{{ policies[0].id }}"
               type: "{{ policies[0].type }}"
             type: defaultAction
           type: AccessPolicy
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: '{{ domain[0].uuid }}'
