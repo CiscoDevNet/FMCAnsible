@@ -29,7 +29,7 @@
           action: ALLOW
           logEnd: True
           logBegin: False
-          sendEventsToFMC : True
+          sendEventsToFMC: True
           filePolicy: "{{ file_policies[0] }}"
           type: AccessRule
         path_params:

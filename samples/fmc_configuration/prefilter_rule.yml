@@ -47,10 +47,3 @@
           domainUUID: '{{ domain[0].uuid }}'
           containerUUID: '{{ prefilter[1].id }}'
           objectId: '{{ PrefilterRule_ngfw_prefilter_policy10.id }}'
-
-    
-
-
-
-
-          
