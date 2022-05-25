@@ -5,9 +5,6 @@ IMPORTANT: When cloning this repository place it under ansible_collections/cisco
 An Ansible Collection that automates configuration management 
 and execution of operational tasks on Cisco Firepower Management Console (FMC) devices using FMC REST API.  
 
-_This file describes the development and testing aspects. In case you are looking for 
-the user documentation, please check [FMC Ansible docs on DevNet](https://developer.cisco.com/site/fmc-ansible/)._
-
 ## Installation Guide
 
 The collection contains four Ansible modules:
@@ -16,17 +13,9 @@ The collection contains four Ansible modules:
 
 Sample playbooks are located in the [`samples`](./samples) folder.
 
-## View Collection Documentation With ansible-docs
+## View Collection Documentation
 
-The following commands will generate ansible-docs for each of the collection modules
-
-```
-
-ansible-doc -M ./plugins/modules/ fmc_configuration
-ansible-doc -M ./plugins/modules/ fmc_file_download
-ansible-doc -M ./plugins/modules/ fmc_file_upload
-ansible-doc -M ./plugins/modules/ fmc_install
-```
+Usage Instructions are presnt in the Instructions folder
 
 
 ## Using the collection in Ansible
@@ -47,12 +36,7 @@ pip install -r requirements.txt
 2. Install the ansible collection
 
 ```
-ansible-galaxy collection install git+https://github.com/meignw2021/FMCAnsible.git,fmc-7
-
-Starting collection install process
-Installing 'cisco.fmcansible:3.3.3' to '/root/.ansible/collections/ansible_collections/cisco/fmcansible'
-Created collection for cisco.fmcansible at /root/.ansible/collections/ansible_collections/cisco/fmcansible
-cisco.fmcansible (3.3.3) was installed successfully
+ansible-galaxy collection install git+https://github.com/CiscoDevNet/FMCAnsible.git
 ```
 
 3. List installed collections.
@@ -129,7 +113,7 @@ Integration tests are written in a form of playbooks. Thus, integration tests ar
     ```
     docker build -t fmc-ansible:integration -f Dockerfile_integration .
     ```
-    **NOTE**: The default image is based on the release v0.4.0 of the [`FTD-Ansible`](https://github.com/CiscoDevNet/FMCAnsible) and Python 3.6. 
+    **NOTE**: The default image is based on the release v0.4.0 of the [`FMC-Ansible`](https://github.com/CiscoDevNet/FMCAnsible) and Python 3.6. 
 
 2. You can build the custom Docker image:
     ```
