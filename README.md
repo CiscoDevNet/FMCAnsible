@@ -1,5 +1,7 @@
 # FMC Ansible Modules
 
+IMPORTANT: This is a beta build. It is still being tested. Please use it for testing and provide feedback, do not use in production.
+
 IMPORTANT: When cloning this repository place it under ansible_collections/cisco (requirement to run some of the Ansible tools like ansible-test).
 
 An Ansible Collection that automates configuration management 
