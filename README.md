@@ -29,7 +29,7 @@ docker run -it -v $(pwd)/samples:/fmc-ansible/playbooks \
 -v $(pwd)/ansible.cfg:/fmc-ansible/ansible.cfg \
 -v $(pwd)/requirements.txt:/fmc-ansible/requirements.txt \
 -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-python:3.6 bash
+python:3.10 bash
 
 cd /fmc-ansible
 pip install -r requirements.txt
@@ -51,8 +51,9 @@ ansible-galaxy collection list
 ```
 cat ansible.cfg
 ```
-
-4. Reference the collection from your playbook
+4. Edit hosts file `samples/fmc_configuration/hosts`  and add your FMC device IP address/credentials.
+   
+5. Reference the collection from your playbook
 
 **NOTE**: The tasks in the playbook reference the collection
 
@@ -71,8 +72,8 @@ cat ansible.cfg
 Run the sample playbook.
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/user.yml
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/latest.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 ```
 
 ## Tests
@@ -85,8 +86,7 @@ When running sanity tests locally this project needs to be located at a path und
 
 ```
 rm -rf tests/output 
-ansible-test sanity --docker -v --color --python 3.6
-ansible-test sanity --docker -v --color --python 3.7
+ansible-test sanity --docker -v --color
 ```
 
 ### Running Units Tests Using Docker
@@ -96,22 +96,20 @@ When running sanity tests locally this project needs to be located at a path und
 
 ```
 rm -rf tests/output 
-ansible-test units --docker -v --python 3.6
-ansible-test units --docker -v --python 3.7
+ansible-test units --docker -v --color
 ```
 
 To run a single test, specify the filename at the end of command:
 ```
 rm -rf tests/output 
-ansible-test units --docker -v tests/unit/httpapi_plugins/test_fmc.py --color --python 3.6
-ansible-test units --docker -v tests/unit/module_utils/test_upsert_functionality.py --color --python 3.6
+ansible-test units --docker -v tests/unit/httpapi_plugins/test_ftd.py --color
 ```
 
 ### Integration Tests
 
 Integration tests are written in a form of playbooks. Thus, integration tests are written as sample playbooks with assertion and can be found in the `samples` folder. They start with `test_` prefix and can be run as usual playbooks.  The integration tests use a local Docker container which copies the necessary code and folders from your local path into a docker container for testing.
 
-1. Build the default Python 3.6, Ansible 2.10 Docker image:
+1. Build the default Python 3.9, Ansible 2.10 Docker image:
     ```
     docker build -t fmc-ansible:integration -f Dockerfile_integration .
     ```
@@ -146,15 +144,16 @@ Integration tests are written in a form of playbooks. Thus, integration tests ar
 1. Setup docker environment
 
 ```
-docker run -it -v $(pwd):/root/ansible_collections/ansible/fmcansible \
-python:3.6 bash
+docker run -it -v $(pwd):/root/ansible_collections/cisco/fmcansible \
+python:3.10 bash
 ```
 
-2. Change to working directory
+2. Change to working directory, update and upgrade system and install requirements.txt
 
 ```
-cd /root/ansible_collections/ansible/fmcansible
+cd /root/ansible_collections/cisco/fmcansible
 apt update && apt upgrade -y
+pip install -r requirements.txt 
 ```
 
 3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
@@ -168,7 +167,7 @@ See section Above
 
 2. Run `ansible-playbook` with `-vvvv`
     ```
-    $ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/user.yml -vvvv
+    $ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_policy.yml -vvvv
     ```
 
 3. The log file will contain additional information (REST, etc.)
