@@ -69,60 +69,61 @@ class TestFmcHttpApi(unittest.TestCase):
         self.fmc_plugin.access_token = 'ACCESS_TOKEN'
         self.fmc_plugin._load_name = 'httpapi'
 
-    # def test_login_should_request_tokens_when_no_refresh_token(self):
-    #     self.connection_mock.send.return_value = self._connection_response(
-    #         {'access_token': 'ACCESS_TOKEN', 'refresh_token': 'REFRESH_TOKEN'}
-    #     )
+    def test_login_should_request_tokens_when_no_refresh_token(self):
+        self.connection_mock.send.return_value = self._login_response(
+            {'access_token': 'ACCESS_TOKEN', 'refresh_token': 'REFRESH_TOKEN'}
+        )
 
-    #     self.fmc_plugin.login('foo', 'bar')
+        self.fmc_plugin.login('foo', 'bar')
 
-    #     assert 'ACCESS_TOKEN' == self.fmc_plugin.access_token
-    #     assert 'REFRESH_TOKEN' == self.fmc_plugin.refresh_token
-    #     assert {'Authorization': 'Bearer ACCESS_TOKEN'} == self.fmc_plugin.connection._auth
-    #     expected_body = json.dumps({'grant_type': 'password', 'username': 'foo', 'password': 'bar'})
-    #     self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
+        assert 'ACCESS_TOKEN' == self.fmc_plugin.access_token
+        assert 'REFRESH_TOKEN' == self.fmc_plugin.refresh_token
+        # no longer supported in plugin, keeping for historical purposes:
+        # assert {'Authorization': 'Bearer ACCESS_TOKEN'} == self.fmc_plugin.connection._auth
+        expected_body = json.dumps({'grant_type': 'password', 'username': 'foo', 'password': 'bar'})
+        self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
 
-    # def test_login_should_update_tokens_when_refresh_token_exists(self):
-    #     self.fmc_plugin.refresh_token = 'REFRESH_TOKEN'
-    #     self.connection_mock.send.return_value = self._connection_response(
-    #         {'access_token': 'NEW_ACCESS_TOKEN', 'refresh_token': 'NEW_REFRESH_TOKEN'}
-    #     )
+    def test_login_should_update_tokens_when_refresh_token_exists(self):
+        self.fmc_plugin.refresh_token = 'REFRESH_TOKEN'
+        self.connection_mock.send.return_value = self._login_response(
+            {'X-auth-access-token': 'NEW_ACCESS_TOKEN', 'refresh_token': 'NEW_REFRESH_TOKEN'}
+        )
 
-    #     self.fmc_plugin.login('foo', 'bar')
+        self.fmc_plugin.login('foo', 'bar')
 
-    #     assert 'NEW_ACCESS_TOKEN' == self.fmc_plugin.access_token
-    #     assert 'NEW_REFRESH_TOKEN' == self.fmc_plugin.refresh_token
-    #     assert {'Authorization': 'Bearer NEW_ACCESS_TOKEN'} == self.fmc_plugin.connection._auth
-    #     expected_body = json.dumps({'grant_type': 'refresh_token', 'refresh_token': 'REFRESH_TOKEN'})
-    #     self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
+        assert 'NEW_ACCESS_TOKEN' == self.fmc_plugin.access_token
+        assert 'NEW_REFRESH_TOKEN' == self.fmc_plugin.refresh_token
+        expected_body = json.dumps({'grant_type': 'refresh_token', 'refresh_token': 'REFRESH_TOKEN'})
+        self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
 
-    # def test_login_should_use_env_variable_when_set(self):
-    #     temp_token_path = self.fmc_plugin.hostvars['token_path']
-    #     self.fmc_plugin.hostvars['token_path'] = '/testFakeLoginUrl'
-    #     self.connection_mock.send.return_value = self._connection_response(
-    #         {'access_token': 'ACCESS_TOKEN', 'refresh_token': 'REFRESH_TOKEN'}
-    #     )
+    def test_login_should_use_env_variable_when_set(self):
+        temp_token_path = self.fmc_plugin.hostvars['token_path']
+        self.fmc_plugin.hostvars['token_path'] = '/testFakeLoginUrl'
+        self.connection_mock.send.return_value = self._login_response(
+            {'access_token': 'ACCESS_TOKEN', 'refresh_token': 'REFRESH_TOKEN'}
+        )
 
-    #     self.fmc_plugin.login('foo', 'bar')
+        self.fmc_plugin.login('foo', 'bar')
 
-    #     self.connection_mock.send.assert_called_once_with('/testFakeLoginUrl', mock.ANY, headers=mock.ANY,
-    #                                                       method=mock.ANY)
-    #     self.fmc_plugin.hostvars['token_path'] = temp_token_path
+        self.connection_mock.send.assert_called_once_with('/testFakeLoginUrl', mock.ANY, headers=mock.ANY,
+                                                          method=mock.ANY)
+        self.fmc_plugin.hostvars['token_path'] = temp_token_path
 
     def test_login_raises_exception_when_no_refresh_token_and_no_credentials(self):
         with self.assertRaises(AnsibleConnectionFailure) as res:
             self.fmc_plugin.login(None, None)
         assert 'Username and password are required' in str(res.exception)
 
-    # def test_login_raises_exception_when_invalid_response(self):
-    #     self.connection_mock.send.return_value = self._connection_response(
-    #         {'no_access_token': 'ACCESS_TOKEN'}
-    #     )
+    def test_login_raises_exception_when_invalid_response(self):
+        self.connection_mock.send.return_value = self._login_response(
+            {'no_access_token': 'ACCESS_TOKEN'},
+            apply_base_headers=False
+        )
 
-    #     with self.assertRaises(ConnectionError) as res:
-    #         self.fmc_plugin.login('foo', 'bar')
+        with self.assertRaises(ConnectionError) as res:
+            self.fmc_plugin.login('foo', 'bar')
 
-    #     assert 'Server returned response without token info during connection authentication' in str(res.exception)
+        assert 'Server returned response without token info during connection authentication' in str(res.exception)
 
     def test_login_raises_exception_when_http_error(self):
         self.connection_mock.send.side_effect = HTTPError('http://testhost.com', 400, '', {},
@@ -133,18 +134,18 @@ class TestFmcHttpApi(unittest.TestCase):
 
         assert "Failed to authenticate user" in str(res.exception)
 
-    # def test_logout_should_revoke_tokens(self):
-    #     self.fmc_plugin.access_token = 'ACCESS_TOKEN_TO_REVOKE'
-    #     self.fmc_plugin.refresh_token = 'REFRESH_TOKEN_TO_REVOKE'
-    #     self.connection_mock.send.return_value = self._connection_response(None)
+    def test_logout_should_revoke_tokens(self):
+        self.fmc_plugin.access_token = 'ACCESS_TOKEN_TO_REVOKE'
+        self.fmc_plugin.refresh_token = 'REFRESH_TOKEN_TO_REVOKE'
+        self.connection_mock.send.return_value = self._login_response(None)
 
-    #     self.fmc_plugin.logout()
+        self.fmc_plugin.logout()
 
-    #     assert self.fmc_plugin.access_token is None
-    #     assert self.fmc_plugin.refresh_token is None
-    #     expected_body = json.dumps({'grant_type': 'revoke_token', 'access_token': 'ACCESS_TOKEN_TO_REVOKE',
-    #                                 'token_to_revoke': 'REFRESH_TOKEN_TO_REVOKE'})
-    #     self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
+        assert self.fmc_plugin.access_token is None
+        assert self.fmc_plugin.refresh_token is None
+        expected_body = json.dumps({'grant_type': 'revoke_token', 'access_token': 'ACCESS_TOKEN_TO_REVOKE',
+                                    'token_to_revoke': 'REFRESH_TOKEN_TO_REVOKE'})
+        self.connection_mock.send.assert_called_once_with(mock.ANY, expected_body, headers=mock.ANY, method=mock.ANY)
 
     def test_send_request_should_send_correct_request(self):
         exp_resp = {'id': '123', 'name': 'foo'}
@@ -188,22 +189,17 @@ class TestFmcHttpApi(unittest.TestCase):
         assert not resp[ResponseParams.SUCCESS]
         assert resp[ResponseParams.STATUS_CODE] == 500
 
-        # with self.assertRaises(ConnectionError) as res:
-        #    self.fmc_plugin.send_request('/test', HTTPMethod.GET)
+    def test_handle_httperror_should_update_tokens_and_retry_on_auth_errors(self):
+        self.fmc_plugin.refresh_token = 'REFRESH_TOKEN'
+        self.connection_mock.send.return_value = self._login_response(
+            {'access_token': 'NEW_ACCESS_TOKEN', 'refresh_token': 'NEW_REFRESH_TOKEN'}
+        )
 
-        # assert 'Invalid JSON response' in str(res.exception)
+        retry = self.fmc_plugin.handle_httperror(HTTPError('http://testhost.com', 401, '', {}, None))
 
-    # def test_handle_httperror_should_update_tokens_and_retry_on_auth_errors(self):
-    #     self.fmc_plugin.refresh_token = 'REFRESH_TOKEN'
-    #     self.connection_mock.send.return_value = self._connection_response(
-    #         {'access_token': 'NEW_ACCESS_TOKEN', 'refresh_token': 'NEW_REFRESH_TOKEN'}
-    #     )
-
-    #     retry = self.fmc_plugin.handle_httperror(HTTPError('http://testhost.com', 401, '', {}, None))
-
-    #     assert retry
-    #     assert 'NEW_ACCESS_TOKEN' == self.fmc_plugin.access_token
-    #     assert 'NEW_REFRESH_TOKEN' == self.fmc_plugin.refresh_token
+        assert retry
+        assert 'NEW_ACCESS_TOKEN' == self.fmc_plugin.access_token
+        assert 'NEW_REFRESH_TOKEN' == self.fmc_plugin.refresh_token
 
     def test_handle_httperror_should_not_retry_on_non_auth_errors(self):
         assert not self.fmc_plugin.handle_httperror(HTTPError('http://testhost.com', 500, '', {}, None))
@@ -327,45 +323,14 @@ class TestFmcHttpApi(unittest.TestCase):
 
         assert self.fmc_plugin.get_operation_specs_by_model_name('nonExistingOperation') is None
 
-    @staticmethod
-    def _connection_response(response, status=200):
-        response_mock = mock.Mock()
-        response_mock.getcode.return_value = status
-        response_text = json.dumps(response) if type(response) is dict else response
-        response_data = BytesIO(response_text.encode() if response_text else ''.encode())
-        return response_mock, response_data
+    def test_get_list_of_supported_api_versions_with_positive_response(self):
+        http_response_mock = mock.MagicMock()
+        http_response_mock.getvalue.return_value = '{"supportedVersions": ["v1"]}'
 
-    # def test_get_list_of_supported_api_versions_with_failed_http_request(self):
-    #     error_msg = "Invalid Credentials"
-    #     fp = mock.MagicMock()
-    #     fp.read.return_value = '{{"error-msg": "{0}"}}'.format(error_msg)
-    #     send_mock = mock.MagicMock(side_effect=HTTPError('url', 400, 'msg', 'hdrs', fp))
-    #     with mock.patch.object(self.fmc_plugin.connection, 'send', send_mock):
-    #         with self.assertRaises(ConnectionError) as res:
-    #             self.fmc_plugin._get_supported_api_versions()
-
-    #     assert error_msg in str(res.exception)
-
-    # def test_get_list_of_supported_api_versions_with_buggy_response(self):
-    #     error_msg = "Non JSON value"
-    #     http_response_mock = mock.MagicMock()
-    #     http_response_mock.getvalue.return_value = error_msg
-
-    #     send_mock = mock.MagicMock(return_value=(None, http_response_mock))
-
-    #     with mock.patch.object(self.fmc_plugin.connection, 'send', send_mock):
-    #         with self.assertRaises(ConnectionError) as res:
-    #             self.fmc_plugin._get_supported_api_versions()
-    #     assert error_msg in str(res.exception)
-
-    # def test_get_list_of_supported_api_versions_with_positive_response(self):
-    #     http_response_mock = mock.MagicMock()
-    #     http_response_mock.getvalue.return_value = '{"supportedVersions": ["v1"]}'
-
-    #     send_mock = mock.MagicMock(return_value=(None, http_response_mock))
-    #     with mock.patch.object(self.fmc_plugin.connection, 'send', send_mock):
-    #         supported_versions = self.fmc_plugin._get_supported_api_versions()
-    #         assert supported_versions == ['v1']
+        send_mock = mock.MagicMock(return_value=(None, http_response_mock))
+        with mock.patch.object(self.fmc_plugin.connection, 'send', send_mock):
+            supported_versions = self.fmc_plugin._get_supported_api_versions()
+            assert supported_versions == 'v1'
 
     @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.HttpApi._get_api_token_path', mock.MagicMock(return_value=None))
     @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.HttpApi._get_known_token_paths')
@@ -427,3 +392,36 @@ class TestFmcHttpApi(unittest.TestCase):
         url = mock.MagicMock()
         self.fmc_plugin._set_api_token_path(url)
         assert self.fmc_plugin._get_api_token_path() == url
+
+    # helpers
+    @staticmethod
+    def _connection_response(response, status=200):
+        response_mock = mock.Mock()
+        response_mock.getcode.return_value = status
+        response_text = json.dumps(response) if type(response) is dict else response
+        response_data = BytesIO(response_text.encode() if response_text else ''.encode())
+        return response_mock, response_data
+
+    @staticmethod
+    def _login_response(response_headers, status=200, apply_base_headers=True):
+        response_mock = mock.Mock()
+        response_mock.getcode.return_value = status
+        base_headers = {
+            'X-auth-access-token': None,
+            'X-auth-refresh-token': None,
+            'global': 'e276abec-e0f2-11e3-8169-6d9ed49b625f',
+            'DOMAINS': '[{"uuid": "e276abec-e0f2-11e3-8169-6d9ed49b625f", "name":"Global"}]'
+        }
+        if apply_base_headers and type(response_headers) is dict:
+            headers_dict = base_headers.copy()
+            # rename tokens if needed
+            headers_dict['X-auth-access-token'] = response_headers.get('X-auth-access-token') or response_headers.get('access_token') \
+                or headers_dict['X-auth-access-token']
+            headers_dict['X-auth-refresh-token'] = response_headers.get('X-auth-refresh-token') or response_headers.get('refresh_token') \
+                or headers_dict['X-auth-refresh-token']
+        else:
+            headers_dict = response_headers
+        # if they don't pass a dict for headers, let it through and let the errors happen
+        response_mock.info.return_value = headers_dict
+        response_data = BytesIO(''.encode())
+        return response_mock, response_data
