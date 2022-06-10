@@ -8,7 +8,7 @@ namespace: cisco
 name: fmcansible
 
 # The version of the collection. Must be compatible with semantic versioning
-version: 0.4.0
+version: 0.1.0
 
 # The path to the Markdown (.md) readme file. This path is relative to the root of the collection
 readme: README.md
@@ -36,11 +36,9 @@ license_file: ''
 # requirements as 'namespace' and 'name'
 tags: 
   - "cisco"
-  - "ftd"
+  - "fmc"
   - "cloud"
   - "collection"
-  - "networking"
-  - "sdn"
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
@@ -55,7 +53,7 @@ dependencies:
 repository: https://github.com/CiscoDevNet/FMCAnsible
 
 # The URL to any online docs
-documentation: https://developer.cisco.com/site/fmc-ansible/
+#documentation: https://developer.cisco.com/site/fmc-ansible/
 
 # The URL to the homepage of the collection/project
 homepage: https://github.com/CiscoDevNet/FMCAnsible

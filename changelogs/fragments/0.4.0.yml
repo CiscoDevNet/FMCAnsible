@@ -1,3 +1,0 @@
-major_changes:
-  - Migrated modules to Ansible collection `cisco.ftdansible`
-  - fixed linting issues and other issues raised by ansible-test

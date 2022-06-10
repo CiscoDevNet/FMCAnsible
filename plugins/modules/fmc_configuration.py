@@ -34,7 +34,7 @@ short_description: Manages configuration on Cisco FMC devices over REST API
 description:
   - Manages configuration on Cisco FMC devices including creating, updating, removing configuration objects,
     scheduling and staring jobs, deploying pending changes, etc. All operation are performed over REST API.
-version_added: "2.7.0"
+version_added: "1.0.0"
 author: "Cisco Systems (@cisco)"
 
 options:

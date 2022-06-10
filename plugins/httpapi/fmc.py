@@ -26,11 +26,11 @@ DOCUMENTATION = """
 ---
 author: Ansible Networking Team
 httpapi : fmc
-short_description: HttpApi Plugin for Cisco ASA Firepower device
+short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
-  - This HttpApi plugin provides methods to connect to Cisco ASA firepower
+  - This HttpApi plugin provides methods to connect to Cisco Secure Firewall
     devices over a HTTP(S)-based api.
-version_added: "2.7.0"
+version_added: "1.0.0"
 options:
   token_path:
     type: str

@@ -13,7 +13,7 @@ httpapi : fmc
 short_description: Internal client for FMC
 description:
   - Wraps urllib to make specific requests to FMC endpoint and parse the responses.
-version_added: "2.7.0"
+version_added: "1.0.0"
 options:
   host:
     type: str
