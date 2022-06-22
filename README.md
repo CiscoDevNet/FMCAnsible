@@ -1,188 +1,83 @@
-# FMC Ansible Modules
-
-IMPORTANT: This is a beta build. It is still being tested. Please use it for testing and provide feedback, do not use in production.
-
-IMPORTANT: When cloning this repository place it under ansible_collections/cisco (requirement to run some of the Ansible tools like ansible-test).
+# Cisco Secure Firewall Management Center (FMC) Ansible Collection
 
 An Ansible Collection that automates configuration management 
-and execution of operational tasks on Cisco Firepower Management Console (FMC) devices using FMC REST API.  
+and execution of operational tasks on Cisco Secure Firewall Management Centre (FMC) devices using FMC REST API. 
 
-## Installation Guide
+This module has been tested against the following ansible versions: **2.9.17, 2.10.5**
+This module has been tested against the following cisco Secure Firewall Management Center versions: **7.0, 7.1**
 
-The collection contains four Ansible modules:
+## Included Content
 
-* [`fmc_configuration.py`](./ansible_collections/plugins/modules/fmc_configuration.py) - manages device configuration via REST API. The module configures virtual and physical devices by sending HTTPS calls formatted according to the REST API specification;
+The collection contains one Ansible module:
 
-Sample playbooks are located in the [`samples`](./samples) folder.
+* [`fmc_configuration.py`](https://github.com/CiscoDevNet/FMCAnsible/blob/main/plugins/modules/fmc_configuration.py) - manages device configuration via REST API. The module configures virtual and physical devices by sending HTTPS calls formatted according to the REST API specification.
 
-## View Collection Documentation
+## Installing this collection
 
-Usage Instructions are presnt in the Instructions folder
-
-
-## Using the collection in Ansible
-
-1. Setup docker environment
+You can install the Cisco DCNM collection with the Ansible Galaxy CLI:
 
 ```
-docker run -it -v $(pwd)/samples:/fmc-ansible/playbooks \
--v $(pwd)/ansible.cfg:/fmc-ansible/ansible.cfg \
--v $(pwd)/requirements.txt:/fmc-ansible/requirements.txt \
--v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-python:3.10 bash
-
-cd /fmc-ansible
-pip install -r requirements.txt
+ansible-galaxy collection install cisco.fmcansible
 ```
 
-2. Install the ansible collection
+## Usage Instruction
+
+Create the inventory file. Ansible inventory contains information about systems where the playbooks should be run. You should create an inventory file with information about the FMC that will be used for configuration.
+
+The default location for inventory is /etc/ansible/hosts, but you can specify a different path by adding the `-i <path>` argument to the ansible-playbook command.
+
+The inventory file requires:
+
+-       Hostname or IP Address of the FMC
+
+-       Username for FMC
+
+-       Password for the given user
 
 ```
-ansible-galaxy collection install git+https://github.com/CiscoDevNet/FMCAnsible.git
+[all:vars]
+ansible_network_os=cisco.fmcansible.fmc
+
+[vfmc]
+<FMC IP> ansible_user=<username> ansible_password=<password> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
 ```
 
-3. List installed collections.
-```
-ansible-galaxy collection list
-```
+Then create a playbook referencing the module and the desired operation. This example `network.yml` demonstrates how to create a simple network object. The task creates a new object representing the subnet.
 
-3. Validate your ansible.cfg file contains a path to ansible collections:
+After creation, the network object is stored as an Ansible fact and can be accessed  
+using `Network_net15` variable.
 
-```
-cat ansible.cfg
-```
-4. Edit hosts file `samples/fmc_configuration/hosts`  and add your FMC device IP address/credentials.
-   
-5. Reference the collection from your playbook
-
-**NOTE**: The tasks in the playbook reference the collection
-
-```
+```ansible
 - hosts: all
   connection: httpapi
   tasks:
-    - name: Find a Google application
+    - name: Get Domain UUID
       cisco.fmcansible.fmc_configuration:
-        operation: getApplicationList
-        filters:
-          name: Google
-        register_as: google_app_results
-```        
+        operation: getAllDomain
+        register_as: domain
 
-Run the sample playbook.
+    - name: Create a network object for Cisco FTD 1
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        data:
+          name: net15
+          value: 10.10.30.0/24
+          type: Network
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+```
+Then run the playbook
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy.yml
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
+ansible-playbook -i hosts network.yml
 ```
 
-## Tests
-
-The project contains unit tests for Ansible modules, HTTP API plugin and util files. They can be found in `test/unit` directory. Ansible has many utils for mocking and running tests, so unit tests in this project also rely on them and including Ansible test module to the Python path is required.
-
-### Running Sanity Tests Using Docker
-
-When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/fmcansible).  
-
-```
-rm -rf tests/output 
-ansible-test sanity --docker -v --color
-```
-
-### Running Units Tests Using Docker
-
-When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/fmcansible)
+Detailed Usage Instructions can be found [here](https://github.com/CiscoDevNet/FMCAnsible/blob/main/Instructions/usage.md)
 
 
-```
-rm -rf tests/output 
-ansible-test units --docker -v --color
-```
+Sample playbooks are located [`here`](https://github.com/CiscoDevNet/FMCAnsible/tree/main/samples).
 
-To run a single test, specify the filename at the end of command:
-```
-rm -rf tests/output 
-ansible-test units --docker -v tests/unit/httpapi_plugins/test_ftd.py --color
-```
+## Contributing to this collection
 
-### Integration Tests
-
-Integration tests are written in a form of playbooks. Thus, integration tests are written as sample playbooks with assertion and can be found in the `samples` folder. They start with `test_` prefix and can be run as usual playbooks.  The integration tests use a local Docker container which copies the necessary code and folders from your local path into a docker container for testing.
-
-1. Build the default Python 3.9, Ansible 2.10 Docker image:
-    ```
-    docker build -t fmc-ansible:integration -f Dockerfile_integration .
-    ```
-    **NOTE**: The default image is based on the release v0.4.0 of the [`FMC-Ansible`](https://github.com/CiscoDevNet/FMCAnsible) and Python 3.6. 
-
-2. You can build the custom Docker image:
-    ```
-    docker build -t fmc-ansible:integration \
-    -f Dockerfile_integration \
-    --build-arg PYTHON_VERSION=<2.7|3.5|3.6|3.7> \
-    --build-arg FMC_ANSIBLE_VERSION=<tag name | branch name> .
-    ```
-
-3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
-
-4. Run the playbook in Docker mounting playbook folder to `/fmc-ansible/playbooks` and inventory file to `/etc/ansible/hosts`:
-
-    ```
-    docker run -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-    -v $(pwd)/ansible.cfg:/root/ansible_collections/cisco/fmcansible/ansible.cfg \
-    fmc-ansible:integration /root/ansible_collections/cisco/fmcansible/samples/fmc_configuration/latest.yml
-
-    docker run -v $(pwd)/inventory/sample_hosts:/etc/ansible/hosts \
-    -v $(pwd)/ansible.cfg:/root/ansible_collections/cisco/fmcansible/ansible.cfg \
-    fmc-ansible:integration /root/ansible_collections/cisco/fmcansible/samples/fmc_configuration/user.yml
-
-    ```
-
-
-## Developing Locally With Docker
-
-1. Setup docker environment
-
-```
-docker run -it -v $(pwd):/root/ansible_collections/cisco/fmcansible \
-python:3.10 bash
-```
-
-2. Change to working directory, update and upgrade system and install requirements.txt
-
-```
-cd /root/ansible_collections/cisco/fmcansible
-apt update && apt upgrade -y
-pip install -r requirements.txt 
-```
-
-3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
-
-
-See section Above 
-
-## Debugging
-
-1. Add `log_path` with path to log file in `ansible.cfg`
-
-2. Run `ansible-playbook` with `-vvvv`
-    ```
-    $ ansible-playbook -i inventory/sample_hosts samples/fmc_configuration/access_policy.yml -vvvv
-    ```
-
-3. The log file will contain additional information (REST, etc.)
-
-
-## Troubleshooting
-
-```
-import file mismatch:
-imported module 'test.unit.module_utils.test_common' has this __file__ attribute: ...
-which is not the same as the test file we want to collect:
-  /fmc-ansible/test/unit/module_utils/test_common.py
-HINT: remove __pycache__ / .pyc files and/or use a unique basename for your test file modules
-```
-
-In case you experience the following error while running the tests in Docker, remove compiled bytecode files files with 
-`find . -name "*.pyc" -type f -delete` command and try again.
+We welcome community contributions to this collection. If you find problems, please open an issue or create a PR against the [Cisco FMCAnsible repository](https://github.com/CiscoDevNet/FMCAnsible)
 

@@ -27,6 +27,6 @@ sections:
   - Bugfixes
 - - known_issues
   - Known Issues
-title: Cisco FTDAnsible Collection
+title: Cisco FMCAnsible Collection
 trivial_section_name: trivial
 use_fqcn: true
