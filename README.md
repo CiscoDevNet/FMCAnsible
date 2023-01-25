@@ -72,7 +72,7 @@ Then run the playbook
 ansible-playbook -i hosts network.yml
 ```
 
-Detailed Usage Instructions can be found [here](https://github.com/CiscoDevNet/FMCAnsible/blob/main/Instructions/usage.md)
+Detailed Usage Instructions can be found [here](https://github.com/CiscoDevNet/FMCAnsible/blob/main/docs/usage.md)
 
 
 Sample playbooks are located [`here`](https://github.com/CiscoDevNet/FMCAnsible/tree/main/samples).
