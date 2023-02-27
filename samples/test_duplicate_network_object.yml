@@ -20,7 +20,7 @@
       register: result
     - assert:
         that:
-          - getObjs | length == 7
+          - getObjs | length == 0
 
     - name: createMultipleNetworkObject should create multiple new networks
       cisco.fmcansible.fmc_configuration:

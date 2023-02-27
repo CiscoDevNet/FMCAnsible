@@ -8,7 +8,7 @@
 
     - name: Create a TCP port for PostgreSQL
       cisco.fmcansible.fmc_configuration:
-        operation: createMultipleProtocolPortObject
+        operation: upsertProtocolPortObject
         data:
           name: PostgreSQLporte
           port: "5432"
