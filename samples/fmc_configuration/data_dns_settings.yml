@@ -5,7 +5,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertDNSServerGroupObject
         data:
-          type: dnsservergroup
+          type: DNSServerGroupObject
           name: CustomDNSServerGroup
           timeout: 2
           retries: 3
