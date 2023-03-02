@@ -19,7 +19,7 @@
         data:
           name: NGFW-Access-Policy28
           defaultAction:
-            action: BLOCK
+            action: PERMIT
             intrusionPolicy:
               id: "{{ policies[0].id }}"
               type: "{{ policies[0].type }}"

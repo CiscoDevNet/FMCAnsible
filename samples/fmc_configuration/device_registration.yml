@@ -14,20 +14,25 @@
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
         filters:
-          name: NGFW-Access-Policy27
+          name: test
         register_as: accesspolicy
-
-    - name: device onboarding
+    
+    - name: Get Server Version
       cisco.fmcansible.fmc_configuration:
-        operation: createDevice
+        operation: getAllServerVersion
+        register_as: server_version
+
+    - name: Device onboarding for < 7.X
+      when: server_version[0].serverVersion is regex("[0-6]\.[0-9]+\.[0-9]+")
+      cisco.fmcansible.fmc_configuration:
+        operation: upsertDevice
         data:
-          hostName: "1.1.1.1"
+          hostName: "10.0.2.11"
           license_caps:
             - 'BASE'
           ftdMode: 'ROUTED'
           type: Device
           regKey: cisco
-          performanceTier: "FTDv30"
           name: "FTD1"
           accessPolicy:
             id: '{{ accesspolicy[0].id }}'
@@ -36,3 +41,36 @@
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
         register_as: ftd
+
+    - name: Device onboarding for >= 7.X
+      when: server_version[0].serverVersion is not regex("[0-6]\.[0-9]+\.[0-9]+")
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleDevice
+        data:
+          - hostName: "10.0.2.11"
+            license_caps:
+              - 'BASE'
+            ftdMode: 'ROUTED'
+            type: Device
+            regKey: cisco
+            performanceTier: "FTDv30"
+            name: "FTD1"
+            accessPolicy:
+              id: '{{ accesspolicy[0].id }}'
+              type: 'AccessPolicy'
+            natID: '1234'
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        query_params:
+          bulk: true
+        register_as: ftd
+
+    - name: Verify whether device is registered
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDevice
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}' 
+        register_as: device_list
+      until: (device_list | length) != 0
+      retries: 30
+      delay: 10
