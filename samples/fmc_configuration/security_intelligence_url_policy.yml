@@ -24,19 +24,26 @@
           domainUUID: '{{ domain[0].uuid }}' 
         register_as: device_list 
 
-    # - name: Find a Security Intelligence URL Policy
-    #   cisco.fmcansible.fmc_configuration:
-    #     operation: getAllAccessPolicySecurityIntelligencePolicy
-    #     path_params:
-    #       containerUUID: '{{ device_list[0].id }}'
-    #       domainUUID: '{{ domain[0].uuid }}'
-    #     register_as: policies
+    - name: Get Server Version
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllServerVersion
+        register_as: server_version
 
-    # - name: Add Cisco as whitelisted URL to SecurityIntelligenceURLPolicy
-    #   cisco.fmcansible.fmc_configuration:
-    #     operation: upsertAccessPolicySecurityIntelligencePolicy
-    #     data:
-    #       name: NGFW-Default-Security-Intelligence-URL-Policy
-    #       urls: 
-    #         allowlist: '{{ policies[0]["urls"]["allowlist"]["url"] + [urlobject_cisco] }}'
-    #       type: SecurityIntelligencePolicy
+    - name: Find a Security Intelligence URL Policy
+      when: server_version[0].serverVersion is not regex("[0-6]\.[0-9]+\.[0-9]+")
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicySecurityIntelligencePolicy
+        path_params:
+          containerUUID: "{{ access_policies[0].id }}"
+          domainUUID: "{{ domain[0].uuid }}"
+        register_as: policies
+
+    - name: Add Cisco as whitelisted URL to SecurityIntelligenceURLPolicy
+      when: server_version[0].serverVersion is not regex("[0-6]\.[0-9]+\.[0-9]+")
+      cisco.fmcansible.fmc_configuration:
+        operation: upsertAccessPolicySecurityIntelligencePolicy
+        data:
+          name: NGFW-Default-Security-Intelligence-URL-Policy
+          urls:
+            allowlist: '{{ policies[0]["urls"]["allowlist"]["url"] + [urlobject_cisco] }}'
+          type: SecurityIntelligencePolicy
