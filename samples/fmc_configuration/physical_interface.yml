@@ -13,13 +13,16 @@
           domainUUID: '{{ domain[0].uuid }}' 
         register_as: device_list 
 
-    - name: Get Physical Interfaces
+    - name: Get Physical Interfaces once the FTD is up and running
       cisco.fmcansible.fmc_configuration:
         operation: getAllFTDPhysicalInterface
         path_params:
           containerUUID: '{{ device_list[0].id }}'
           domainUUID: '{{ domain[0].uuid }}'
         register_as: physical_interfaces
+      until: physical_interfaces is defined
+      retries: 10
+      delay: 30
 
     - name: Setup Outside Interface with static IP
       cisco.fmcansible.fmc_configuration:

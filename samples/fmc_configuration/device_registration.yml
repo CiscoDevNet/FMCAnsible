@@ -7,6 +7,28 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
         register_as: domain
+
+    - name: Find an intrustion policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllIntrusionPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        register_as: policies
+    
+    - name: Create an Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: upsertAccessPolicy
+        data:
+          name: test
+          defaultAction:
+            action: PERMIT
+            intrusionPolicy:
+              id: "{{ policies[0].id }}"
+              type: "{{ policies[0].type }}"
+            type: defaultAction
+          type: AccessPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
     
     - name: Get Access Policy
       cisco.fmcansible.fmc_configuration:
@@ -22,8 +44,8 @@
         operation: getAllServerVersion
         register_as: server_version
 
-    - name: Device onboarding for < 7.X
-      when: server_version[0].serverVersion is regex("[0-6]\.[0-9]+\.[0-9]+")
+    - name: Device onboarding for < 7.2
+      when: server_version[0].serverVersion is regex("7\.1\.\d+|7\.0\.\d+|[1-6]\.\d+\.\d+")
       cisco.fmcansible.fmc_configuration:
         operation: upsertDevice
         data:
@@ -42,8 +64,8 @@
           domainUUID: '{{ domain[0].uuid }}'
         register_as: ftd
 
-    - name: Device onboarding for >= 7.X
-      when: server_version[0].serverVersion is not regex("[0-6]\.[0-9]+\.[0-9]+")
+    - name: Device onboarding for >= 7.2
+      when: server_version[0].serverVersion is not regex("7\.1\.\d+|7\.0\.\d+|[1-6]\.\d+\.\d+")
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleDevice
         data:
@@ -65,12 +87,6 @@
           bulk: true
         register_as: ftd
 
-    - name: Verify whether device is registered
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDevice
-        path_params:
-          domainUUID: '{{ domain[0].uuid }}' 
-        register_as: device_list
-      until: (device_list | length) != 0
-      retries: 30
-      delay: 10
+    - name: Wait for 1 device to complete registration
+      wait_for:
+        timeout: 180 # if more than 1 device, increase the timeout

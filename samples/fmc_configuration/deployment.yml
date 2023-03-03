@@ -34,7 +34,7 @@
           version: '{{ devices[0].version }}'
           deviceList:
             - '{{ devices[0].device.id }}'
-          forceDeploy: True
+          forceDeploy: true
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
         register_as: deployment_job

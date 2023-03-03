@@ -6,6 +6,17 @@
         operation: getAllDomain
         register_as: domain
 
+    - name: Create 3 security zones
+      cisco.fmcansible.fmc_configuration:
+        operation: upsertSecurityZoneObject
+        data:
+          name: sz-{{ item }}
+          interfaceMode: ROUTED
+          type: SecurityZone
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+      with_sequence: start=1 end=3
+
     - name: Get Sec Zone
       cisco.fmcansible.fmc_configuration:
         operation: getAllSecurityZoneObject
