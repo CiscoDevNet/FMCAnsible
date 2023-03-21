@@ -19,7 +19,7 @@
 
     - name: device onboarding
       cisco.fmcansible.fmc_configuration:
-        operation: createDevice
+        operation: createMultipleDevice
         data:
           hostName: "1.1.1.1"
           license_caps:
