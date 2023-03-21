@@ -4,7 +4,7 @@ An Ansible Collection that automates configuration management
 and execution of operational tasks on Cisco Secure Firewall Management Centre (FMC) devices using FMC REST API. 
 
 This module has been tested against the following ansible versions: **2.9.17, 2.10.5**
-This module has been tested against the following cisco Secure Firewall Management Center versions: **7.0, 7.1, 7.2**
+This module has been tested against the following cisco Secure Firewall Management Center versions: **7.0, 7.1, 7.2, 7.3**
 
 ## Included Content
 
