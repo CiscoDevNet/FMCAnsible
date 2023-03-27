@@ -70,6 +70,10 @@ BULK = "bulk"
 NAME = "name"
 IF_NAME = "ifname"
 
+################## DEBUG SHIT ###########################
+from Mylogger import MyLogger
+logger = MyLogger('my_app', log_file='debug.log')
+################## DEBUG SHIT ###########################
 
 # Note: FMC uses create/update; FTD uses add/edit
 class OperationNamePrefix:
@@ -553,7 +557,9 @@ class BaseConfigurationResource(object):
         data, query_params, path_params = _get_user_params(params)
         op_spec = self.get_operation_spec(operation_name)
 
+        logger.debug(f"op_sec: {op_spec}\nquery_params: {query_params}\ndata: {data}")
         query_params = {key: val for (key, val) in query_params.items() if key in op_spec[OperationField.PARAMETERS][OperationParams.QUERY].keys()}
+        logger.debug(f"query_params after new line: {query_params}")
 
         url, method = op_spec[OperationField.URL], op_spec[OperationField.METHOD]
 

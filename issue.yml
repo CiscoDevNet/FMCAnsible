@@ -1,0 +1,71 @@
+- hosts: all
+  connection: httpapi
+  tasks:
+    - name: Get Domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Find an intrustion policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllIntrusionPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        register_as: policies
+
+    - name: Allow traffic by default
+      cisco.fmcansible.fmc_configuration:
+        operation: upsertAccessPolicy
+        data:
+          name: ftdpolicy
+          defaultAction:
+            action: PERMIT
+            intrusionPolicy:
+              id: "{{ policies[0].id }}"
+              type: "{{ policies[0].type }}"
+            type: defaultAction
+          type: AccessPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+
+    - name: create auxilary network object
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        data:
+          name: "ansible-test-network467"
+          value: "192.22.21.0/24"
+          type: "networkobject"
+        register_as: net1
+
+    - name: Get Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        filters:
+          name: ftdpolicy
+        register_as: accesspolicy
+
+    - name: print details
+      debug:
+        msg: '{{accesspolicy}}'
+
+    - name: Create an access rule allowing trafic from Cisco DevNet
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleAccessRule
+        data:
+          name: AllowCiscoTraffic9
+          type: accessrule
+          sourceNetworks:
+            objects:
+              - id: '{{ net1.id }}'
+                name: '{{net1.name }}'
+                type: '{{ net1.type }}'
+          action: ALLOW
+        path_params:
+          containerUUID: '{{ accesspolicy[0].id }}'
+          domainUUID: '{{ domain[0].uuid }}'
+        query_params:
+          section: "mandatory"
