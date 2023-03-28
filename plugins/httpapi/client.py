@@ -84,7 +84,7 @@ class InternalHttpClient(object):
         # ex:
         #     connection.send(url, data, method=http_method, headers=BASE_HEADERS)
         method = method.upper()
-        conn = http.client.HTTPSConnection(self._host, timeout=10, context=ssl._create_unverified_context())
+        conn = http.client.HTTPSConnection(self._host, timeout=60, context=ssl._create_unverified_context())
         conn.request(method, url_path, data, headers)
         # response
         response = conn.getresponse()
