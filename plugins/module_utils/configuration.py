@@ -29,7 +29,7 @@ from ansible.module_utils.six import iteritems
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, delete_props_not_in_model, \
     FmcServerError, ResponseParams, copy_identity_properties, add_missing_properties_left_to_right, FmcUnexpectedResponse, FmcConfigurationError
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, OperationParams, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
 #   copy_identity_properties, FmcUnexpectedResponse
 # from module_utils.fmc_swagger_client import OperationField, ValidationError
@@ -552,9 +552,15 @@ class BaseConfigurationResource(object):
 
         data, query_params, path_params = _get_user_params(params)
         op_spec = self.get_operation_spec(operation_name)
+
+        filtered_query_params = {}
+        for key, val in query_params.items():
+            if key in op_spec[OperationField.PARAMETERS][OperationParams.QUERY].keys():
+                filtered_query_params[key] = val
+        
         url, method = op_spec[OperationField.URL], op_spec[OperationField.METHOD]
 
-        return self._send_request(url, method, data, path_params, query_params)
+        return self._send_request(url, method, data, path_params, filtered_query_params)
 
     def _send_request(self, url_path, http_method, body_params=None, path_params=None, query_params=None):
         def raise_for_failure(resp):
