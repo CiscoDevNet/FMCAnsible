@@ -31,11 +31,7 @@ import re
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common.collections import is_string
 
-#===================== LOGGING ======================
-from ansible_collections.cisco.fmcansible.plugins.module_utils.Log import customLogger
-logger = customLogger(__name__, log_file=f'~/tests/FMCAnsible/${__file__[:-3]}.log')
 
-#
 INVALID_IDENTIFIER_SYMBOLS = r'[^a-zA-Z0-9_]'
 
 IDENTITY_PROPERTIES = ['id', 'version', 'ruleId']
@@ -86,7 +82,7 @@ def construct_ansible_facts(response, params):
             object_name = re.sub(INVALID_IDENTIFIER_SYMBOLS, '_', response_body['name'].lower())
             fact_name = '%s_%s' % (response_body['type'], object_name)
             facts[fact_name] = response_body
-    logger.info(f'facts: {facts}')
+
     return facts
 
 
