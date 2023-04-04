@@ -67,6 +67,7 @@ Most operations are similar to CRUD functions and can be divided into the follow
 | **path_params**  | False        | dict     | Corresponds to URL parameters in HTTP request                                                                                                                        |
 | **register_as**  | False        | string   | A name for the fact that is registered with the response from the server.                                                                                            |
 | **filters**      | False        | dict     | A map with filter criteria for upsert and getAll operations.                                                                                                         |
+| **loop_block**      | False        | bool     | Corresponds to whether the block is looped.                                                                                                     |
 ### **Return** **Value**
 
 | **Value**    | **Returned** | **Type** | **Description**                           |
