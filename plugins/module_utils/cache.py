@@ -5,14 +5,14 @@ class ResponseCache:
         self.cache_file = cache_file
 
         if not os.path.exists(self.cache_file):
-            with open(self.cache_file, "w") as f:
-                json.dump({}, f, indent=2)
+            with open(self.cache_file, "w", encoding="utf-8") as file:
+                json.dump({}, file, indent=2)
 
     def cache_response(self, name, response_body, is_loop_block=False):
         # Load the cached responses from the file
         try:
-            with open(self.cache_file, "r") as f:
-                cached_responses = json.load(f)
+            with open(self.cache_file, "r", encoding="utf-8") as file:
+                cached_responses = json.load(file)
         except FileNotFoundError:
             cached_responses = {}
 
@@ -35,14 +35,14 @@ class ResponseCache:
         else:
             return
         
-        with open(self.cache_file, "w") as f:
-            json.dump(cached_responses, f, indent=2)
+        with open(self.cache_file, "w", encoding="utf-8") as file:
+            json.dump(cached_responses, file, indent=2)
 
     def get_cached_responses(self, is_loop_block=False):
         if is_loop_block:
             try:
-                with open(self.cache_file, "r") as f:
-                    return json.load(f)
+                with open(self.cache_file, "r", encoding="utf-8") as file:
+                    return json.load(file)
             except FileNotFoundError:
                 return {}
         else:
