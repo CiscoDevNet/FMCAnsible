@@ -69,7 +69,6 @@ class FmcUnexpectedResponse(Exception):
     """The exception to be raised in case of unexpected responses from 3d parties."""
     pass
 
-
 def construct_ansible_facts(response, params):
     facts = dict()
     if response:
