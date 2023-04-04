@@ -277,6 +277,9 @@ class HttpApi(HttpApiBase):
             if self._require_login():
                 self._login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
 
+            if self.access_token == None and self.refresh_token == None:
+                return self._handle_send_error(http_method, "Verify your credentials or check the maximum number of allowed concurrent logins.", 401)
+            
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
             # response_data is bytearray, so convert to string
