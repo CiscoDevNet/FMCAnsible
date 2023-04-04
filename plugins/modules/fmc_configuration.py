@@ -24,8 +24,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
-						'status': ['preview'],
-						'supported_by': 'network'}
+                    'status': ['preview'],
+                    'supported_by': 'network'}
 
 DOCUMENTATION = """
 ---
@@ -85,14 +85,15 @@ EXAMPLES = """
     operation: deleteNetworkObject
     path_params:
       objId: "{{ hostNetwork['id'] }}"
+"""
 
 RETURN = """
 response:
     description: HTTP response returned from the API call.
     returned: success
     type: dict
-
 """
+
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from os import path, remove
@@ -118,7 +119,7 @@ def main():
         loop_block=dict(type='bool')
     )
     module = AnsibleModule(argument_spec=fields,
-                    supports_check_mode=True)
+                        supports_check_mode=True)
     params = module.params
 
     connection = Connection(module._socket_path)
@@ -151,7 +152,7 @@ def main():
         module.fail_json(msg='Failed to execute %s operation because of the configuration error: %s' % (op_name, e.msg))
     except FmcServerError as e:
         module.fail_json(msg='Server returned an error trying to execute %s operation. Status code: %s. '
-                    'Server response: %s' % (op_name, e.code, e.response))
+                        'Server response: %s' % (op_name, e.code, e.response))
     except FmcUnexpectedResponse as e:
         module.fail_json(msg=e.args[0])
     except ValidationError as e:
@@ -160,4 +161,4 @@ def main():
         module.exit_json(changed=False)
 
 if __name__ == '__main__':
-		main()
+    main()
