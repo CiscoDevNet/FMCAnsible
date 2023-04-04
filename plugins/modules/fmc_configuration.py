@@ -24,8 +24,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 ANSIBLE_METADATA = {'metadata_version': '1.1',
-                        'status': ['preview'],
-                        'supported_by': 'network'}
+                    'status': ['preview'],
+                    'supported_by': 'network'}
 
 DOCUMENTATION = """
 ---
@@ -69,23 +69,22 @@ options:
 
 EXAMPLES = """
 - name: Create a network object
-    fmc_configuration:
-        operation: "addNetworkObject"
-        data:
-            name: "Ansible-network-host"
-            description: "From Ansible with love"
-            subType: "HOST"
-            value: "192.168.2.0"
-            dnsResolution: "IPV4_AND_IPV6"
-            type: "networkobject"
-            isSystemDefined: false
-        register_as: "hostNetwork"
-
+  fmc_configuration:
+    operation: addNetworkObject
+    data:
+      name: Ansible-network-host
+      description: From Ansible with love
+      subType: HOST
+      value: 192.168.2.0
+      dnsResolution: IPV4_AND_IPV6
+      type: networkobject
+      isSystemDefined: false
+    register_as: hostNetwork
 - name: Delete the network object
-    fmc_configuration:
-        operation: "deleteNetworkObject"
-        path_params:
-            objId: "{{ hostNetwork['id'] }}"
+  fmc_configuration:
+    operation: deleteNetworkObject
+    path_params:
+      objId: "{{ hostNetwork['id'] }}"
 """
 
 RETURN = """
@@ -104,8 +103,9 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import con
     FmcServerError, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import ResponseCache
 
-cache_file = "/tmp/.cache.json"
-cache = ResponseCache(cache_file)
+CACHE_FILE = "/tmp/.cache.json"
+cache = ResponseCache(CACHE_FILE)
+
 
 def main():
     fields = dict(
@@ -118,16 +118,16 @@ def main():
         loop_block=dict(type='bool', default=False)
     )
     module = AnsibleModule(argument_spec=fields,
-                            supports_check_mode=True)
+                        supports_check_mode=True)
     params = module.params
 
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)
     op_name = params['operation']
-    cache_exists = path.exists(cache_file)
+    cache_exists = path.exists(CACHE_FILE)
     if op_name == "getAllDomain":
         if cache_exists:
-            remove(cache_file)
+            remove(CACHE_FILE)
 
     try:
         resp = resource.execute_operation(op_name, params)
@@ -151,7 +151,7 @@ def main():
         module.fail_json(msg='Failed to execute %s operation because of the configuration error: %s' % (op_name, e.msg))
     except FmcServerError as e:
         module.fail_json(msg='Server returned an error trying to execute %s operation. Status code: %s. '
-                                                        'Server response: %s' % (op_name, e.code, e.response))
+                        'Server response: %s' % (op_name, e.code, e.response))
     except FmcUnexpectedResponse as e:
         module.fail_json(msg=e.args[0])
     except ValidationError as e:
@@ -161,4 +161,4 @@ def main():
 
 
 if __name__ == '__main__':
-        main()
+    main()
