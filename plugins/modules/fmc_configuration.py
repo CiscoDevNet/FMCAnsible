@@ -119,7 +119,7 @@ def main():
         loop_block=dict(type='bool')
     )
     module = AnsibleModule(argument_spec=fields,
-                        supports_check_mode=True)
+                            supports_check_mode=True)
     params = module.params
 
     connection = Connection(module._socket_path)
@@ -152,13 +152,14 @@ def main():
         module.fail_json(msg='Failed to execute %s operation because of the configuration error: %s' % (op_name, e.msg))
     except FmcServerError as e:
         module.fail_json(msg='Server returned an error trying to execute %s operation. Status code: %s. '
-                        'Server response: %s' % (op_name, e.code, e.response))
+                            'Server response: %s' % (op_name, e.code, e.response))
     except FmcUnexpectedResponse as e:
         module.fail_json(msg=e.args[0])
     except ValidationError as e:
         module.fail_json(msg=e.args[0])
     except CheckModeException:
         module.exit_json(changed=False)
+
 
 if __name__ == '__main__':
     main()

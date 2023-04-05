@@ -15,7 +15,6 @@ class ResponseCache:
             with open(self.cache_file, "w") as file:
                 json.dump({}, file, indent=2)
 
-
     def cache_response(self, name, response_body, is_loop_block=False):
         # Load the cached responses from the file
         try:
@@ -49,7 +48,6 @@ class ResponseCache:
 
         with open(self.cache_file, "w") as file:
             json.dump(cached_responses, file, indent=2)
-
 
     def get_cached_responses(self, is_loop_block=False):
         if is_loop_block:

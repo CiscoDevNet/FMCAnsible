@@ -19,20 +19,20 @@ class TestResponseCache(unittest.TestCase):
     def test_cache_response(self):
         # Test caching a response for a non-loop block
         self.cache.cache_response("test_key", {"test": "value"})
-        with open(self.cache_file, "r", encoding="UTF-8") as f:
+        with open(self.cache_file, "r") as f:
             cached_responses = json.load(f)
             self.assertEqual(cached_responses, {})
 
         # Test caching a response for a loop block
         self.cache.cache_response("loop_key", {"key": "value"}, is_loop_block=True)
-        with open(self.cache_file, "r", encoding="UTF-8") as f:
+        with open(self.cache_file, "r") as f:
             cached_responses = json.load(f)
             expected_cached_responses = {"loop_key": {"key": "value"}}
             self.assertEqual(cached_responses, expected_cached_responses)
 
         # Test appending to a cached response for a loop block
         self.cache.cache_response("loop_key", {"new": "value"}, is_loop_block=True)
-        with open(self.cache_file, "r", encoding="UTF-8") as f:
+        with open(self.cache_file, "r") as f:
             cached_responses = json.load(f)
             expected_cached_responses = {"loop_key": [{"key": "value"}, {"new": "value"}]}
             self.assertEqual(cached_responses, expected_cached_responses)
