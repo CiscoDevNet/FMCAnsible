@@ -97,6 +97,7 @@ response:
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from os import path, remove
+from re import compile
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
@@ -106,6 +107,17 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import Resp
 
 CACHE_FILE = "/tmp/.cache.json"
 cache = ResponseCache(CACHE_FILE)
+
+
+def extract_hosts(response_object):
+    ip_pattern = compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b')
+
+    if isinstance(response_object, list):
+        response_object = response_object[0]
+    elif not response_object.get('links', {}).get('self'):
+        return "default"
+
+    return ip_pattern.findall(response_object['links']['self'])[0]
 
 
 def main():
@@ -119,7 +131,7 @@ def main():
         loop_block=dict(type='bool')
     )
     module = AnsibleModule(argument_spec=fields,
-                            supports_check_mode=True)
+                           supports_check_mode=True)
     params = module.params
 
     connection = Connection(module._socket_path)
@@ -133,18 +145,27 @@ def main():
     try:
         resp = resource.execute_operation(op_name, params)
         facts = construct_ansible_facts(resp, module.params)
+
         if not facts:
-            module.exit_json(changed=resource.config_changed, response=resp, ansible_facts=facts)
+            module.exit_json(changed=resource.config_changed,
+                             response=resp, ansible_facts=facts)
+        if "update" in op_name:
+            module.exit_json(changed=resource.config_changed,
+                             response=resp, ansible_facts=facts)
+
+        hostname = extract_hosts(resp)
 
         facts_copy = facts.copy()
         name, response_body = facts_copy.popitem()
-        cache.cache_response(name, response_body, module.params['loop_block'])
+        cache.cache_response(name, response_body, hostname)
 
-        __facts_cache = cache.get_cached_responses(module.params['loop_block'])
+        __facts_cache = cache.get_cached_responses(hostname)
         if __facts_cache != {}:
-            module.exit_json(changed=resource.config_changed, response=resp, ansible_facts=__facts_cache)
+            module.exit_json(changed=resource.config_changed,
+                             response=resp, ansible_facts=__facts_cache)
         else:
-            module.exit_json(changed=resource.config_changed, response=resp, ansible_facts=facts)
+            module.exit_json(changed=resource.config_changed,
+                             response=resp, ansible_facts=facts)
 
     except FmcInvalidOperationNameError as e:
         module.fail_json(msg='Invalid operation name provided: %s' % e.operation_name)
@@ -152,7 +173,7 @@ def main():
         module.fail_json(msg='Failed to execute %s operation because of the configuration error: %s' % (op_name, e.msg))
     except FmcServerError as e:
         module.fail_json(msg='Server returned an error trying to execute %s operation. Status code: %s. '
-                            'Server response: %s' % (op_name, e.code, e.response))
+                         'Server response: %s' % (op_name, e.code, e.response))
     except FmcUnexpectedResponse as e:
         module.fail_json(msg=e.args[0])
     except ValidationError as e:
