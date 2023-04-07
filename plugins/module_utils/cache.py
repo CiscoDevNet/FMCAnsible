@@ -42,7 +42,8 @@ class ResponseCache:
             if isinstance(response_body, dict):
                 flag = True
 
-            # If the key exists, append/extend the response_body to the cached value
+            # If the key exists, append/extend the
+            # response_body to the cached value
             cached_value = [cached_responses[host][name]] if not \
                 isinstance(cached_responses[host][name], list) \
                 else cached_responses[host][name]
@@ -73,6 +74,6 @@ class ResponseCache:
     def get_cached_responses(self, hostname):
         try:
             with open(self.cache_file, "r") as file:
-                return json.load(file)[f'{hostname}']
+                return json.load(file).get(str(hostname), {})
         except FileNotFoundError:
             return {}

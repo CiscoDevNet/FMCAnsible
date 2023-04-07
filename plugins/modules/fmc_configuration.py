@@ -105,7 +105,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import con
     FmcServerError, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import ResponseCache
 
-CACHE_FILE = "/tmp/.cache.json"
+CACHE_FILE = "/tmp/cache.json"
 cache = ResponseCache(CACHE_FILE)
 
 
@@ -128,7 +128,6 @@ def main():
         path_params=dict(type='dict'),
         register_as=dict(type='str'),
         filters=dict(type='dict'),
-        loop_block=dict(type='bool')
     )
     module = AnsibleModule(argument_spec=fields,
                            supports_check_mode=True)
