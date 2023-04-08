@@ -1,7 +1,12 @@
+from __future__ import absolute_import, division, print_function
+
 import unittest
 import tempfile
 import shutil
 import os
+
+__metaclass__ = type
+
 from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import ResponseCache
 
 
