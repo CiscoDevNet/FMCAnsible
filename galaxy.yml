@@ -4,26 +4,26 @@ version: 0.9.0
 readme: README.md
 
 authors:
-- joe Agster <joeaxcdw>
-- Iurii Tymoshevskyi <itymo>
-- Sameer Singh <sameesin>
+  - joe Agster <joeaxcdw>
+  - Iurii Tymoshevskyi <itymo>
+  - Sameer Singh <sameesin>
 
 description: An Ansible collection for managing Cisco Secure Firewall Management Center
 
-license_file: 'LICENSE'
+license_file: "LICENSE"
 
-tags: 
+tags:
   - "cisco"
   - "security"
   - "firewall"
   - "fmc"
   - "ftd"
 
-dependencies: 
-  community.general: 3.8.0
-  community.network: 3.0.0
-  ansible.netcommon: 3.0.1
-  ansible.utils: 2.6.1
+dependencies:
+  community.general: 6.5.0
+  community.network: 5.0.0
+  ansible.netcommon: 5.1.0
+  ansible.utils: 2.9.0
 
 repository: https://github.com/CiscoDevNet/FMCAnsible
 homepage: https://github.com/CiscoDevNet/FMCAnsible
