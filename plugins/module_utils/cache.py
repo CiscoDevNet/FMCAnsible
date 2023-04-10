@@ -12,7 +12,7 @@ def get_hash(obj):
     """
     Creates a hash value for the given object.
     """
-    hash_obj = hashlib.sha256(repr(obj).encode('utf-8'))
+    hash_obj = hashlib.sha256(json.dumps(obj, sort_keys=True).encode('utf-8'))
     return hash_obj.hexdigest()
 
 
