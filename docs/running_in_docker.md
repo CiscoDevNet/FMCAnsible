@@ -79,7 +79,7 @@ Create an access rule logging malware files
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_logging.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_logging.yml
 ```
 
 Data dns settings, create custom DNS object
