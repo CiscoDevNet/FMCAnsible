@@ -58,7 +58,7 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 
 Run playbooks:
 
-Access policy, allow traffic by default
+* Access policy, allow traffic by default
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy.yml)
 
@@ -66,7 +66,7 @@ Access policy, allow traffic by default
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy.yml
 ```
 
-Access rule with networks
+* Access rule with networks
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_networks.yml)
 
@@ -74,7 +74,7 @@ Access rule with networks
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_networks.yml
 ```
 
-Create an access rule logging malware files
+* Create an access rule logging malware files
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_logging.yml)
 
@@ -82,7 +82,7 @@ Create an access rule logging malware files
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_logging.yml
 ```
 
-Data dns settings, create custom DNS object
+* Data dns settings, create custom DNS object
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/data_dns_settings.yml)
 
@@ -90,7 +90,7 @@ Data dns settings, create custom DNS object
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/data_dns_settings.yml
 ```
 
-FTD device registration
+* FTD device registration
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/device_registration.yml)
 
@@ -98,7 +98,7 @@ FTD device registration
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/device_registration.yml
 ```
 
-Dns server group
+* Dns server group
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/dnsservergroup.yml)
 
@@ -106,7 +106,7 @@ Dns server group
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/dnsservergroup.yml
 ```
 
-NAT
+* NAT
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/nat.yml)
 
@@ -114,7 +114,7 @@ NAT
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 ```
 
-Network object
+* Network object
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/network_object.yml)
 
@@ -122,7 +122,7 @@ Network object
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/network_object.yml
 ```
 
-Physical interface
+* Physical interface
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/physical_interface.yml)
 
@@ -130,7 +130,7 @@ Physical interface
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/physical_interface.yml
 ```
 
-Port object
+* Port object
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/port_object.yml)
 
@@ -138,7 +138,7 @@ Port object
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/port_object.yml
 ```
 
-Prefilter policy
+* Prefilter policy
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_policy.yml)
 
@@ -146,7 +146,7 @@ Prefilter policy
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_policy.yml
 ```
 
-Prefilter rule
+* Prefilter rule
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_rule.yml)
 
@@ -154,7 +154,7 @@ Prefilter rule
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_rule.yml
 ```
 
-Security zones
+* Security zones
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/security_zones.yml)
 
@@ -162,7 +162,7 @@ Security zones
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zones.yml
 ```
 
-Static route
+* Static route
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/static_route.yml)
 
@@ -170,7 +170,7 @@ Static route
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/static_route.yml
 ```
 
-Sub interfaces
+* Sub interfaces
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/sub_interfaces.yml)
 
