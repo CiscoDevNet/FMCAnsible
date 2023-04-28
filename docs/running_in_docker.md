@@ -56,7 +56,7 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 ```
 
-Run playbooks:
+All playbooks:
 
 * Access policy, allow traffic by default
 
