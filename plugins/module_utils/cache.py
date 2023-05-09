@@ -1,14 +1,31 @@
-import os, json
+
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
+import json
+import os
+import hashlib
+
+
+def get_hash(obj):
+    """
+    Creates a hash value for the given object.
+    """
+    hash_obj = hashlib.sha256(json.dumps(obj, sort_keys=True).encode('utf-8'))
+    return hash_obj.hexdigest()
+
 
 class ResponseCache:
     def __init__(self, cache_file):
         self.cache_file = cache_file
 
         if not os.path.exists(self.cache_file):
-            with open(self.cache_file, "w") as f:
-                json.dump({}, f, indent=2)
+            with open(self.cache_file, "w") as file:
+                json.dump({}, file, indent=2)
+        return
 
-    def cache_response(self, name, response_body, is_loop_block=False):
+    def cache_response(self, name, response_body, host):
         # Load the cached responses from the file
         try:
             with open(self.cache_file, "r") as f:
@@ -16,34 +33,47 @@ class ResponseCache:
         except FileNotFoundError:
             cached_responses = {}
 
-        if is_loop_block:
-            if name not in cached_responses:
-            # If the key doesn't exist
-                cached_responses[name] = response_body
-            else:
-            # If the key exists, append/extend the response_body to the cached value
-                cached_value = cached_responses[name]
-                if isinstance(cached_value, dict):
-                    # If the cached value is a dict, convert it to a list and append the new response body
-                    cached_responses[name] = [cached_value, response_body] if isinstance(response_body, dict) else [cached_value] + response_body
-                elif isinstance(cached_value, list):
-                    # If the cached value is a list, append/extend the new response body to the list
-                    if isinstance(response_body, list):
-                        cached_responses[name].extend(response_body)
-                    else:
-                        cached_responses[name].append(response_body)
+        if host not in cached_responses:
+            cached_responses[host] = {name: response_body}
+        elif name not in cached_responses[host]:
+            cached_responses[host][name] = response_body
         else:
-            return
-        
-        with open(self.cache_file, "w") as f:
-            json.dump(cached_responses, f, indent=2)
+            flag = False
+            if isinstance(response_body, dict):
+                flag = True
 
-    def get_cached_responses(self, is_loop_block=False):
-        if is_loop_block:
-            try:
-                with open(self.cache_file, "r") as f:
-                    return json.load(f)
-            except FileNotFoundError:
-                return {}
-        else:
+            # If the key exists, append/extend the
+            # response_body to the cached value
+            cached_value = [cached_responses[host][name]] if not \
+                isinstance(cached_responses[host][name], list) \
+                else cached_responses[host][name]
+
+            response_body = [response_body] if not \
+                isinstance(response_body, list) else \
+                response_body
+
+            combined_list = response_body + cached_value
+            unique = []
+
+            # Use a set to check for duplicates based on hash value
+            hashes = set()
+            for obj in combined_list:
+                obj_hash = get_hash(obj)
+                if obj_hash not in hashes:
+                    unique.append(obj)
+                    hashes.add(obj_hash)
+
+            if len(unique) == 1 and flag is True:
+                unique = unique[0]
+
+            cached_responses[host][name] = unique
+
+        with open(self.cache_file, "w") as file:
+            json.dump(cached_responses, file, indent=2)
+
+    def get_cached_responses(self, hostname):
+        try:
+            with open(self.cache_file, "r") as file:
+                return json.load(file).get(str(hostname), {})
+        except FileNotFoundError:
             return {}
