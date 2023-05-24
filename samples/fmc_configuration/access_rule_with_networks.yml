@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain
       cisco.fmcansible.fmc_configuration:
@@ -12,8 +14,8 @@
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
         data:
-          name: "ansible-test-network466"
-          value: "192.22.22.0/24"
+          name: "{{ networkobject_name | default('ansible-test-network466') }}"
+          value: "{{ networkobject_ip | default('192.22.22.0/24') }}"
           type: "networkobject"
         register_as: net1
 
@@ -23,9 +25,9 @@
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
         filters:
-          name: NGFW-Access-Policy25
+          name: "{{ accesspolicy_name | default('NGFW-Access-Policy25') }}"
         register_as: accesspolicy
-                  
+
     - name: Create an access rule allowing trafic from Cisco DevNet
       cisco.fmcansible.fmc_configuration:
         operation: upsertAccessRule
@@ -64,10 +66,10 @@
           containerUUID: '{{ accesspolicy[0].id }}'
           domainUUID: '{{ domain[0].uuid }}'
 
-    - name: Delete the access rule allowing trafic from/to Cisco DevNet
-      cisco.fmcansible.fmc_configuration:
-        operation: deleteAccessRule
-        path_params:
-          objectId: '{{ AccessRule_allowciscotraffic8.id }}'
-          containerUUID: '{{ accesspolicy[0].id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+    # - name: Delete the access rule allowing trafic from/to Cisco DevNet
+    #   cisco.fmcansible.fmc_configuration:
+    #     operation: deleteAccessRule
+    #     path_params:
+    #       objectId: '{{ AccessRule_allowciscotraffic8.id }}'
+    #       containerUUID: '{{ accesspolicy[0].id }}'
+    #       domainUUID: '{{ domain[0].uuid }}'

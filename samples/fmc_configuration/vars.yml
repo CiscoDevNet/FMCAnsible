@@ -1,0 +1,43 @@
+
+##access_rule_with_networks
+#networkobject_name: "variable"
+#networkobject_ip: "variable"
+#accesspolicy_name: "variable"
+
+##data_dns_settings
+#dnsserevergroup_name: "variable"
+#dnsserver1_ip: "variable"
+#dnsserver2_ip: "variable"
+
+##device_registration
+#ftd_ip: "variable"
+#reg_key: "variable"
+#ftd_name: "variable"
+
+##nat_create
+#nat_polycy_name: "variable"
+
+##network_object
+#networkobject_ftd1_name: "variable"
+#networkobject_ftd2_value: "variable"
+#networkobject_ftd1_name: "variable"
+#networkobject_ftd2_value: "variable"
+#networkgroup_name: "variable"
+
+##physical_interface
+#inside_ip: "variable"
+#inside_netmask: "variable"
+#outside_ip: "variable"
+#outside_netmask: "variable"
+
+##prefilter_policy
+#prefilterpolicy_name: "variable"
+
+##static_route
+#firstdestinationnetwork: "variable"
+#seconddestinationnetwork: "variable"
+#gatewaynetwork: "variable"
+
+##sub_interface
+#subinterface_ip: "variable"
+#subinterface_netmask: "variable"

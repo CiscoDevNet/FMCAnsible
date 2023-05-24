@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain
       cisco.fmcansible.fmc_configuration:
@@ -11,7 +13,7 @@
         operation: upsertNetworkObject
         data:
           name: PrivateNetwork4
-          value: 192.168.4.0/24
+          value: "{{ firstdestinationnetwork | default('192.168.4.0/24') }}"
           type: networkobject
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
@@ -21,7 +23,7 @@
         operation: upsertNetworkObject
         data:
           name: PrivateNetwork5
-          value: 192.168.6.0/24
+          value: "{{ seconddestinationnetwork | default('192.168.6.0/24') }}"
           type: networkobject
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
@@ -31,16 +33,16 @@
         operation: upsertHostObject
         data:
           name: Router2
-          value: 192.168.2.1
+          value: "{{ gatewaynetwork | default('192.168.2.2') }}"
           type: host
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
-      
+
     - name: Get Devices
       cisco.fmcansible.fmc_configuration:
         operation: getAllDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}' 
+          domainUUID: '{{ domain[0].uuid }}'
         register_as: device_list
 
     - name: Get Device Interfaces
@@ -61,7 +63,7 @@
           selectedNetworks:
             - id: "{{ Network_privatenetwork4.id }}"
             - id: "{{ Network_privatenetwork5.id }}"
-          gateway: 
+          gateway:
             object:
               id: "{{ Host_router2.id }}"
           name: "test_static_route"

@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain
       cisco.fmcansible.fmc_configuration:
@@ -26,7 +28,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertFTDNatPolicy
         data:
-          name: Test-NAT-Policys3
+          name: "{{ nat_polycy_name | default('Test-NAT-Policys3') }}"
           type: FTDNatPolicy
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
@@ -37,8 +39,8 @@
         operation: upsertFTDManualNatRule
         data:
           natType: STATIC
-          destinationInterface: "{{ zones[2] }}"
-          sourceInterface: "{{ zones[1] }}"
+          destinationInterface: "{{ zones[1] }}"
+          sourceInterface: "{{ zones[0] }}"
           originalSource: "{{ network_results[0] }}"
           interfaceInTranslatedSource: True
           dns: False
@@ -49,10 +51,10 @@
           domainUUID: '{{ domain[0].uuid }}'
         register_as: nat1
 
-    - name: Delete an inside-outsite NAT rule
-      cisco.fmcansible.fmc_configuration:
-        operation: deleteFTDManualNatRule
-        path_params:
-          containerUUID: '{{ NAT.id }}'
-          domainUUID: '{{ domain[0].uuid }}'
-          objectId: '{{ nat1.id }}'
+    # - name: Delete an inside-outsite NAT rule
+    #   cisco.fmcansible.fmc_configuration:
+    #     operation: deleteFTDManualNatRule
+    #     path_params:
+    #       containerUUID: '{{ NAT.id }}'
+    #       domainUUID: '{{ domain[0].uuid }}'
+    #       objectId: '{{ nat1.id }}'

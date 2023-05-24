@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain
       cisco.fmcansible.fmc_configuration:
@@ -10,7 +12,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: createPrefilterPolicy
         data:
-          name: NGFW-Prefilter-Policy104
+          name: "{{ prefilterpolicy_name | default('NGFW-Prefilter-Policy104') }}"
           defaultAction:
             action: ANALYZE_TUNNELS
             type: PrefilterPolicyDefaultAction
@@ -24,7 +26,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: updatePrefilterPolicy
         data:
-          name: NGFW-Prefilter-Policy104
+          name: "{{ prefilterpolicy_name | default('NGFW-Prefilter-Policy104') }}"
           defaultAction:
             action: ANALYZE_TUNNELS
             type: PrefilterPolicyDefaultAction
@@ -35,11 +37,9 @@
           domainUUID: '{{ domain[0].uuid }}'
           objectId: '{{ prefilter.id }}'
 
-    - name: Delete Prefilter Policy
-      cisco.fmcansible.fmc_configuration:
-        operation: deletePrefilterPolicy
-        path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          objectId: '{{ prefilter.id }}'
-
-    
+    # - name: Delete Prefilter Policy
+    #   cisco.fmcansible.fmc_configuration:
+    #     operation: deletePrefilterPolicy
+    #     path_params:
+    #       domainUUID: '{{ domain[0].uuid }}'
+    #       objectId: '{{ prefilter.id }}'

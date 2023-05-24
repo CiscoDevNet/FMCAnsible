@@ -31,8 +31,8 @@ ansible-galaxy collection list
 ```
 cat ansible.cfg
 ```
-4. Edit hosts file `samples/fmc_configuration/hosts`  and add your FMC device IP address/credentials.
-   
+4. Edit hosts file `inventory/sample_hosts`  and add your FMC device IP address/credentials.
+
 5. Reference the collection from your playbook
 
 **NOTE**: The tasks in the playbook reference the collection
@@ -58,6 +58,8 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 
 All playbooks:
 
+You can define variables in file "samples/fmc_configuration/vars.yml" otherwise the default values will be used.
+
 * Access policy, allow traffic by default
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy.yml)
@@ -67,6 +69,14 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy
 ```
 
 * Access rule with networks
+
+Variables:
+
+networkobject_name | default('ansible-test-network466')
+
+networkobject_ip | default('192.22.22.0/24')
+
+accesspolicy_name | default('NGFW-Access-Policy25')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_networks.yml)
 
@@ -84,6 +94,14 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_w
 
 * Data dns settings, create custom DNS object
 
+Variables:
+
+dnsserevergroup_name | default('CustomDNSServerGroup')
+
+dnsserver1_ip | default('1.2.3.4')
+
+dnsserver2_ip | default('2.2.3.4')
+
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/data_dns_settings.yml)
 
 ```
@@ -91,6 +109,14 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/data_dns_sett
 ```
 
 * FTD device registration
+
+Variables:
+
+ftd_ip | default('1.1.1.1')
+
+reg_key | default('cisco')
+
+ftd_name | default('FTD1')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/device_registration.yml)
 
@@ -100,6 +126,14 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/device_regist
 
 * Dns server group
 
+Variables:
+
+dnsserevergroup_name | default('CustomDNSServerGroup')
+
+dnsserver1_ip | default('1.2.3.4')
+
+dnsserver2_ip | default('2.2.3.4')
+
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/dnsservergroup.yml)
 
 ```
@@ -107,6 +141,10 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/dnsservergrou
 ```
 
 * NAT
+
+Variables:
+
+nat_polycy_name | default('Test-NAT-Policys3')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/nat.yml)
 
@@ -116,6 +154,18 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
 
 * Network object
 
+Variables:
+
+networkobject_ftd1_name | default('net-15')
+
+networkobject_ftd2_value | default('10.10.30.0/24')
+
+networkobject_ftd1_name | default('net-13')
+
+networkobject_ftd2_value | default('10.10.40.0/24')
+
+networkgroup_name | default('netg-1')
+
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/network_object.yml)
 
 ```
@@ -123,6 +173,16 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/network_objec
 ```
 
 * Physical interface
+
+Variables:
+
+outside_ip | default('192.168.10.4')
+
+outside_netmask | default('255.255.255.0')
+
+inside_ip | default('192.168.20.2')
+
+inside_netmask | default('255.255.255.0')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/physical_interface.yml)
 
@@ -139,6 +199,10 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/port_object.y
 ```
 
 * Prefilter policy
+
+Variables:
+
+prefilterpolicy_name | default('NGFW-Prefilter-Policy104')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_policy.yml)
 
@@ -164,6 +228,14 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zone
 
 * Static route
 
+Variables:
+
+firstdestinationnetwork | default('192.168.4.0/24')
+
+seconddestinationnetwork | default('192.168.6.0/24')
+
+gatewaynetwork | default('192.168.2.2')
+
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/static_route.yml)
 
 ```
@@ -171,6 +243,12 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/static_route.
 ```
 
 * Sub interfaces
+
+Variables:
+
+subinterface_ip | default('192.168.5.15')
+
+subinterface_ip | default('192.168.5.15')
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/sub_interfaces.yml)
 
@@ -188,7 +266,7 @@ The project contains unit tests for Ansible modules, HTTP API plugin and util fi
 When running sanity tests locally this project needs to be located at a path under ansible_collections/cisco (for example ansible_collections/cisco/fmcansible).  
 
 ```
-rm -rf tests/output 
+rm -rf tests/output
 ansible-test sanity --docker -v --color
 ```
 
@@ -198,13 +276,13 @@ When running sanity tests locally this project needs to be located at a path und
 
 
 ```
-rm -rf tests/output 
+rm -rf tests/output
 ansible-test units --docker -v --color
 ```
 
 To run a single test, specify the filename at the end of command:
 ```
-rm -rf tests/output 
+rm -rf tests/output
 ansible-test units --docker -v tests/unit/httpapi_plugins/test_ftd.py --color
 ```
 
@@ -251,7 +329,7 @@ python:3.10 bash
 ```
 cd /root/ansible_collections/cisco/fmcansible
 apt update && apt upgrade -y
-pip install -r requirements.txt 
+pip install -r requirements.txt
 ```
 
 3. Create an inventory file that tells Ansible what devices to run the tasks on. [`sample_hosts`](./inventory/sample_hosts) shows an example of inventory file.
