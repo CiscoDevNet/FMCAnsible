@@ -1,0 +1,15 @@
+##accessPolicy
+#accesspolicy_name: "AccesPolicy1"
+
+##device_registration
+#ftd_ip: "192.168.0.1"
+#reg_key: "cisco"
+#ftd_name: "FTD"
+#nat_id: ""
+
+##security_zone
+#securityzone1_name: "secz1"
+#securityzone2_name: "secz1"
+
+##nat_create
+#nat_polycy_name: "NatPolicy1"
