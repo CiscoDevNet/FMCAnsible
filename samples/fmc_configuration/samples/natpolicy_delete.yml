@@ -1,0 +1,25 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Get FTD Nat Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllFTDNatPolicy"
+        path_params:
+            domainUUID: "{{ domain[0].uuid }}"
+        filters:
+          name: "{{ delete_natpolicy_name }}"
+        register_as: natpolicy
+
+    - name: Delete FTD Nat Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: "deleteFTDNatPolicy"
+        path_params:
+            objectId: "{{ natpolicy[0].id }}"
+            domainUUID: "{{ domain[0].uuid }}"

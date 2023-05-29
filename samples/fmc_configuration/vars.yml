@@ -1,43 +1,125 @@
+#------------------------------------------------------
+## Access_policy create
+#------------------------------------------------------
+#accesspolicy_name: "AccesPolicy1"
 
-##access_rule_with_networks
-#networkobject_name: "variable"
-#networkobject_ip: "variable"
-#accesspolicy_name: "variable"
+#------------------------------------------------------
+## Access_policy delete
+#------------------------------------------------------
+#delete_accesspolicy_name: "AccesPolicy1"
 
-##data_dns_settings
-#dnsserevergroup_name: "variable"
-#dnsserver1_ip: "variable"
-#dnsserver2_ip: "variable"
+#------------------------------------------------------
+## Access_rule_with_logging_create
+#------------------------------------------------------
+#accessrule_name: "rule1"
 
-##device_registration
-#ftd_ip: "variable"
-#reg_key: "variable"
-#ftd_name: "variable"
+#------------------------------------------------------
+## Access_rule_with_networks
+#------------------------------------------------------
+#networkobject_name: "value"
+#networkobject_ip: "value"
+#accesspolicy_name: "value"
 
-##nat_create
-#nat_polycy_name: "variable"
+#------------------------------------------------------
+## Access_rule_delete
+#------------------------------------------------------
+#delete_accesspolicy_name
+#delete_accessrule_name
 
-##network_object
-#networkobject_ftd1_name: "variable"
-#networkobject_ftd2_value: "variable"
-#networkobject_ftd1_name: "variable"
-#networkobject_ftd2_value: "variable"
-#networkgroup_name: "variable"
+#------------------------------------------------------
+## Data_dns_settings
+#------------------------------------------------------
+#dnsserevergroup_name: "value"
+#dnsserver1_ip: "value"
+#dnsserver2_ip: "value"
 
-##physical_interface
-#inside_ip: "variable"
-#inside_netmask: "variable"
-#outside_ip: "variable"
-#outside_netmask: "variable"
+#------------------------------------------------------
+## Dnsserevergroup_create
+#------------------------------------------------------
+#dnsserevergroup_name: "value"
+#dnsserver1_ip: "value"
+#dnsserver2_ip: "value"
 
-##prefilter_policy
-#prefilterpolicy_name: "variable"
+#------------------------------------------------------
+## Dnsserevergroup_delete
+#------------------------------------------------------
+#delete_dnservergroupobject_name: "dns"
 
-##static_route
-#firstdestinationnetwork: "variable"
-#seconddestinationnetwork: "variable"
-#gatewaynetwork: "variable"
+#------------------------------------------------------
+## Device_registration
+#------------------------------------------------------
+#ftd_ip: "value"
+#reg_key: "value"
+#ftd_name: "value"
+#nat_id: ""
 
-##sub_interface
-#subinterface_ip: "variable"
-#subinterface_netmask: "variable"
+#------------------------------------------------------
+## Nat_create
+#------------------------------------------------------
+#nat_polycy_name: "value"
+
+#------------------------------------------------------
+## Natpolicy_delete
+#------------------------------------------------------
+#delete_natpolicy_name: "natpol1"
+
+#------------------------------------------------------
+## Natrule_delete
+#------------------------------------------------------
+#delete_natpolicy_name: "natpol1"
+#delete_natrule_name: "rule1"
+
+#------------------------------------------------------
+## Network_object
+#------------------------------------------------------
+#networkobject_ftd1_name: "value"
+#networkobject_ftd2_value: "value"
+#networkobject_ftd1_name: "value"
+#networkobject_ftd2_value: "value"
+#networkgroup_name: "value"
+
+#------------------------------------------------------
+## Physical_interface
+#------------------------------------------------------
+#inside_ip: "value"
+#inside_netmask: "value"
+#outside_ip: "value"
+#outside_netmask: "value"
+
+#------------------------------------------------------
+## Prefilter_policy_create
+#prefilterpolicy_name: "value"
+
+#------------------------------------------------------
+## Prefilter_policy_delete
+#------------------------------------------------------
+#delete_prefilterpolicy_name: "pol1"
+
+#------------------------------------------------------
+## Prefilter_rule_delete
+#------------------------------------------------------
+#delete_prefilterpolicy_name: "pol1"
+#delete_prefilterrule_name: "rule1"
+
+#------------------------------------------------------
+## Static_route
+#------------------------------------------------------
+#firstdestinationnetwork: "value"
+#seconddestinationnetwork: "value"
+#gatewaynetwork: "value"
+
+#------------------------------------------------------
+## Sub_interface
+#------------------------------------------------------
+#subinterface_ip: "value"
+#subinterface_netmask: "value"
+
+#------------------------------------------------------
+## Security_zones_create
+#------------------------------------------------------
+#securityzone_name: "secz1"
+
+#------------------------------------------------------
+## Security_zone_delete
+#------------------------------------------------------
+#delete_securityzone_name: "zone1"

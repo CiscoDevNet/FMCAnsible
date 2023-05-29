@@ -60,15 +60,34 @@ All playbooks:
 
 You can define variables in file "samples/fmc_configuration/vars.yml" otherwise the default values will be used.
 
-* Access policy, allow traffic by default
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy.yml)
+* Access policy create, allow traffic by default
+
+Variables:
+
+accesspolicy_name | default('AccessPolicy1')
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy_create.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy_create.yml
 ```
 
-* Access rule with networks
+
+* Access policy delete
+
+Variables:
+
+delete_accesspolicy_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_policy_delete.yml
+```
+
+
+* Create an access rule with networks
 
 Variables:
 
@@ -78,19 +97,36 @@ networkobject_ip | default('192.22.22.0/24')
 
 accesspolicy_name | default('NGFW-Access-Policy25')
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_networks.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_networks_create.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_networks.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_networks_create.yml
 ```
+
 
 * Create an access rule logging malware files
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_logging.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_rule_with_logging_create.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_logging.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_with_logging_create.yml
 ```
+
+
+* Access rule delete
+
+Variables:
+
+delete_accesspolicy_name
+
+delete_accessrule_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/access_policy_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/access_rule_delete.yml
+```
+
 
 * Data dns settings, create custom DNS object
 
@@ -108,7 +144,12 @@ dnsserver2_ip | default('2.2.3.4')
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/data_dns_settings.yml
 ```
 
+
 * FTD device registration
+
+Requirements:
+
+Before registering an FTD device, you need to create an access policy
 
 Variables:
 
@@ -124,7 +165,15 @@ ftd_name | default('FTD1')
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/device_registration.yml
 ```
 
-* Dns server group
+* Deploy changes to FTD devices
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/deployment.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/deployment.yml
+```
+
+* Dns server group create
 
 Variables:
 
@@ -137,20 +186,93 @@ dnsserver2_ip | default('2.2.3.4')
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/dnsservergroup.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/dnsservergroup.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/dnsservergroup_create.yml
 ```
 
-* NAT
+
+* Dns server group delete
+
+Variables:
+
+delete_dnservergroupobject_name
+
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/dnsserevergroup_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/dnsserevergroup_delete.yml
+```
+
+
+* Security zones create
+
+Variables:
+
+securityzone_name | default('secz1')
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/security_zones_create.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zones_create.yml
+```
+
+
+* Security zone delete
+
+Variables:
+
+delete_securityzone_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/security_zone_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zone_delete.yml
+```
+
+
+
+* NAT Create
+
+Requirements:
+
+Before creating a Nat policy, you need to create two or more security zones.
 
 Variables:
 
 nat_polycy_name | default('Test-NAT-Policys3')
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/nat.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/nat_create.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat_create.yml
 ```
+
+
+* NAT policy delete
+
+Variables:
+
+delete_natpolicy_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/natpolicy_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/natpolicy_delete.yml
+```
+
+
+* NAT rule delete
+
+Variables:
+
+delete_natrule_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/natrule_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/natrule_delete.yml
+```
+
 
 * Network object
 
@@ -172,6 +294,7 @@ networkgroup_name | default('netg-1')
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/network_object.yml
 ```
 
+
 * Physical interface
 
 Variables:
@@ -190,6 +313,7 @@ inside_netmask | default('255.255.255.0')
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/physical_interface.yml
 ```
 
+
 * Port object
 
 [example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/port_object.yml)
@@ -198,32 +322,54 @@ ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/physical_inte
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/port_object.yml
 ```
 
-* Prefilter policy
+
+* Prefilter policy create
 
 Variables:
 
 prefilterpolicy_name | default('NGFW-Prefilter-Policy104')
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_policy.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_policy_create.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_policy.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_policy_create.yml
 ```
 
-* Prefilter rule
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_rule.yml)
+* Prefilter policy delete
 
-```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_rule.yml
-```
+Variables:
 
-* Security zones
+delete_prefilterpolicy_name
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/security_zones.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_policy_delete.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zones.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_policy_delete.yml
+```
+
+
+* Prefilter rule create
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_rule_create.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_rule_create.yml
+```
+
+
+* Prefilter rule delete
+
+Variables:
+
+delete_prefilterpolicy_name
+
+delete_prefilterrule_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/prefilter_rule_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/prefilter_rule_delete.yml
 ```
 
 * Static route
@@ -241,6 +387,7 @@ gatewaynetwork | default('192.168.2.2')
 ```
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/static_route.yml
 ```
+
 
 * Sub interfaces
 

@@ -67,8 +67,23 @@ accesspolicy_name | default('AccessPolicy1')
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/access_policy.yml
 ```
 
+* Access policy delete
+
+Variables:
+
+delete_accesspolicy_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/access_policy_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/access_policy_delete.yml
+```
 
 * FTD device registration
+
+Requirements:
+
+Before registering an FTD device, you need to create an access policy
 
 Variables:
 
@@ -83,6 +98,17 @@ ftd_name | default('FTD1')
 ```
 ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/device_registration.yml
 ```
+
+
+* Deploy changes to FTD devices
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/deployment.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/deployment.yml
+```
+
+
 * Security zones
 
 Variables:
@@ -91,20 +117,48 @@ securityzone1_name | default('secz1')
 
 securityzone2_name | default('secz2')
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/security_zones.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/security_zones.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/security_zones.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/security_zones.yml
+```
+
+* Security zone delete
+
+Variables:
+
+delete_securityzone_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/security_zone_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/security_zone_delete.yml
 ```
 
 * NAT
+
+Requirements:
+
+Before creating a Nat policy, you need to create two or more security zones.
 
 Variables:
 
 nat_polycy_name | default('Test-NAT-Policys3')
 
-[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/nat.yml)
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/nat.yml)
 
 ```
-ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/nat.yml
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/nat.yml
+```
+
+* NAT policy delete
+
+Variables:
+
+delete_natpolicy_name
+
+[example](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/fmc_configuration/samples/natpolicy_delete.yml)
+
+```
+ansible-playbook -i /etc/ansible/hosts playbooks/fmc_configuration/samples/natpolicy_delete.yml
 ```

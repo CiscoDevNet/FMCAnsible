@@ -1,7 +1,8 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
-
     - name: Get Domain UUID
       cisco.fmcansible.fmc_configuration:
         operation: getAllDomain
@@ -11,6 +12,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllAccessPolicy
         register_as: accesspolicy
+        filters:
+          name: "{{ accesspolicy_name | default('NGFW-Access-Policy25') }}"
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
 
@@ -25,7 +28,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertAccessRule
         data:
-          name: Log traffic with malware files 2
+          name: "{{ accessrule_name | default('Log traffic with malware files 2') }}"
           action: ALLOW
           logEnd: True
           logBegin: False
