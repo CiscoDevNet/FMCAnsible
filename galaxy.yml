@@ -20,7 +20,7 @@ tags:
   - "ftd"
 
 dependencies:
-  community.general: 6.5.0
+  community.general: '>= 6.5.0'
   community.network: 5.0.0
   ansible.netcommon: 5.1.0
   ansible.utils: 2.9.0
