@@ -1,0 +1,36 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Get Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        filters:
+          name: '{{ delete_accesspolicy_name }}'
+        register_as: accesspolicy
+
+    - name: Get Access Rule
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllAccessRule"
+        path_params:
+          containerUUID: "{{ accesspolicy[0].id }}"
+          domainUUID: "{{ domain[0].uuid }}"
+        filters:
+          name: '{{ delete_accessrule_name }}'
+        register_as: accessrule
+
+    - name: Delete the access rule allowing trafic from/to Cisco DevNet
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteAccessRule
+        path_params:
+          objectId: '{{ accessrule[0].id }}'
+          containerUUID: '{{ accesspolicy[0].id }}'
+          domainUUID: '{{ domain[0].uuid }}'
