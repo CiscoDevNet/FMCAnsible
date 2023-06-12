@@ -1,0 +1,43 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Get Sec Zone
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllSecurityZoneObject
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        register_as: zones
+
+    - name: Get FTD Nat Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllFTDNatPolicy"
+        path_params:
+            domainUUID: "{{ domain[0].uuid }}"
+        filters:
+          name: "{{ delete_natpolicy_name }}"
+        register_as: natpolicy
+
+    - name: Get FTD Manual Nat Rule
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllFTDManualNatRule"
+        path_params:
+            containerUUID: "{{ natpolicy[0].id }}"
+            domainUUID: "{{ domain[0].uuid }}"
+        filters:
+          name: "{{ delete_natrule_name }}"
+        register_as: natrule
+
+    - name: Delete an inside-outsite NAT rule
+      cisco.fmcansible.fmc_configuration:
+        operation: deleteFTDManualNatRule
+        path_params:
+          containerUUID: '{{ natpolicy[0].id }}'
+          domainUUID: '{{ domain[0].uuid }}'
+          objectId: '{{ natrule.id }}'

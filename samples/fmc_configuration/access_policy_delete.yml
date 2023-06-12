@@ -1,0 +1,25 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Get Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllAccessPolicy"
+        path_params:
+            domainUUID: "{{ domain[0].uuid }}"
+        filters:
+          name: "{{ delete_accesspolicy_name }}"
+        register_as: accesspolicy
+
+    - name: Delete Access Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: "deleteAccessPolicy"
+        path_params:
+            objectId: "{{ accesspolicy[0].id }}"
+            domainUUID: "{{ domain[0].uuid }}"

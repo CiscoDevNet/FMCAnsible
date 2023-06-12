@@ -1,0 +1,30 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain UUID
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Create security zone
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleSecurityZoneObject
+        data:
+          name: "{{securityzone_name | default('secz1') }}"
+          interfaceMode: ROUTED
+          type: SecurityZone
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+
+    # - name: Update security zone - Inside
+    #   cisco.fmcansible.fmc_configuration:
+    #     operation: updateSecurityZoneObject
+    #     data:
+    #       name: secz1
+    #       interfaceMode: ROUTED
+    #       type: SecurityZone
+    #     path_params:
+    #       domainUUID: '{{ domain[0].uuid }}'
+    #       objectId: '{{ SecurityZone_secz1.id }}'
