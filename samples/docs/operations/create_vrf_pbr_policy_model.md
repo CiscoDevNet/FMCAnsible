@@ -7,9 +7,9 @@ The createVrfPBRPolicyModel operation handles configuration related to [/api/fmc
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| virtualrouterUUID | True | string <td colspan=3> Unique identifier of Virtual Router |
-| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| virtualrouterUUID | True | string | Unique identifier of Virtual Router |
+| containerUUID | True | string | The container id under which this specific resource is contained. |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

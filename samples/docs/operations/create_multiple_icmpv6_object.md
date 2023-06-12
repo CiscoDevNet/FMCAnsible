@@ -5,22 +5,22 @@ The createMultipleICMPV6Object operation handles configuration related to [/api/
 **Retrieves, deletes, creates, or modifies the icmpv6 object associated with the specified ID. If no ID is specified for a GET, retrieves list of all icmpv6 objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| name | icmpv6_obj1 |
-| icmpType | 3 |
-| code | 0 |
-| type | ICMPV6Object |
+| Parameter | Value | Description |
+| --------- | -------- |  -------- |
+| name | icmpv6_obj1 | User assigned resource name. |
+| icmpType | 3 | ICMP type number. |
+| code | 0 | ICMP code number. |
+| type | ICMPV6Object | Type associated with resource: ICMPV6Object. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for ICMPv6 objects. |
+| bulk | False | boolean | Enables bulk create for ICMPv6 objects. |
 
 ## Example
 ```yaml

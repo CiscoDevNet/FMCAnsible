@@ -5,15 +5,15 @@ The createPacketTracerPCAPFiles operation handles configuration related to [/api
 **Creates, deletes, or retrieves PCAP files from FMC. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| payloadFile | .pcap or .pcapng file |
-| replaceFile | true or false |
+| Parameter | Value | Description |
+| --------- | -------- | -------- |
+| payloadFile | .pcap or .pcapng file | Select a PCAP file. .pcap and .pcapng are the supported file formats. *required |
+| replaceFile | true or false | Replaces the file on disk if it already exists. By default is set to false. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

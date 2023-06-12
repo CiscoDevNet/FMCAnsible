@@ -14,12 +14,12 @@ The createMultipleTunnelTags operation handles configuration related to [/api/fm
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk object operations. Only bulk POST is currently supported for tunnel tags. Allowed values are 'true' and 'false'. |
+| bulk | False | boolean | This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk object operations. Only bulk POST is currently supported for tunnel tags. Allowed values are 'true' and 'false'. |
 
 ## Example
 ```yaml

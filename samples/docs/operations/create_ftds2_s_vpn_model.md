@@ -7,7 +7,7 @@ The createFTDS2SVpnModel operation handles configuration related to [/api/fmc_co
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

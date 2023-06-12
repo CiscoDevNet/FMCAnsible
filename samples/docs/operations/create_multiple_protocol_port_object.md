@@ -5,22 +5,22 @@ The createMultipleProtocolPortObject operation handles configuration related to 
 **Retrieves, deletes, creates, or modifies the protocol(tcp/udp) port object associated with the specified ID. If no ID is specified for a GET, retrieves list of all protocol(tcp/udp) port objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| name | protocolport_obj1 |
-| protocol | TCP (IANA protocol number or Ethertype. This is handled differently for Transport and Network layer protocols. Transport layer protocols are identified by the IANA protocol number. For example: • 6 — TCP • 17 — UDP Network layer protocols are identified by the decimal form of the IEEE Registration Authority Ethertype. For example: • 2048 — IP.) |
-| port | 123 |
-| type | ProtocolPortObject |
+| Parameter | Value | Description |
+| --------- | -------- | -------- |
+| name | protocolport_obj1 | User chosen resource name. |
+| protocol | TCP  | IANA protocol number or Ethertype. This is handled differently for Transport and Network layer protocols. Transport layer protocols are identified by the IANA protocol number. For example: • 6 — TCP • 17 — UDP Network layer protocols are identified by the decimal form of the IEEE Registration Authority Ethertype. For example: • 2048 — IP. |
+| port | 123 | Port number for the object. |
+| type | ProtocolPortObject | Type associated with resource: ProtocolPortObject |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for protocol port objects. |
+| bulk | False | boolean | Enables bulk create for protocol port objects. |
 
 ## Example
 ```yaml

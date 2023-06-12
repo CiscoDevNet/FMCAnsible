@@ -5,21 +5,21 @@ The createMultipleNetmapHost operation handles configuration related to [/api/fm
 **Creates, deletes, or retrieves a host in the Network Map. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| type | Host |
-| ipAddress | ['192.168.1.2'] |
-| macAddress | AA:BB:CC:DD:EE:FF |
+| Parameter | Value | Description |
+| --------- | -------- | ----------- |
+| type | Host | Type associated with resource: Host |
+| ipAddress | ['192.168.1.2'] | List of IPs of the host. At this point, when creating a host, only one IP is supported, but must still be in an array |
+| macAddress | AA:BB:CC:DD:EE:FF | MAC of the host. This is the primary MAC of the host |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create or delete. <br>This field must be true in order to delete with a filter rather than an identifier. |
+| bulk | False | boolean | Enables bulk create or delete. <br>This field must be true in order to delete with a filter rather than an identifier. |
 
 ## Example
 ```yaml

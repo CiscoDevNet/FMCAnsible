@@ -15,7 +15,7 @@ The createSnort3IPSRulesFileUpload operation handles configuration related to [/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

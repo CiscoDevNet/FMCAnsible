@@ -14,12 +14,12 @@ The createMultiplePortObjectGroup operation handles configuration related to [/a
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for port group objects. |
+| bulk | False | boolean | Enables bulk create for port group objects. |
 
 ## Example
 ```yaml

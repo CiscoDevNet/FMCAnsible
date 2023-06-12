@@ -4,6 +4,8 @@ The createExtendedAccessListModel operation handles configuration related to [/a
 ## Description
 **Retrieves, deletes, creates, or modifies the Extended Access List associated with the specified ID. If no ID is specified, retrieves list of all Extended Access List. _Check the response section for applicable examples (if any)._**
 
+**An access control list (ACL) consists of one or more access control entries (ACE) that collectively define the network traffic profile. Extended Access Control List identifies traffic based on source and destination address and ports. Supports IPv4 and IPv6 addresses, which you can mix in a given rule.**
+
 ## Data Parameters Example
 | Parameter | Value |
 | --------- | -------- |
@@ -13,7 +15,7 @@ The createExtendedAccessListModel operation handles configuration related to [/a
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

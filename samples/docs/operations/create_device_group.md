@@ -5,16 +5,16 @@ The createDeviceGroup operation handles configuration related to [/api/fmc_confi
 **Retrieves, deletes, creates, or modifies the device group associated with the specified ID. If no ID is specified for a GET, retrieves list of all device groups. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| name | zoom |
-| type | DeviceGroup |
-| members | [{'id': 'deviceUUID', 'type': 'Device', 'name': 'deviceName'}] |
+| Parameter | Value | Description |
+| --------- | -------- | -------- |
+| name | zoom | User assigned resource name. |
+| type | DeviceGroup | Response object associated with resource: DeviceGroup. |
+| members | [{'id': 'deviceUUID', 'type': 'Device', 'name': 'deviceName'}] | Represents devices included in group. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

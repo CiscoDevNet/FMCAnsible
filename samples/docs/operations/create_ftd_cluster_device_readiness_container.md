@@ -7,12 +7,12 @@ The createFTDClusterDeviceReadinessContainer operation handles configuration rel
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| skipControlReadiness | False | string <td colspan=3> This is a query parameter, if given as true (skipControlReadiness=true) skips control readiness check and performs data devices compatibility with control.  |
+| skipControlReadiness | False | string | This is a query parameter, if given as true (skipControlReadiness=true) skips control readiness check and performs data devices compatibility with control.  |
 
 ## Example
 ```yaml

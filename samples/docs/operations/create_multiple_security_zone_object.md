@@ -5,22 +5,22 @@ The createMultipleSecurityZoneObject operation handles configuration related to 
 **Retrieves, deletes, creates, or modifies the security zone objects associated with the specified ID. If no ID is specified for a GET, retrieves list of all security zone objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| type | SecurityZone |
-| name | SecurityZoneObject5 |
-| interfaceMode | INLINE (DEFAULT), PASSIVE, SWITCHED, ROUTED, ASA |
-| interfaces | [{'type': 'PhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}, {'type': 'PhysicalInterface', 'id': 'Intf-UUID-2', 'name': 'eth2'}] |
+| Parameter | Value | Description |
+| --------- | -------- | -------- |
+| type | SecurityZone | Type associated with resource: SecurityZone. |
+| name | SecurityZoneObject5 | User chosen resource name. |
+| interfaceMode | INLINE (DEFAULT), PASSIVE, SWITCHED, ROUTED, ASA |  |
+| interfaces | [{'type': 'PhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}, {'type': 'PhysicalInterface', 'id': 'Intf-UUID-2', 'name': 'eth2'}] | Objects representing interfaces belonging to security zone. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for security zone objects. |
+| bulk | False | boolean | Enables bulk create for security zone objects. |
 
 ## Example
 ```yaml

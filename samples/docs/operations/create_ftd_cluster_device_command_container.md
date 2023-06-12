@@ -7,13 +7,13 @@ The createFTDClusterDeviceCommandContainer operation handles configuration relat
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| containerUUID | True | string  | The container id under which this specific resource is contained. |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| filter | True | string <td colspan=3> Filter are <code>operation</code> and <code>deviceUUID</code>. Value of filter is of format:<code>deviceUUID:device uuid;operation:{enable|disable|control}</code>. <code>'deviceUUID'</code> is UUID of device and is a mandatory field. <code>'operation'</code> is the command that needs to be executed on device and is a mandatory field. |
+| filter | True | string | Filter are <code>operation</code> and <code>deviceUUID</code>. Value of filter is of format:<code>deviceUUID:device uuid;operation:{enable|disable|control}</code>. <code>'deviceUUID'</code> is UUID of device and is a mandatory field. <code>'operation'</code> is the command that needs to be executed on device and is a mandatory field. |
 
 ## Example
 ```yaml

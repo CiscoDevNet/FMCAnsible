@@ -5,22 +5,22 @@ The createMultipleURLGroupObject operation handles configuration related to [/ap
 **Retrieves, deletes, creates, or modifies the url group objects associated with the specified ID. If no ID is specified for a GET, retrieves list of all url group objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| name | urlgroup_obj1 |
-| objects | [{'type': 'Url', 'id': 'UrlObjectUUID'}] |
-| literals | [{'type': 'Url', 'url': 'www.google.com'}] |
-| type | UrlGroup |
+| Parameter | Value | Description |
+| --------- | -------- | -------- |
+| name | urlgroup_obj1 | User assigned resource name. |
+| objects | [{'type': 'Url', 'id': 'UrlObjectUUID'}] | Represents URL objects in group. |
+| literals | [{'type': 'Url', 'url': 'www.google.com'}] | Represents target URL associated with URL object. |
+| type | UrlGroup | Type associated with resource. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for url group objects. |
+| bulk | False | boolean | Enables bulk create for url group objects. |
 
 ## Example
 ```yaml

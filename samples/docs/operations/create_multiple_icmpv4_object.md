@@ -5,22 +5,22 @@ The createMultipleICMPV4Object operation handles configuration related to [/api/
 **Retrieves, deletes, creates, or modifies the icmpv4 object associated with the specified ID. If no ID is specified for a GET, retrieves list of all icmpv4 objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value |
-| --------- | -------- |
-| name | icmpv4_obj1 |
-| icmpType | 3 |
-| code | 0 |
-| type | ICMPV4Object |
+| Parameter | Value | Description |
+| --------- | -------- |  -------- |
+| name | icmpv4_obj1 | User assigned resource name. |
+| icmpType | 3 | ICMP type number. |
+| code | 0 | ICMP code number. |
+| type | ICMPV4Object | Type associated with resource: ICMPV4Object. |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for ICMPv4 objects. |
+| bulk | False | boolean | Enables bulk create for ICMPv4 objects. |
 
 ## Example
 ```yaml

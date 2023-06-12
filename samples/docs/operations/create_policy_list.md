@@ -15,14 +15,14 @@ The createPolicyList operation handles configuration related to [/api/fmc_config
 | metric | 111 | This setting allows you to match any routes that have a specified metric. The metric values can range from 0 to 4294967295. |
 | name | GlobalPL123 | Name for the policy list object |
 | action | DENY (DEFAULT), PERMIT | Action to take for this matching criteria: PERMIT or DENY |
-| overridable | False |   |
-| description |   |   |
+| overridable | False | Defines the override details for this object.  |
+| description |   |  A policy list for use in a route map for Border Gateway Protocol (BGP).  |
 | type | PolicyList | PolicyList - type of this object |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

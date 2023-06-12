@@ -19,12 +19,12 @@ The createMultipleVlanTag operation handles configuration related to [/api/fmc_c
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for vlan tag objects. |
+| bulk | False | boolean | Enables bulk create for vlan tag objects. |
 
 ## Example
 ```yaml

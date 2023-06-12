@@ -14,7 +14,7 @@ The createFTDVlanInterface operation handles configuration related to [/api/fmc_
 | enableAntiSpoofing | True |
 | ifname | Intf_name |
 | name | Vlan30 |
-| mode | NONE |
+| mode | NONE (DEFAULT), INLINE, PASSIVE, TAP, ERSPAN, SWITCHPORT |
 | MTU | 1500 |
 | priority | 10 |
 | overrideDefaultFragmentSetting | {'size': 200, 'chain': 24, 'timeout': 5} |
@@ -26,8 +26,8 @@ The createFTDVlanInterface operation handles configuration related to [/api/fmc_
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| containerUUID | True | string | The container id under which this specific resource is contained. |
+| domainUUID | True | string | Domain UUID |
 
 ## Example
 ```yaml

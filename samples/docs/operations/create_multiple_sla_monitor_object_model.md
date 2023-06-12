@@ -24,12 +24,12 @@ The createMultipleSLAMonitorObjectModel operation handles configuration related 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string <td colspan=3> Domain UUID |
+| domainUUID | True | string | Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean <td colspan=3> Enables bulk create for SLA monitor objects. |
+| bulk | False | boolean | Enables bulk create for SLA monitor objects. |
 
 ## Example
 ```yaml
