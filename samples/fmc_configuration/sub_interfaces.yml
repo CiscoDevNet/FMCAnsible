@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain
       cisco.fmcansible.fmc_configuration:
@@ -10,8 +12,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}' 
-        register_as: device_list 
+          domainUUID: '{{ domain[0].uuid }}'
+        register_as: device_list
 
     - name: Get Physical Interfaces
       cisco.fmcansible.fmc_configuration:
@@ -26,7 +28,7 @@
         operation: createMultipleFTDSubInterface
         data:
           ifname: outside_subinterface
-          name: GigabitEthernet0/0
+          name: GigabitEthernet0/1
           subIntfId: 1
           ipv4:
             dhcp:
@@ -50,8 +52,8 @@
           subIntfId: 2
           ipv4:
             static:
-              address: 192.168.5.15
-              netmask: 255.255.255.0
+              address: "{{ subinterface_ip | default('192.168.5.15') }}"
+              netmask: "{{ subinterface_netmask | default('255.255.255.0') }}"
           enabled: True
           vlanId: 102
           MTU: 1500

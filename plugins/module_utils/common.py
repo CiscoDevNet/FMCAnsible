@@ -31,6 +31,7 @@ import re
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common.collections import is_string
 
+
 INVALID_IDENTIFIER_SYMBOLS = r'[^a-zA-Z0-9_]'
 
 IDENTITY_PROPERTIES = ['id', 'version', 'ruleId']

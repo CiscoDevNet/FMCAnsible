@@ -1,5 +1,7 @@
 - hosts: all
   connection: httpapi
+  vars_files:
+    - vars.yml
   tasks:
     - name: Get Domain UUID
       cisco.fmcansible.fmc_configuration:
@@ -10,8 +12,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         data:
-          name: net-15
-          value: 10.10.30.0/24
+          name: "{{ networkobject_ftd1_name | default('net-15') }}"
+          value: "{{ networkobject_ftd2_value | default('10.10.30.0/24') }}"
           type: Network
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
@@ -20,8 +22,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         data:
-          name: net-13
-          value: 10.10.40.0/24
+          name: "{{ networkobject_ftd1_name | default('net-13') }}"
+          value: "{{ networkobject_ftd2_value | default('10.10.40.0/24') }}"
           type: Network
         path_params:
           domainUUID: '{{ domain[0].uuid }}'
@@ -30,7 +32,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkGroup
         data:
-          name: netg-1
+          name: "{{ networkgroup_name | default('netg-1') }}"
           type: networkgroup
           objects:
             - id: '{{ Network_net_15.id }}'

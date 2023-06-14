@@ -1,0 +1,25 @@
+- hosts: all
+  connection: httpapi
+  vars_files:
+    - vars.yml
+  tasks:
+    - name: Get Domain
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: domain
+
+    - name: Execute 'getAllPrefilterPolicy' operation
+      cisco.fmcansible.fmc_configuration:
+        operation: "getAllPrefilterPolicy"
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+        filters:
+          name: '{{ delete_prefilterpolicy_name }}'
+        register_as: prefilter
+
+    - name: Delete Prefilter Policy
+      cisco.fmcansible.fmc_configuration:
+        operation: deletePrefilterPolicy
+        path_params:
+          domainUUID: '{{ domain[0].uuid }}'
+          objectId: '{{ prefilter[0].id }}'
