@@ -12,7 +12,8 @@
 
 ### Supported Operations
 * [getAllDevice](../operations/get_all_device.md)
-* [createDevice](../operations/create_device.md)
+* [createMultipleDevice](../operations/create_multiple_device.md)
+* [deleteMultipleDevice](../operations/delete_multiple_device.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/fpphysicalinterfaces/{objectId}
 
 ### Supported Operations
@@ -115,6 +116,17 @@
 ### Supported Operations
 * [getAllFTDVTIInterface](../operations/get_all_ftdvti_interface.md)
 * [createMultipleFTDVTIInterface](../operations/create_multiple_ftdvti_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/loopbackinterfaces/{objectId}
+
+### Supported Operations
+* [getFTDLoopbackInterface](../operations/get_ftd_loopback_interface.md)
+* [updateFTDLoopbackInterface](../operations/update_ftd_loopback_interface.md)
+* [deleteFTDLoopbackInterface](../operations/delete_ftd_loopback_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/loopbackinterfaces
+
+### Supported Operations
+* [getAllFTDLoopbackInterface](../operations/get_all_ftd_loopback_interface.md)
+* [createFTDLoopbackInterface](../operations/create_ftd_loopback_interface.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/vlaninterfaces/{objectId}
 
 ### Supported Operations
@@ -329,10 +341,64 @@
 ### Supported Operations
 * [getAllVTEPPolicy](../operations/get_all_vtep_policy.md)
 * [createVTEPPolicy](../operations/create_vtep_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/eigrproutes/{objectId}
+
+### Supported Operations
+* [getEigrpPolicyModel](../operations/get_eigrp_policy_model.md)
+* [updateEigrpPolicyModel](../operations/update_eigrp_policy_model.md)
+* [deleteEigrpPolicyModel](../operations/delete_eigrp_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/eigrproutes
+
+### Supported Operations
+* [getAllEigrpPolicyModel](../operations/get_all_eigrp_policy_model.md)
+* [createEigrpPolicyModel](../operations/create_eigrp_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/virtualrouters/{virtualrouterUUID}/eigrproutes/{objectId}
+
+### Supported Operations
+* [getVrfEigrpPolicyModel](../operations/get_vrf_eigrp_policy_model.md)
+* [updateVrfEigrpPolicyModel](../operations/update_vrf_eigrp_policy_model.md)
+* [deleteVrfEigrpPolicyModel](../operations/delete_vrf_eigrp_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/virtualrouters/{virtualrouterUUID}/eigrproutes
+
+### Supported Operations
+* [getAllVrfEigrpPolicyModel](../operations/get_all_vrf_eigrp_policy_model.md)
+* [createVrfEigrpPolicyModel](../operations/create_vrf_eigrp_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/bfdpolicies/{objectId}
+
+### Supported Operations
+* [getBFDPolicyModel](../operations/get_bfd_policy_model.md)
+* [updateBFDPolicyModel](../operations/update_bfd_policy_model.md)
+* [deleteBFDPolicyModel](../operations/delete_bfd_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/bfdpolicies
+
+### Supported Operations
+* [getAllBFDPolicyModel](../operations/get_all_bfd_policy_model.md)
+* [createBFDPolicyModel](../operations/create_bfd_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/virtualrouters/{virtualrouterUUID}/bfdpolicies/{objectId}
+
+### Supported Operations
+* [getVrfBFDPolicyModel](../operations/get_vrf_bfd_policy_model.md)
+* [updateVrfBFDPolicyModel](../operations/update_vrf_bfd_policy_model.md)
+* [deleteVrfBFDPolicyModel](../operations/delete_vrf_bfd_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/virtualrouters/{virtualrouterUUID}/bfdpolicies
+
+### Supported Operations
+* [getAllVrfBFDPolicyModel](../operations/get_all_vrf_bfd_policy_model.md)
+* [createVrfBFDPolicyModel](../operations/create_vrf_bfd_policy_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/devices/copyconfigrequests
 
 ### Supported Operations
 * [createDeviceCopyConfigRequest](../operations/create_device_copy_config_request.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicesettings/{containerUUID}
+
+### Supported Operations
+* [getDeviceSettings](../operations/get_device_settings.md)
+* [updateDeviceSettings](../operations/update_device_settings.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/devicesettings
+
+### Supported Operations
+* [getAllDeviceSettings](../operations/get_all_device_settings.md)
+* [updateMultipleDeviceSettings](../operations/update_multiple_device_settings.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/devices/operational/exports
 
 ### Supported Operations
@@ -341,6 +407,10 @@
 
 ### Supported Operations
 * [createDeviceImport](../operations/create_device_import.md)
+## /api/fmc_config/v1/domain/{domainUUID}/devices/operational/changemanagers
+
+### Supported Operations
+* [createChangeConfigManagerFTDRequest](../operations/create_change_config_manager_ftd_request.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/fpphysicalinterfaces
 
 ### Supported Operations

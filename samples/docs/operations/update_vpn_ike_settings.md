@@ -27,8 +27,8 @@ The updateVpnIkeSettings operation handles configuration related to [/api/fmc_co
     operation: "updateVpnIkeSettings"
     data:
         links: {'self': '<fmc_ip>/api/fmc_config/v1/domain/domainUUID/policy/ftds2svpns/topologyUUID/ikesettings/005056A9-7483-0ed3-0000-012884902862'}
-        id: "005056A9-7483-0ed3-0000-012884902862"
-        type: "IkeSettings"
+        id: 005056A9-7483-0ed3-0000-012884902862
+        type: IkeSettings
         ikeV2Settings: {'automaticPreSharedKeyLength': 7, 'enforceHexBasedPreSharedKeyOnly': True, 'authenticationType': 'AUTOMATIC_PRE_SHARED_KEY', 'policies': [{'name': 'DES-SHA-SHA', 'id': '005056A9-6FFE-0ed3-0000-000000000402', 'type': 'Ike2'}, {'name': 'AES-SHA-SHA', 'id': '005056A9-6FFE-0ed3-0000-000000000401', 'type': 'Ike2'}]}
         ikeV1Settings: {'automaticPreSharedKeyLength': 7, 'authenticationType': 'AUTOMATIC_PRE_SHARED_KEY', 'policies': [{'name': 'preshared_sha_des_dh5_160', 'id': '005056A9-6FFE-0ed3-0000-000000000303', 'type': 'Ike'}, {'name': 'preshared_sha_aes256_dh14_3', 'id': '005056A9-6FFE-0ed3-0000-000000000307', 'type': 'Ike'}]}
     path_params:

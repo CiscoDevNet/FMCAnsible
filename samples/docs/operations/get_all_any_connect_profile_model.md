@@ -2,7 +2,7 @@
 
 The getAllAnyConnectProfileModel operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/object/anyconnectprofiles](/paths//api/fmc_config/v1/domain/{domain_uuid}/object/anyconnectprofiles.md) path.&nbsp;
 ## Description
-**Retrieves the AnyConnect Profile associated with the specified ID. If no ID is specified for a GET, retrieves list of all AnyConnect Profile objects.**
+**Retrieves, update, deletes or creates the AnyConnect Profile associated with the specified ID. If no ID is specified for a GET, retrieves list of all AnyConnect Profile objects.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

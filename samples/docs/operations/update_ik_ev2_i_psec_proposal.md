@@ -26,12 +26,12 @@ The updateIKEv2IPsecProposal operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateIKEv2IPsecProposal"
     data:
-        name: "ikev2ipsecproposal-test-1"
-        id: "ikev2ipsecproposalUUID"
+        name: ikev2ipsecproposal-test-1
+        id: ikev2ipsecproposalUUID
         encryptionAlgorithms: ['3DES']
         integrityAlgorithms: ['SHA-256']
-        type: "IKEv2IPsecProposal"
-        description: "IKEv2 IPsec object description"
+        type: IKEv2IPsecProposal
+        description: IKEv2 IPsec object description
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

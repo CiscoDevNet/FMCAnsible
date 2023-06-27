@@ -25,10 +25,10 @@ The updateLocalRealmUser operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateLocalRealmUser"
     data:
-        name: "Test1"
-        id: "Local-Realm-User-UUID-1"
-        type: "LocalRealmUser"
-        password: "TESTPASSWORD_UPDATE"
+        name: Test1
+        id: Local-Realm-User-UUID-1
+        type: LocalRealmUser
+        password: TESTPASSWORD_UPDATE
         realm: {'id': 'realmUUID', 'type': 'Realm', 'name': 'ntd-test.cisco.com'}
     path_params:
         objectId: "{{ object_id }}"

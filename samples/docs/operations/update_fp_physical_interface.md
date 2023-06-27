@@ -26,11 +26,11 @@ The updateFPPhysicalInterface operation handles configuration related to [/api/f
   cisco.fmcansible.fmc_configuration:
     operation: "updateFPPhysicalInterface"
     data:
-        name: "s1p4"
-        type: "FPPhysicalInterface"
-        id: "fpphysicalinterfaceUUID2"
+        name: s1p4
+        type: FPPhysicalInterface
+        id: fpphysicalinterfaceUUID2
         enabled: 1
-        interfaceType: "INLINE"
+        interfaceType: INLINE
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

@@ -2,7 +2,7 @@
 
 The getInspectorOverrideConfig operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/policy/networkanalysispolicies/{containerUUID}/inspectoroverrideconfigs](/paths//api/fmc_config/v1/domain/{domain_uuid}/policy/networkanalysispolicies/{container_uuid}/inspectoroverrideconfigs.md) path.&nbsp;
 ## Description
-**Retrieves or modifies the inspector override configuration associated with the specified policy. An inspector override allows the user to modify behaviour specified in the base policy's inspector configuration.**
+**Retrieves or modifies the inspector override configuration associated with the specified policy. An inspector override allows the user to modify behaviour specified in the base policys inspector configuration.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

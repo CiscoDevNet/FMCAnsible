@@ -25,10 +25,10 @@ The updateICMPV4Object operation handles configuration related to [/api/fmc_conf
   cisco.fmcansible.fmc_configuration:
     operation: "updateICMPV4Object"
     data:
-        id: "icmpv4Object1UUID"
-        name: "icmpv4_obj1_updated"
-        type: "ICMPV4Object"
-        icmpType: "3"
+        id: icmpv4Object1UUID
+        name: icmpv4_obj1_updated
+        type: ICMPV4Object
+        icmpType: 3
         code: 1
     path_params:
         objectId: "{{ object_id }}"

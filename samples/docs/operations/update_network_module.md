@@ -24,9 +24,9 @@ The updateNetworkModule operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updateNetworkModule"
     data:
-        id: "networkModuleUUID"
-        moduleState: "DISABLED"
-        type: "NetworkModule"
+        id: networkModuleUUID
+        moduleState: DISABLED
+        type: NetworkModule
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

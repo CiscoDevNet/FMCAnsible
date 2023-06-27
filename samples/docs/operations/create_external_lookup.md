@@ -15,7 +15,7 @@ The createExternalLookup operation handles configuration related to [/api/fmc_co
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -23,10 +23,10 @@ The createExternalLookup operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "createExternalLookup"
     data:
-        name: "test"
-        template: "http://www.example.com"
+        name: test
+        template: http://www.example.com
         enabled: True
-        type: "ExternalLookup"
+        type: ExternalLookup
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

@@ -23,8 +23,8 @@ The updateStandardACL operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "updateStandardACL"
     data:
-        id: "stdACLObjectUUID"
-        name: "StandardAccessListTest"
+        id: stdACLObjectUUID
+        name: StandardAccessListTest
         entries: [{'action': 'DENY', 'networks': {'objects': [{'id': '00000000-0000-0ed3-0000-270582939747'}]}}]
     path_params:
         objectId: "{{ object_id }}"

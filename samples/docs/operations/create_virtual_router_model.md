@@ -15,8 +15,8 @@ The createVirtualRouterModel operation handles configuration related to [/api/fm
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -24,9 +24,9 @@ The createVirtualRouterModel operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "createVirtualRouterModel"
     data:
-        type: "VirtualRouter"
-        name: "Beta"
-        description: "Human Resource Department Virtual Router"
+        type: VirtualRouter
+        name: Beta
+        description: Human Resource Department Virtual Router
         interfaces: [{'id': 'interface_uuid1', 'type': 'PhysicalInterface', 'name': 'OUTSIDE'}, {'id': 'interface_uuid2', 'type': 'SubInterface', 'name': 'OUTSIDE-SUB'}]
     path_params:
         containerUUID: "{{ container_uuid }}"

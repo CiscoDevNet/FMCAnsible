@@ -27,8 +27,8 @@ The updateVpnAdvancedSettings operation handles configuration related to [/api/f
   cisco.fmcansible.fmc_configuration:
     operation: "updateVpnAdvancedSettings"
     data:
-        id: "005056A9-097E-0ed3-0000-021474836554"
-        type: "AdvancedSettings"
+        id: 005056A9-097E-0ed3-0000-021474836554
+        type: AdvancedSettings
         links: {'self': '<fmc_url>/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/ftds2svpns/005056A9-097E-0ed3-0000-008589935150/advancedsettings/005056A9-097E-0ed3-0000-021474836554'}
         advancedIkeSetting: {'peerIdentityValidation': 'REQUIRED', 'thresholdToChallengeIncomingCookies': 50, 'percentageOfSAsAllowedInNegotiation': 100, 'enableNotificationOnTunnelDisconnect': False, 'identitySentToPeer': 'AUTO_OR_DN', 'enableAggressiveMode': False, 'cookieChallenge': 'CUSTOM'}
         advancedTunnelSetting: {'certificateMapSettings': {'useCertMapConfiguredInEndpointToDetermineTunnel': False, 'useCertificateOuToDetermineTunnel': True, 'useIkeIdentityOuToDetermineTunnel': True, 'usePeerIpAddressToDetermineTunnel': True}, 'enableSpokeToSpokeConnectivityThroughHub': False, 'natKeepaliveMessageTraversal': {'enabled': True, 'intervalSeconds': 20}, 'bypassAccessControlTrafficForDecryptedTraffic': False}

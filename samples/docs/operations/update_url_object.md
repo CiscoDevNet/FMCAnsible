@@ -27,13 +27,13 @@ The updateURLObject operation handles configuration related to [/api/fmc_config/
   cisco.fmcansible.fmc_configuration:
     operation: "updateURLObject"
     data:
-        type: "Url"
-        url: "www.cisco.com"
+        type: Url
+        url: www.cisco.com
         overridable: True
         overrides: {'parent': {'id': 'url1_uuid', 'type': 'Url'}, 'target': {'name': '10.10.16.29', 'id': 'target_uuid', 'type': 'Device'}}
-        description: " "
-        id: "url1_uuid"
-        name: "url1"
+        description:  
+        id: url1_uuid
+        name: url1
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

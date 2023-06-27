@@ -30,8 +30,8 @@ The updateDynamicObjectMappings operation handles configuration related to [/api
     operation: "updateDynamicObjectMappings"
     data:
         mappings: ['1.1.1.2', '1.2.3.4/24']
-        type: "DynamicObjectMappings"
-        id: "0050568D-75AB-0ed3-0000-038654707195"
+        type: DynamicObjectMappings
+        id: 0050568D-75AB-0ed3-0000-038654707195
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -41,21 +41,21 @@ The updateRESTIndicator operation handles configuration related to [/api/fmc_tid
         inheritedProperty: {'ttl': 90, 'publish': True, 'allowlist': False, 'expirationTime': 1506280028, 'action': 'monitor'}
         effectiveProperty: {'ttl': 90, 'publish': True, 'allowlist': False, 'expirationTime': 1506280028, 'action': 'monitor'}
         customProperty: {'publish': True, 'action': 'block'}
-        feedId: "feedUUID"
+        feedId: feedUUID
         equation: {'children': [{'children': [{'isRealized': False, 'type': 'IPV_4_ADDR', 'value': 'IPV_4_ADDR:c4a098d02ba0407e165c14996f8eae6b65a119a2'}], 'condition': 'EQUALS', 'applyCondition': 'ANY', 'isRealized': False}], 'isRealized': False, 'op': 'OR'}
         updatedAt: 1499842559
-        sourceName: "Test Flat File IPV4"
+        sourceName: Test Flat File IPV4
         containsUnsupported: False
         containsInvalid: False
         observables: [{'inheritedProperty': {'ttl': 90, 'publish': True, 'allowlist': False, 'expirationTime': 1506280028, 'action': 'monitor'}, 'effectiveProperty': {'ttl': 90, 'publish': True, 'allowlist': False, 'expirationTime': 1506280028, 'action': 'monitor'}, 'indicatorCount': 1, 'observableType': 'IPV_4_ADDR', 'updatedAt': 1498504028, 'value': 'ipAddressValue', 'id': 'IPV_4_ADDR:c4a098d02ba0407e165c14996f8eae6b65a119a2', 'type': 'observable', 'name': 'Observable', 'version': '1.0.0'}]
-        indicatorVersion: "1.0.0"
+        indicatorVersion: 1.0.0
         noRealizedIncidents: 0
         noPartialIncidents: 0
-        id: "indicatorUUID"
-        type: "indicator"
-        name: "Sample Indicator IPV4"
-        version: "1.0.0"
-        description: "Indicator description changed"
+        id: indicatorUUID
+        type: indicator
+        name: Sample Indicator IPV4
+        version: 1.0.0
+        description: Indicator description changed
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

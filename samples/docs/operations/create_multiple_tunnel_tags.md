@@ -14,12 +14,12 @@ The createMultipleTunnelTags operation handles configuration related to [/api/fm
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk object operations. Only bulk POST is currently supported for tunnel tags. Allowed values are 'true' and 'false'. |
+| bulk | False | boolean <td colspan=3> This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk object operations. Only bulk POST is currently supported for tunnel tags. Allowed values are true and false. |
 
 ## Example
 ```yaml
@@ -27,9 +27,9 @@ The createMultipleTunnelTags operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleTunnelTags"
     data:
-        type: "TunnelTag"
-        name: "NewTunnelTag"
-        description: "Tunnel Tag description"
+        type: TunnelTag
+        name: NewTunnelTag
+        description: Tunnel Tag description
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

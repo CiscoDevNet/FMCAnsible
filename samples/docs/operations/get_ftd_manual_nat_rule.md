@@ -14,7 +14,7 @@ The getFTDManualNatRule operation handles configuration related to [/api/fmc_con
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is 'before_auto' and 'after_auto'. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is before_auto and after_auto. |
 
 ## Example
 ```yaml

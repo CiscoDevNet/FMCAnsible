@@ -8,7 +8,7 @@ The createPolicyAssignment operation handles configuration related to [/api/fmc_
 | Parameter | Value |
 | --------- | -------- |
 | type | PolicyAssignment |
-| policy | {'type': 'AccessPolicy', 'name': 'AccessPolicy2', 'id': 'accesspolicyUUID'} |
+| policy | {'type': 'FTDPlatformSettingsPolicy', 'name': 'FTDPlatformSettingsPolicy2', 'id': 'ftdplatformsettingspolicyUUID'} |
 | targets | [{'id': 'deviceUUID1', 'type': 'Device', 'name': 'FTD_Device1'}, {'id': 'deviceUUID2', 'type': 'Device', 'name': 'FTD_Device2'}] |
 
 ## Path Parameters
@@ -22,8 +22,8 @@ The createPolicyAssignment operation handles configuration related to [/api/fmc_
   cisco.fmcansible.fmc_configuration:
     operation: "createPolicyAssignment"
     data:
-        type: "PolicyAssignment"
-        policy: {'type': 'AccessPolicy', 'name': 'AccessPolicy2', 'id': 'accesspolicyUUID'}
+        type: PolicyAssignment
+        policy: {'type': 'FTDPlatformSettingsPolicy', 'name': 'FTDPlatformSettingsPolicy2', 'id': 'ftdplatformsettingspolicyUUID'}
         targets: [{'id': 'deviceUUID1', 'type': 'Device', 'name': 'FTD_Device1'}, {'id': 'deviceUUID2', 'type': 'Device', 'name': 'FTD_Device2'}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

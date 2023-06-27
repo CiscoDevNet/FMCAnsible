@@ -23,9 +23,9 @@ The updateSnort3IntrusionRuleGroupsObject operation handles configuration relate
   cisco.fmcansible.fmc_configuration:
     operation: "updateSnort3IntrusionRuleGroupsObject"
     data:
-        description: "Updated Custom Intrusion Rule group1"
-        name: "Updated Custom RuleGroup 1"
-        type: "IntrusionRuleGroup"
+        description: Updated Custom Intrusion Rule group1
+        name: Updated Custom RuleGroup 1
+        type: IntrusionRuleGroup
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

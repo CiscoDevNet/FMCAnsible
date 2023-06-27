@@ -13,12 +13,36 @@
       "content": "create_access_policy_category.md"
     },
     {
+      "title": "createAnyConnectCustomAttributeModel",
+      "content": "create_any_connect_custom_attribute_model.md"
+    },
+    {
+      "title": "createAnyConnectExternalBrowserPackageModel",
+      "content": "create_any_connect_external_browser_package_model.md"
+    },
+    {
+      "title": "createAnyConnectPackageModel",
+      "content": "create_any_connect_package_model.md"
+    },
+    {
+      "title": "createAnyConnectProfileModel",
+      "content": "create_any_connect_profile_model.md"
+    },
+    {
       "title": "createApplicationFilter",
       "content": "create_application_filter.md"
     },
     {
       "title": "createAsPathList",
       "content": "create_as_path_list.md"
+    },
+    {
+      "title": "createBFDPolicyModel",
+      "content": "create_bfd_policy_model.md"
+    },
+    {
+      "title": "createBFDTemplate",
+      "content": "create_bfd_template.md"
     },
     {
       "title": "createBGPGeneralSettingModel",
@@ -29,16 +53,32 @@
       "content": "create_bgpi_pv_address_family_model.md"
     },
     {
+      "title": "createBreakoutInterface",
+      "content": "create_breakout_interface.md"
+    },
+    {
       "title": "createCancelUpgrade",
       "content": "create_cancel_upgrade.md"
+    },
+    {
+      "title": "createCertificateMapModel",
+      "content": "create_certificate_map_model.md"
+    },
+    {
+      "title": "createChangeConfigManagerFTDRequest",
+      "content": "create_change_config_manager_ftd_request.md"
+    },
+    {
+      "title": "createCSDACStatus",
+      "content": "create_csdac_status.md"
     },
     {
       "title": "createDeploymentRequest",
       "content": "create_deployment_request.md"
     },
     {
-      "title": "createDevice",
-      "content": "create_device.md"
+      "title": "createDeviceBackup",
+      "content": "create_device_backup.md"
     },
     {
       "title": "createDeviceCopyConfigRequest",
@@ -57,8 +97,16 @@
       "content": "create_device_import.md"
     },
     {
+      "title": "createDHCPIPv6Pool",
+      "content": "create_dhcpi_pv6_pool.md"
+    },
+    {
       "title": "createDNSServerGroupObject",
       "content": "create_dns_server_group_object.md"
+    },
+    {
+      "title": "createDownloadInternalCA",
+      "content": "create_download_internal_ca.md"
     },
     {
       "title": "createDynamicAccessPolicy",
@@ -73,8 +121,20 @@
       "content": "create_dynamic_objects_bulk.md"
     },
     {
+      "title": "createEBSSnapshot",
+      "content": "create_ebs_snapshot.md"
+    },
+    {
       "title": "createECMPZoneModel",
       "content": "create_ecmp_zone_model.md"
+    },
+    {
+      "title": "createEigrpPolicyModel",
+      "content": "create_eigrp_policy_model.md"
+    },
+    {
+      "title": "createEmailReport",
+      "content": "create_email_report.md"
     },
     {
       "title": "createExpandedCommunityList",
@@ -91,6 +151,14 @@
     {
       "title": "createExternalLookup",
       "content": "create_external_lookup.md"
+    },
+    {
+      "title": "createFlexConfig",
+      "content": "create_flex_config.md"
+    },
+    {
+      "title": "createFlexConfigMigration",
+      "content": "create_flex_config_migration.md"
     },
     {
       "title": "createFPLogicalInterface",
@@ -121,8 +189,20 @@
       "content": "create_ftdha_interface_mac_addresses.md"
     },
     {
+      "title": "createFTDLoopbackInterface",
+      "content": "create_ftd_loopback_interface.md"
+    },
+    {
       "title": "createFTDNatPolicy",
       "content": "create_ftd_nat_policy.md"
+    },
+    {
+      "title": "createFTDRAVpnConnectionProfileModel",
+      "content": "create_ftdra_vpn_connection_profile_model.md"
+    },
+    {
+      "title": "createFTDRAVpnModel",
+      "content": "create_ftdra_vpn_model.md"
     },
     {
       "title": "createFTDRedundantInterface",
@@ -143,6 +223,10 @@
     {
       "title": "createGeoLocationObject",
       "content": "create_geo_location_object.md"
+    },
+    {
+      "title": "createHostScanPackageObject",
+      "content": "create_host_scan_package_object.md"
     },
     {
       "title": "createIKEv1IPsecProposal",
@@ -169,20 +253,44 @@
       "content": "create_interface_event.md"
     },
     {
+      "title": "createInternalCA",
+      "content": "create_internal_ca.md"
+    },
+    {
+      "title": "createInternalCertificate",
+      "content": "create_internal_certificate.md"
+    },
+    {
       "title": "createIntrusionPolicy",
       "content": "create_intrusion_policy.md"
+    },
+    {
+      "title": "createIPv4AddressPool",
+      "content": "create_i_pv4_address_pool.md"
     },
     {
       "title": "createIPv4PrefixList",
       "content": "create_i_pv4_prefix_list.md"
     },
     {
+      "title": "createIPv6AddressPool",
+      "content": "create_i_pv6_address_pool.md"
+    },
+    {
       "title": "createIPv6PrefixList",
       "content": "create_i_pv6_prefix_list.md"
     },
     {
+      "title": "createJoinInterface",
+      "content": "create_join_interface.md"
+    },
+    {
       "title": "createMultipleAccessRule",
       "content": "create_multiple_access_rule.md"
+    },
+    {
+      "title": "createMultipleDevice",
+      "content": "create_multiple_device.md"
     },
     {
       "title": "createMultipleDynamicObject",
@@ -207,6 +315,10 @@
     {
       "title": "createMultipleFTDVTIInterface",
       "content": "create_multiple_ftdvti_interface.md"
+    },
+    {
+      "title": "createMultipleGroupPolicyModel",
+      "content": "create_multiple_group_policy_model.md"
     },
     {
       "title": "createMultipleHostObject",
@@ -273,6 +385,10 @@
       "content": "create_multiple_protocol_port_object.md"
     },
     {
+      "title": "createMultipleRadiusServerGroupModel",
+      "content": "create_multiple_radius_server_group_model.md"
+    },
+    {
       "title": "createMultipleRangeObject",
       "content": "create_multiple_range_object.md"
     },
@@ -291,6 +407,10 @@
     {
       "title": "createMultipleSnort3IPSRulesObject",
       "content": "create_multiple_snort3_ips_rules_object.md"
+    },
+    {
+      "title": "createMultipleSSOServer",
+      "content": "create_multiple_sso_server.md"
     },
     {
       "title": "createMultipleTimeRange",
@@ -341,6 +461,10 @@
       "content": "create_policy_list.md"
     },
     {
+      "title": "createPolicyLock",
+      "content": "create_policy_lock.md"
+    },
+    {
       "title": "createPrefilterPolicy",
       "content": "create_prefilter_policy.md"
     },
@@ -381,6 +505,18 @@
       "content": "create_route_map.md"
     },
     {
+      "title": "createSecurityGroupTag",
+      "content": "create_security_group_tag.md"
+    },
+    {
+      "title": "createSIURLList",
+      "content": "create_siurl_list.md"
+    },
+    {
+      "title": "createSmartLicense",
+      "content": "create_smart_license.md"
+    },
+    {
       "title": "createSnort3IPSRulesFileUpload",
       "content": "create_snort3_ips_rules_file_upload.md"
     },
@@ -397,8 +533,32 @@
       "content": "create_standard_community_list.md"
     },
     {
+      "title": "createTerminateRAVPNSession",
+      "content": "create_terminate_ravpn_session.md"
+    },
+    {
+      "title": "createTestUmbrellaConnection",
+      "content": "create_test_umbrella_connection.md"
+    },
+    {
+      "title": "createUmbrellaDeploymentData",
+      "content": "create_umbrella_deployment_data.md"
+    },
+    {
+      "title": "createUmbrellaDNSPolicy",
+      "content": "create_umbrella_dns_policy.md"
+    },
+    {
+      "title": "createUmbrellaProtectionPolicy",
+      "content": "create_umbrella_protection_policy.md"
+    },
+    {
       "title": "createUpgrade",
       "content": "create_upgrade.md"
+    },
+    {
+      "title": "createValidateCertFile",
+      "content": "create_validate_cert_file.md"
     },
     {
       "title": "createVirtualRouterModel",
@@ -409,8 +569,16 @@
       "content": "create_virtual_switch.md"
     },
     {
+      "title": "createVpnCertEnrollmentModel",
+      "content": "create_vpn_cert_enrollment_model.md"
+    },
+    {
       "title": "createVpnEndpoint",
       "content": "create_vpn_endpoint.md"
+    },
+    {
+      "title": "createVrfBFDPolicyModel",
+      "content": "create_vrf_bfd_policy_model.md"
     },
     {
       "title": "createVrfBGPIPvAddressFamilyModel",
@@ -419,6 +587,10 @@
     {
       "title": "createVrfECMPZoneModel",
       "content": "create_vrf_ecmp_zone_model.md"
+    },
+    {
+      "title": "createVrfEigrpPolicyModel",
+      "content": "create_vrf_eigrp_policy_model.md"
     },
     {
       "title": "createVrfIPv4StaticRouteModel",
@@ -449,12 +621,40 @@
       "content": "delete_access_rule.md"
     },
     {
+      "title": "deleteAnyConnectCustomAttributeModel",
+      "content": "delete_any_connect_custom_attribute_model.md"
+    },
+    {
+      "title": "deleteAnyConnectExternalBrowserPackageModel",
+      "content": "delete_any_connect_external_browser_package_model.md"
+    },
+    {
+      "title": "deleteAnyConnectPackageModel",
+      "content": "delete_any_connect_package_model.md"
+    },
+    {
+      "title": "deleteAnyConnectProfileModel",
+      "content": "delete_any_connect_profile_model.md"
+    },
+    {
       "title": "deleteApplicationFilter",
       "content": "delete_application_filter.md"
     },
     {
       "title": "deleteAsPathList",
       "content": "delete_as_path_list.md"
+    },
+    {
+      "title": "deleteBackupFile",
+      "content": "delete_backup_file.md"
+    },
+    {
+      "title": "deleteBFDPolicyModel",
+      "content": "delete_bfd_policy_model.md"
+    },
+    {
+      "title": "deleteBFDTemplate",
+      "content": "delete_bfd_template.md"
     },
     {
       "title": "deleteBGPGeneralSettingModel",
@@ -465,12 +665,20 @@
       "content": "delete_bgpi_pv_address_family_model.md"
     },
     {
+      "title": "deleteCertificateMapModel",
+      "content": "delete_certificate_map_model.md"
+    },
+    {
       "title": "deleteDevice",
       "content": "delete_device.md"
     },
     {
       "title": "deleteDeviceGroup",
       "content": "delete_device_group.md"
+    },
+    {
+      "title": "deleteDHCPIPv6Pool",
+      "content": "delete_dhcpi_pv6_pool.md"
     },
     {
       "title": "deleteDNSServerGroupObject",
@@ -487,6 +695,10 @@
     {
       "title": "deleteECMPZoneModel",
       "content": "delete_ecmp_zone_model.md"
+    },
+    {
+      "title": "deleteEigrpPolicyModel",
+      "content": "delete_eigrp_policy_model.md"
     },
     {
       "title": "deleteExpandedCommunityList",
@@ -533,12 +745,24 @@
       "content": "delete_ftdha_interface_mac_addresses.md"
     },
     {
+      "title": "deleteFTDLoopbackInterface",
+      "content": "delete_ftd_loopback_interface.md"
+    },
+    {
       "title": "deleteFTDManualNatRule",
       "content": "delete_ftd_manual_nat_rule.md"
     },
     {
       "title": "deleteFTDNatPolicy",
       "content": "delete_ftd_nat_policy.md"
+    },
+    {
+      "title": "deleteFTDRAVpnConnectionProfileModel",
+      "content": "delete_ftdra_vpn_connection_profile_model.md"
+    },
+    {
+      "title": "deleteFTDRAVpnModel",
+      "content": "delete_ftdra_vpn_model.md"
     },
     {
       "title": "deleteFTDRedundantInterface",
@@ -569,12 +793,20 @@
       "content": "delete_geo_location_object.md"
     },
     {
+      "title": "deleteGroupPolicyModel",
+      "content": "delete_group_policy_model.md"
+    },
+    {
       "title": "deleteHitCount",
       "content": "delete_hit_count.md"
     },
     {
       "title": "deleteHostObject",
       "content": "delete_host_object.md"
+    },
+    {
+      "title": "deleteHostScanPackageObject",
+      "content": "delete_host_scan_package_object.md"
     },
     {
       "title": "deleteICMPV4Object",
@@ -609,8 +841,20 @@
       "content": "delete_interface_group_object.md"
     },
     {
+      "title": "deleteInternalCA",
+      "content": "delete_internal_ca.md"
+    },
+    {
+      "title": "deleteInternalCertificate",
+      "content": "delete_internal_certificate.md"
+    },
+    {
       "title": "deleteIntrusionPolicy",
       "content": "delete_intrusion_policy.md"
+    },
+    {
+      "title": "deleteIPv4AddressPool",
+      "content": "delete_i_pv4_address_pool.md"
     },
     {
       "title": "deleteIPv4PrefixList",
@@ -619,6 +863,10 @@
     {
       "title": "deleteIPv4StaticRouteModel",
       "content": "delete_i_pv4_static_route_model.md"
+    },
+    {
+      "title": "deleteIPv6AddressPool",
+      "content": "delete_i_pv6_address_pool.md"
     },
     {
       "title": "deleteIPv6PrefixList",
@@ -641,6 +889,10 @@
       "content": "delete_multiple_access_rule.md"
     },
     {
+      "title": "deleteMultipleDevice",
+      "content": "delete_multiple_device.md"
+    },
+    {
       "title": "deleteMultipleDynamicObject",
       "content": "delete_multiple_dynamic_object.md"
     },
@@ -651,6 +903,18 @@
     {
       "title": "deleteMultipleDynamicObjectMappingsBulk",
       "content": "delete_multiple_dynamic_object_mappings_bulk.md"
+    },
+    {
+      "title": "deleteMultipleFTDAutoNatRule",
+      "content": "delete_multiple_ftd_auto_nat_rule.md"
+    },
+    {
+      "title": "deleteMultipleFTDManualNatRule",
+      "content": "delete_multiple_ftd_manual_nat_rule.md"
+    },
+    {
+      "title": "deleteMultipleFTDNatRule",
+      "content": "delete_multiple_ftd_nat_rule.md"
     },
     {
       "title": "deleteMultipleNetmapHost",
@@ -721,6 +985,10 @@
       "content": "delete_protocol_port_object.md"
     },
     {
+      "title": "deleteRadiusServerGroupModel",
+      "content": "delete_radius_server_group_model.md"
+    },
+    {
       "title": "deleteRangeObject",
       "content": "delete_range_object.md"
     },
@@ -745,8 +1013,16 @@
       "content": "delete_route_map.md"
     },
     {
+      "title": "deleteSecurityGroupTag",
+      "content": "delete_security_group_tag.md"
+    },
+    {
       "title": "deleteSecurityZoneObject",
       "content": "delete_security_zone_object.md"
+    },
+    {
+      "title": "deleteSIURLList",
+      "content": "delete_siurl_list.md"
     },
     {
       "title": "deleteSLAMonitorObjectModel",
@@ -763,6 +1039,10 @@
     {
       "title": "deleteSnort3NetworkAnalysisPolicy",
       "content": "delete_snort3_network_analysis_policy.md"
+    },
+    {
+      "title": "deleteSSOServer",
+      "content": "delete_sso_server.md"
     },
     {
       "title": "deleteStandardACL",
@@ -783,6 +1063,10 @@
     {
       "title": "deleteTunnelTags",
       "content": "delete_tunnel_tags.md"
+    },
+    {
+      "title": "deleteUmbrellaDNSPolicy",
+      "content": "delete_umbrella_dns_policy.md"
     },
     {
       "title": "deleteUpgradePackage",
@@ -813,8 +1097,16 @@
       "content": "delete_vlan_tag_group.md"
     },
     {
+      "title": "deleteVpnCertEnrollmentModel",
+      "content": "delete_vpn_cert_enrollment_model.md"
+    },
+    {
       "title": "deleteVpnEndpoint",
       "content": "delete_vpn_endpoint.md"
+    },
+    {
+      "title": "deleteVrfBFDPolicyModel",
+      "content": "delete_vrf_bfd_policy_model.md"
     },
     {
       "title": "deleteVrfBGPIPvAddressFamilyModel",
@@ -823,6 +1115,10 @@
     {
       "title": "deleteVrfECMPZoneModel",
       "content": "delete_vrf_ecmp_zone_model.md"
+    },
+    {
+      "title": "deleteVrfEigrpPolicyModel",
+      "content": "delete_vrf_eigrp_policy_model.md"
     },
     {
       "title": "deleteVrfIPv4StaticRouteModel",
@@ -953,6 +1249,18 @@
       "content": "get_all_auth_roles.md"
     },
     {
+      "title": "getAllBackupFile",
+      "content": "get_all_backup_file.md"
+    },
+    {
+      "title": "getAllBFDPolicyModel",
+      "content": "get_all_bfd_policy_model.md"
+    },
+    {
+      "title": "getAllBFDTemplate",
+      "content": "get_all_bfd_template.md"
+    },
+    {
       "title": "getAllBGPGeneralSettingModel",
       "content": "get_all_bgp_general_setting_model.md"
     },
@@ -1001,6 +1309,18 @@
       "content": "get_all_device_group.md"
     },
     {
+      "title": "getAllDeviceLicense",
+      "content": "get_all_device_license.md"
+    },
+    {
+      "title": "getAllDeviceSettings",
+      "content": "get_all_device_settings.md"
+    },
+    {
+      "title": "getAllDHCPIPv6Pool",
+      "content": "get_all_dhcpi_pv6_pool.md"
+    },
+    {
       "title": "getAllDNSPolicy",
       "content": "get_all_dns_policy.md"
     },
@@ -1037,6 +1357,10 @@
       "content": "get_all_ecmp_zone_model.md"
     },
     {
+      "title": "getAllEigrpPolicyModel",
+      "content": "get_all_eigrp_policy_model.md"
+    },
+    {
       "title": "getAllEndPointDeviceType",
       "content": "get_all_end_point_device_type.md"
     },
@@ -1067,6 +1391,10 @@
     {
       "title": "getAllFilePolicy",
       "content": "get_all_file_policy.md"
+    },
+    {
+      "title": "getAllFlexConfig",
+      "content": "get_all_flex_config.md"
     },
     {
       "title": "getAllFMCManagedChassis",
@@ -1113,6 +1441,10 @@
       "content": "get_all_ftdha_monitored_interfaces.md"
     },
     {
+      "title": "getAllFTDLoopbackInterface",
+      "content": "get_all_ftd_loopback_interface.md"
+    },
+    {
       "title": "getAllFTDManualNatRule",
       "content": "get_all_ftd_manual_nat_rule.md"
     },
@@ -1129,16 +1461,32 @@
       "content": "get_all_ftd_physical_interface.md"
     },
     {
+      "title": "getAllFTDPlatformSettingsPolicy",
+      "content": "get_all_ftd_platform_settings_policy.md"
+    },
+    {
       "title": "getAllFTDRAVpnAddressAssignmentSetting",
       "content": "get_all_ftdra_vpn_address_assignment_setting.md"
     },
     {
-      "title": "getAllFTDRAVpnCertificateMapSettings",
-      "content": "get_all_ftdra_vpn_certificate_map_settings.md"
-    },
-    {
       "title": "getAllFTDRAVpnConnectionProfileModel",
       "content": "get_all_ftdra_vpn_connection_profile_model.md"
+    },
+    {
+      "title": "getAllFTDRAVpnIPSecCryptoMapModel",
+      "content": "get_all_ftdra_vpn_ip_sec_crypto_map_model.md"
+    },
+    {
+      "title": "getAllFTDRAVpnIPSecIKEv2AdvanceSettingsModel",
+      "content": "get_all_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md"
+    },
+    {
+      "title": "getAllFTDRAVpnLDAPAttributeModel",
+      "content": "get_all_ftdra_vpn_ldap_attribute_model.md"
+    },
+    {
+      "title": "getAllFTDRAVpnLoadBalanceSetting",
+      "content": "get_all_ftdra_vpn_load_balance_setting.md"
     },
     {
       "title": "getAllFTDRAVpnModel",
@@ -1179,6 +1527,10 @@
     {
       "title": "getAllGroupPolicyModel",
       "content": "get_all_group_policy_model.md"
+    },
+    {
+      "title": "getAllHealthPolicy",
+      "content": "get_all_health_policy.md"
     },
     {
       "title": "getAllHostObject",
@@ -1239,6 +1591,14 @@
     {
       "title": "getAllInterfaceObject",
       "content": "get_all_interface_object.md"
+    },
+    {
+      "title": "getAllInternalCA",
+      "content": "get_all_internal_ca.md"
+    },
+    {
+      "title": "getAllInternalCertificate",
+      "content": "get_all_internal_certificate.md"
     },
     {
       "title": "getAllIntrusionPolicy",
@@ -1341,8 +1701,16 @@
       "content": "get_all_packet_tracer_pcap_files.md"
     },
     {
+      "title": "getAllPathMonitoredInterface",
+      "content": "get_all_path_monitored_interface.md"
+    },
+    {
       "title": "getAllPBRPolicyModel",
       "content": "get_all_pbr_policy_model.md"
+    },
+    {
+      "title": "getAllPhysicalInterface",
+      "content": "get_all_physical_interface.md"
     },
     {
       "title": "getAllPolicyAssignment",
@@ -1529,6 +1897,10 @@
       "content": "get_all_syslog_config.md"
     },
     {
+      "title": "getAllTaskStatus",
+      "content": "get_all_task_status.md"
+    },
+    {
       "title": "getAllTimeRange",
       "content": "get_all_time_range.md"
     },
@@ -1539,6 +1911,22 @@
     {
       "title": "getAllTunnelTags",
       "content": "get_all_tunnel_tags.md"
+    },
+    {
+      "title": "getAllUmbrellaConnection",
+      "content": "get_all_umbrella_connection.md"
+    },
+    {
+      "title": "getAllUmbrellaDataCenter",
+      "content": "get_all_umbrella_data_center.md"
+    },
+    {
+      "title": "getAllUmbrellaDNSPolicy",
+      "content": "get_all_umbrella_dns_policy.md"
+    },
+    {
+      "title": "getAllUmbrellaDNSRule",
+      "content": "get_all_umbrella_dns_rule.md"
     },
     {
       "title": "getAllUpgradePackage",
@@ -1597,6 +1985,10 @@
       "content": "get_all_vpn_advanced_settings.md"
     },
     {
+      "title": "getAllVpnCertEnrollmentModel",
+      "content": "get_all_vpn_cert_enrollment_model.md"
+    },
+    {
       "title": "getAllVpnEndpoint",
       "content": "get_all_vpn_endpoint.md"
     },
@@ -1609,8 +2001,8 @@
       "content": "get_all_vpn_ip_sec_settings.md"
     },
     {
-      "title": "getAllVpnPKIEnrollmentModel",
-      "content": "get_all_vpn_pki_enrollment_model.md"
+      "title": "getAllVrfBFDPolicyModel",
+      "content": "get_all_vrf_bfd_policy_model.md"
     },
     {
       "title": "getAllVrfBGPIPvAddressFamilyModel",
@@ -1619,6 +2011,10 @@
     {
       "title": "getAllVrfECMPZoneModel",
       "content": "get_all_vrf_ecmp_zone_model.md"
+    },
+    {
+      "title": "getAllVrfEigrpPolicyModel",
+      "content": "get_all_vrf_eigrp_policy_model.md"
     },
     {
       "title": "getAllVrfIPv4StaticRouteModel",
@@ -1709,6 +2105,18 @@
       "content": "get_audit_model.md"
     },
     {
+      "title": "getBackupFile",
+      "content": "get_backup_file.md"
+    },
+    {
+      "title": "getBFDPolicyModel",
+      "content": "get_bfd_policy_model.md"
+    },
+    {
+      "title": "getBFDTemplate",
+      "content": "get_bfd_template.md"
+    },
+    {
       "title": "getBGPGeneralSettingModel",
       "content": "get_bgp_general_setting_model.md"
     },
@@ -1737,6 +2145,10 @@
       "content": "get_cloud_region.md"
     },
     {
+      "title": "getClusterHealthMonitorSettingsModel",
+      "content": "get_cluster_health_monitor_settings_model.md"
+    },
+    {
       "title": "getCommands",
       "content": "get_commands.md"
     },
@@ -1751,6 +2163,10 @@
     {
       "title": "getCountryObject",
       "content": "get_country_object.md"
+    },
+    {
+      "title": "getCSDACStatus",
+      "content": "get_csdac_status.md"
     },
     {
       "title": "getDefaultAction",
@@ -1773,6 +2189,18 @@
       "content": "get_device_group.md"
     },
     {
+      "title": "getDeviceLicense",
+      "content": "get_device_license.md"
+    },
+    {
+      "title": "getDeviceSettings",
+      "content": "get_device_settings.md"
+    },
+    {
+      "title": "getDHCPIPv6Pool",
+      "content": "get_dhcpi_pv6_pool.md"
+    },
+    {
       "title": "getDNSPolicy",
       "content": "get_dns_policy.md"
     },
@@ -1787,6 +2215,14 @@
     {
       "title": "getDomain",
       "content": "get_domain.md"
+    },
+    {
+      "title": "getDownloadBackup",
+      "content": "get_download_backup.md"
+    },
+    {
+      "title": "getDownloadReport",
+      "content": "get_download_report.md"
     },
     {
       "title": "getDuoConfig",
@@ -1805,12 +2241,24 @@
       "content": "get_dynamic_object_mappings.md"
     },
     {
+      "title": "getEBSSnapshot",
+      "content": "get_ebs_snapshot.md"
+    },
+    {
       "title": "getECMPZoneModel",
       "content": "get_ecmp_zone_model.md"
     },
     {
+      "title": "getEigrpPolicyModel",
+      "content": "get_eigrp_policy_model.md"
+    },
+    {
       "title": "getEndPointDeviceType",
       "content": "get_end_point_device_type.md"
+    },
+    {
+      "title": "getEvaluateChassisOperation",
+      "content": "get_evaluate_chassis_operation.md"
     },
     {
       "title": "getExpandedCommunityList",
@@ -1839,6 +2287,10 @@
     {
       "title": "getFilePolicy",
       "content": "get_file_policy.md"
+    },
+    {
+      "title": "getFlexConfig",
+      "content": "get_flex_config.md"
     },
     {
       "title": "getFMCHAStatus",
@@ -1897,6 +2349,10 @@
       "content": "get_ftdha_monitored_interfaces.md"
     },
     {
+      "title": "getFTDLoopbackInterface",
+      "content": "get_ftd_loopback_interface.md"
+    },
+    {
       "title": "getFTDManualNatRule",
       "content": "get_ftd_manual_nat_rule.md"
     },
@@ -1913,6 +2369,10 @@
       "content": "get_ftd_physical_interface.md"
     },
     {
+      "title": "getFTDPlatformSettingsPolicy",
+      "content": "get_ftd_platform_settings_policy.md"
+    },
+    {
       "title": "getFTDRAVpnAddressAssignmentSetting",
       "content": "get_ftdra_vpn_address_assignment_setting.md"
     },
@@ -1923,6 +2383,22 @@
     {
       "title": "getFTDRAVpnConnectionProfileModel",
       "content": "get_ftdra_vpn_connection_profile_model.md"
+    },
+    {
+      "title": "getFTDRAVpnIPSecCryptoMapModel",
+      "content": "get_ftdra_vpn_ip_sec_crypto_map_model.md"
+    },
+    {
+      "title": "getFTDRAVpnIPSecIKEv2AdvanceSettingsModel",
+      "content": "get_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md"
+    },
+    {
+      "title": "getFTDRAVpnLDAPAttributeModel",
+      "content": "get_ftdra_vpn_ldap_attribute_model.md"
+    },
+    {
+      "title": "getFTDRAVpnLoadBalanceSetting",
+      "content": "get_ftdra_vpn_load_balance_setting.md"
     },
     {
       "title": "getFTDRAVpnModel",
@@ -1957,6 +2433,10 @@
       "content": "get_geo_location_object.md"
     },
     {
+      "title": "getGlobalDeviceSearch",
+      "content": "get_global_device_search.md"
+    },
+    {
       "title": "getGlobalObjectSearch",
       "content": "get_global_object_search.md"
     },
@@ -1987,6 +2467,10 @@
     {
       "title": "getHealthMonitorModel",
       "content": "get_health_monitor_model.md"
+    },
+    {
+      "title": "getHealthPolicy",
+      "content": "get_health_policy.md"
     },
     {
       "title": "getHitCount",
@@ -2063,6 +2547,14 @@
     {
       "title": "getInterfaceObject",
       "content": "get_interface_object.md"
+    },
+    {
+      "title": "getInternalCA",
+      "content": "get_internal_ca.md"
+    },
+    {
+      "title": "getInternalCertificate",
+      "content": "get_internal_certificate.md"
     },
     {
       "title": "getIntrusionPolicy",
@@ -2185,12 +2677,20 @@
       "content": "get_pending_changes.md"
     },
     {
+      "title": "getPhysicalInterface",
+      "content": "get_physical_interface.md"
+    },
+    {
       "title": "getPolicyAssignment",
       "content": "get_policy_assignment.md"
     },
     {
       "title": "getPolicyList",
       "content": "get_policy_list.md"
+    },
+    {
+      "title": "getPolicyLock",
+      "content": "get_policy_lock.md"
     },
     {
       "title": "getPortObject",
@@ -2241,6 +2741,10 @@
       "content": "get_range_override.md"
     },
     {
+      "title": "getRaVpnGateway",
+      "content": "get_ra_vpn_gateway.md"
+    },
+    {
       "title": "getRealm",
       "content": "get_realm.md"
     },
@@ -2283,6 +2787,10 @@
     {
       "title": "getRouteMap",
       "content": "get_route_map.md"
+    },
+    {
+      "title": "getS2SVpnSummaryModel",
+      "content": "get_s2_s_vpn_summary_model.md"
     },
     {
       "title": "getSecurexConfig",
@@ -2331,6 +2839,10 @@
     {
       "title": "getSLAMonitorObjectModel",
       "content": "get_sla_monitor_object_model.md"
+    },
+    {
+      "title": "getSmartLicense",
+      "content": "get_smart_license.md"
     },
     {
       "title": "getSNMPConfig",
@@ -2413,6 +2925,30 @@
       "content": "get_tunnel_tags.md"
     },
     {
+      "title": "getUmbrellaConnection",
+      "content": "get_umbrella_connection.md"
+    },
+    {
+      "title": "getUmbrellaDeploymentData",
+      "content": "get_umbrella_deployment_data.md"
+    },
+    {
+      "title": "getUmbrellaDeploymentTranscript",
+      "content": "get_umbrella_deployment_transcript.md"
+    },
+    {
+      "title": "getUmbrellaDNSPolicy",
+      "content": "get_umbrella_dns_policy.md"
+    },
+    {
+      "title": "getUmbrellaDNSRule",
+      "content": "get_umbrella_dns_rule.md"
+    },
+    {
+      "title": "getUmbrellaProtectionPolicy",
+      "content": "get_umbrella_protection_policy.md"
+    },
+    {
       "title": "getUpgradePackage",
       "content": "get_upgrade_package.md"
     },
@@ -2469,6 +3005,10 @@
       "content": "get_vpn_advanced_settings.md"
     },
     {
+      "title": "getVpnCertEnrollmentModel",
+      "content": "get_vpn_cert_enrollment_model.md"
+    },
+    {
       "title": "getVpnEndpoint",
       "content": "get_vpn_endpoint.md"
     },
@@ -2481,8 +3021,8 @@
       "content": "get_vpn_ip_sec_settings.md"
     },
     {
-      "title": "getVpnPKIEnrollmentModel",
-      "content": "get_vpn_pki_enrollment_model.md"
+      "title": "getVrfBFDPolicyModel",
+      "content": "get_vrf_bfd_policy_model.md"
     },
     {
       "title": "getVrfBGPIPvAddressFamilyModel",
@@ -2491,6 +3031,10 @@
     {
       "title": "getVrfECMPZoneModel",
       "content": "get_vrf_ecmp_zone_model.md"
+    },
+    {
+      "title": "getVrfEigrpPolicyModel",
+      "content": "get_vrf_eigrp_policy_model.md"
     },
     {
       "title": "getVrfIPv4StaticRouteModel",
@@ -2541,12 +3085,36 @@
       "content": "update_access_rule.md"
     },
     {
+      "title": "updateAnyConnectCustomAttributeModel",
+      "content": "update_any_connect_custom_attribute_model.md"
+    },
+    {
+      "title": "updateAnyConnectExternalBrowserPackageModel",
+      "content": "update_any_connect_external_browser_package_model.md"
+    },
+    {
+      "title": "updateAnyConnectPackageModel",
+      "content": "update_any_connect_package_model.md"
+    },
+    {
+      "title": "updateAnyConnectProfileModel",
+      "content": "update_any_connect_profile_model.md"
+    },
+    {
       "title": "updateApplicationFilter",
       "content": "update_application_filter.md"
     },
     {
       "title": "updateAsPathList",
       "content": "update_as_path_list.md"
+    },
+    {
+      "title": "updateBFDPolicyModel",
+      "content": "update_bfd_policy_model.md"
+    },
+    {
+      "title": "updateBFDTemplate",
+      "content": "update_bfd_template.md"
     },
     {
       "title": "updateBGPGeneralSettingModel",
@@ -2557,12 +3125,20 @@
       "content": "update_bgpi_pv_address_family_model.md"
     },
     {
+      "title": "updateCertificateMapModel",
+      "content": "update_certificate_map_model.md"
+    },
+    {
       "title": "updateCloudEvents",
       "content": "update_cloud_events.md"
     },
     {
       "title": "updateCloudRegion",
       "content": "update_cloud_region.md"
+    },
+    {
+      "title": "updateClusterHealthMonitorSettingsModel",
+      "content": "update_cluster_health_monitor_settings_model.md"
     },
     {
       "title": "updateDefaultAction",
@@ -2575,6 +3151,18 @@
     {
       "title": "updateDeviceGroup",
       "content": "update_device_group.md"
+    },
+    {
+      "title": "updateDeviceLicense",
+      "content": "update_device_license.md"
+    },
+    {
+      "title": "updateDeviceSettings",
+      "content": "update_device_settings.md"
+    },
+    {
+      "title": "updateDHCPIPv6Pool",
+      "content": "update_dhcpi_pv6_pool.md"
     },
     {
       "title": "updateDNSServerGroupObject",
@@ -2599,6 +3187,10 @@
     {
       "title": "updateECMPZoneModel",
       "content": "update_ecmp_zone_model.md"
+    },
+    {
+      "title": "updateEigrpPolicyModel",
+      "content": "update_eigrp_policy_model.md"
     },
     {
       "title": "updateExpandedCommunityList",
@@ -2657,6 +3249,10 @@
       "content": "update_ftdha_monitored_interfaces.md"
     },
     {
+      "title": "updateFTDLoopbackInterface",
+      "content": "update_ftd_loopback_interface.md"
+    },
+    {
       "title": "updateFTDManualNatRule",
       "content": "update_ftd_manual_nat_rule.md"
     },
@@ -2667,6 +3263,38 @@
     {
       "title": "updateFTDPhysicalInterface",
       "content": "update_ftd_physical_interface.md"
+    },
+    {
+      "title": "updateFTDRAVpnAddressAssignmentSetting",
+      "content": "update_ftdra_vpn_address_assignment_setting.md"
+    },
+    {
+      "title": "updateFTDRAVpnCertificateMapSettings",
+      "content": "update_ftdra_vpn_certificate_map_settings.md"
+    },
+    {
+      "title": "updateFTDRAVpnConnectionProfileModel",
+      "content": "update_ftdra_vpn_connection_profile_model.md"
+    },
+    {
+      "title": "updateFTDRAVpnIPSecCryptoMapModel",
+      "content": "update_ftdra_vpn_ip_sec_crypto_map_model.md"
+    },
+    {
+      "title": "updateFTDRAVpnIPSecIKEv2AdvanceSettingsModel",
+      "content": "update_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md"
+    },
+    {
+      "title": "updateFTDRAVpnLDAPAttributeModel",
+      "content": "update_ftdra_vpn_ldap_attribute_model.md"
+    },
+    {
+      "title": "updateFTDRAVpnLoadBalanceSetting",
+      "content": "update_ftdra_vpn_load_balance_setting.md"
+    },
+    {
+      "title": "updateFTDRAVpnModel",
+      "content": "update_ftdra_vpn_model.md"
     },
     {
       "title": "updateFTDRedundantInterface",
@@ -2697,12 +3325,20 @@
       "content": "update_geo_location_object.md"
     },
     {
+      "title": "updateGroupPolicyModel",
+      "content": "update_group_policy_model.md"
+    },
+    {
       "title": "updateHitCount",
       "content": "update_hit_count.md"
     },
     {
       "title": "updateHostObject",
       "content": "update_host_object.md"
+    },
+    {
+      "title": "updateHostScanPackageObject",
+      "content": "update_host_scan_package_object.md"
     },
     {
       "title": "updateICMPV4Object",
@@ -2741,8 +3377,20 @@
       "content": "update_interface_group_object.md"
     },
     {
+      "title": "updateInternalCA",
+      "content": "update_internal_ca.md"
+    },
+    {
+      "title": "updateInternalCertificate",
+      "content": "update_internal_certificate.md"
+    },
+    {
       "title": "updateIntrusionPolicy",
       "content": "update_intrusion_policy.md"
+    },
+    {
+      "title": "updateIPv4AddressPool",
+      "content": "update_i_pv4_address_pool.md"
     },
     {
       "title": "updateIPv4PrefixList",
@@ -2751,6 +3399,10 @@
     {
       "title": "updateIPv4StaticRouteModel",
       "content": "update_i_pv4_static_route_model.md"
+    },
+    {
+      "title": "updateIPv6AddressPool",
+      "content": "update_i_pv6_address_pool.md"
     },
     {
       "title": "updateIPv6PrefixList",
@@ -2777,8 +3429,24 @@
       "content": "update_multiple_access_rule.md"
     },
     {
+      "title": "updateMultipleDeviceLicense",
+      "content": "update_multiple_device_license.md"
+    },
+    {
+      "title": "updateMultipleDeviceSettings",
+      "content": "update_multiple_device_settings.md"
+    },
+    {
       "title": "updateMultipleDynamicAttributeFeedConfig",
       "content": "update_multiple_dynamic_attribute_feed_config.md"
+    },
+    {
+      "title": "updateMultipleFTDAutoNatRule",
+      "content": "update_multiple_ftd_auto_nat_rule.md"
+    },
+    {
+      "title": "updateMultipleFTDManualNatRule",
+      "content": "update_multiple_ftd_manual_nat_rule.md"
     },
     {
       "title": "updateMultiplePrefilterRule",
@@ -2817,6 +3485,10 @@
       "content": "update_pbr_policy_model.md"
     },
     {
+      "title": "updatePhysicalInterface",
+      "content": "update_physical_interface.md"
+    },
+    {
       "title": "updatePolicyAssignment",
       "content": "update_policy_assignment.md"
     },
@@ -2847,6 +3519,10 @@
     {
       "title": "updateProtocolPortObject",
       "content": "update_protocol_port_object.md"
+    },
+    {
+      "title": "updateRadiusServerGroupModel",
+      "content": "update_radius_server_group_model.md"
     },
     {
       "title": "updateRangeObject",
@@ -2889,8 +3565,16 @@
       "content": "update_securex_config.md"
     },
     {
+      "title": "updateSecurityGroupTag",
+      "content": "update_security_group_tag.md"
+    },
+    {
       "title": "updateSecurityZoneObject",
       "content": "update_security_zone_object.md"
+    },
+    {
+      "title": "updateSIURLList",
+      "content": "update_siurl_list.md"
     },
     {
       "title": "updateSLAMonitorObjectModel",
@@ -2921,6 +3605,10 @@
       "content": "update_sso_config.md"
     },
     {
+      "title": "updateSSOServer",
+      "content": "update_sso_server.md"
+    },
+    {
       "title": "updateStandardACL",
       "content": "update_standard_acl.md"
     },
@@ -2939,6 +3627,18 @@
     {
       "title": "updateTunnelTags",
       "content": "update_tunnel_tags.md"
+    },
+    {
+      "title": "updateUmbrellaConnection",
+      "content": "update_umbrella_connection.md"
+    },
+    {
+      "title": "updateUmbrellaDNSPolicy",
+      "content": "update_umbrella_dns_policy.md"
+    },
+    {
+      "title": "updateUmbrellaDNSRule",
+      "content": "update_umbrella_dns_rule.md"
     },
     {
       "title": "updateURLGroupObject",
@@ -2969,6 +3669,10 @@
       "content": "update_vpn_advanced_settings.md"
     },
     {
+      "title": "updateVpnCertEnrollmentModel",
+      "content": "update_vpn_cert_enrollment_model.md"
+    },
+    {
       "title": "updateVpnEndpoint",
       "content": "update_vpn_endpoint.md"
     },
@@ -2981,12 +3685,20 @@
       "content": "update_vpn_ip_sec_settings.md"
     },
     {
+      "title": "updateVrfBFDPolicyModel",
+      "content": "update_vrf_bfd_policy_model.md"
+    },
+    {
       "title": "updateVrfBGPIPvAddressFamilyModel",
       "content": "update_vrf_bgpi_pv_address_family_model.md"
     },
     {
       "title": "updateVrfECMPZoneModel",
       "content": "update_vrf_ecmp_zone_model.md"
+    },
+    {
+      "title": "updateVrfEigrpPolicyModel",
+      "content": "update_vrf_eigrp_policy_model.md"
     },
     {
       "title": "updateVrfIPv4StaticRouteModel",

@@ -13,7 +13,7 @@ The createIPv4PrefixList operation handles configuration related to [/api/fmc_co
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -21,7 +21,7 @@ The createIPv4PrefixList operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "createIPv4PrefixList"
     data:
-        name: "IPv4PrefixListTestC"
+        name: IPv4PrefixListTestC
         entries: [{'ipAddress': '11.11.11.11/20', 'sequence': 50, 'maxPrefixLength': 24, 'minPrefixLenth': 22, 'action': 'PERMIT'}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

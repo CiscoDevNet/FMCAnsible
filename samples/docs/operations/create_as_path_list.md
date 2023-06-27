@@ -5,15 +5,15 @@ The createAsPathList operation handles configuration related to [/api/fmc_config
 **Retrieves, deletes, creates, or modifies the AsPath List associated with the specified ID. If no ID is specified, retrieves list of all AsPath Lists. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | ----------- |
-| entries | [{'sequence': 1, 'action': 'PERMIT', 'regularExpression': '-10+50*8'}] | List of regular expression entries that this object holds.|
-| name | 300 |  |
+| Parameter | Value |
+| --------- | -------- |
+| entries | [{'sequence': 1, 'action': 'PERMIT', 'regularExpression': '-10+50*8'}] |
+| name | 300 |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml

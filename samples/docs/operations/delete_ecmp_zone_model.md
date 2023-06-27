@@ -2,7 +2,7 @@
 
 The deleteECMPZoneModel operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/ecmpzones/{objectId}](/paths//api/fmc_config/v1/domain/{domain_uuid}/devices/devicerecords/{container_uuid}/routing/ecmpzones/{object_id}.md) path.&nbsp;
 ## Description
-**Retrieves, deletes, creates, or modifies the ECMP Zone associated with the specified ID. Also, retrieves list of all ECMP Zone.  _Check the response section for applicable examples (if any)._**
+**Retrieves, deletes, creates, or modifies the ECMP Zone associated with the specified ID. Also, retrieves list of all ECMP Zone. _Check the response section for applicable examples (if any)._**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

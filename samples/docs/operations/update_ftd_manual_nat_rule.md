@@ -41,7 +41,8 @@ The updateFTDManualNatRule operation handles configuration related to [/api/fmc_
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is 'before_auto' and 'after_auto'. |
+| partialUpdate | False | boolean <td colspan=3> This field specifies whether to change the entire object or only certain attributes of it. When its value is false the whole object will change, and if the value is true then only the attributes that are specified will change. The default value of this field is false. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is before_auto and after_auto. |
 | targetIndex | False | string <td colspan=3> Creates or modifies manual nat rule at given targetIndex. It takes an integer value. |
 
 ## Example
@@ -59,11 +60,11 @@ The updateFTDManualNatRule operation handles configuration related to [/api/fmc_
         translatedSourcePort: {'type': 'ProtocolPortObject', 'id': 'protocol port object uuid'}
         unidirectional: False
         originalDestination: {'type': 'Network', 'id': 'network object uuid'}
-        id: "manualNatRuleUuid"
+        id: manualNatRuleUuid
         interfaceInOriginalDestination: False
-        type: "FTDManualNatRule"
+        type: FTDManualNatRule
         enabled: True
-        natType: "STATIC"
+        natType: STATIC
         interfaceIpv6: False
         fallThrough: False
         dns: False
@@ -72,12 +73,13 @@ The updateFTDManualNatRule operation handles configuration related to [/api/fmc_
         netToNet: False
         sourceInterface: {'id': 'security zone uuid', 'type': 'SecurityZone'}
         destinationInterface: {'id': 'security zone uuid', 'type': 'SecurityZone'}
-        description: "description of nat rule"
+        description: description of nat rule
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"
     query_params:
+        partialUpdate: "{{ partial_update }}"
         section: "{{ section }}"
         targetIndex: "{{ target_index }}"
 

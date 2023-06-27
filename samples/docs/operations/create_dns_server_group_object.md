@@ -17,7 +17,7 @@ The createDNSServerGroupObject operation handles configuration related to [/api/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -26,9 +26,9 @@ The createDNSServerGroupObject operation handles configuration related to [/api/
     operation: "createDNSServerGroupObject"
     data:
         timeout: 3
-        name: "DNSServerGroupObjectName1"
-        type: "DNSServerGroupObject"
-        defaultdomain: "txcisco.com"
+        name: DNSServerGroupObjectName1
+        type: DNSServerGroupObject
+        defaultdomain: txcisco.com
         dnsservers: [{'name-server': 'IPv4/IPv6hostaddress1'}, {'name-server': 'IPv4/IPv6hostaddress2'}, {'name-server': 'IPv4/IPv6hostaddress3'}, {'name-server': 'IPv4/IPv6hostaddress4'}, {'name-server': 'IPv4/IPv6hostaddress5'}, {'name-server': 'IPv4/IPv6hostaddress6'}]
         retries: 3
     path_params:

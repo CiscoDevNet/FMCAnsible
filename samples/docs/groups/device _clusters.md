@@ -13,6 +13,11 @@
 ### Supported Operations
 * [getAllRestFTDClusterDeviceContainer](../operations/get_all_rest_ftd_cluster_device_container.md)
 * [createRestFTDClusterDeviceContainer](../operations/create_rest_ftd_cluster_device_container.md)
+## /api/fmc_config/v1/domain/{domainUUID}/deviceclusters/ftddevicecluster/{containerUUID}/clusterhealthmonitorsettings/{clusterUuid}
+
+### Supported Operations
+* [getClusterHealthMonitorSettingsModel](../operations/get_cluster_health_monitor_settings_model.md)
+* [updateClusterHealthMonitorSettingsModel](../operations/update_cluster_health_monitor_settings_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/deviceclusters/ftdclusterreadinesscheck
 
 ### Supported Operations
