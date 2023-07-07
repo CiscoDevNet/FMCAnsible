@@ -14,12 +14,12 @@ The createMultiplePortObjectGroup operation handles configuration related to [/a
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for port group objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for port group objects. |
 
 ## Example
 ```yaml
@@ -27,9 +27,9 @@ The createMultiplePortObjectGroup operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "createMultiplePortObjectGroup"
     data:
-        name: "portgroup_obj1"
+        name: portgroup_obj1
         objects: [{'type': 'ICMPV4Object', 'id': 'ICMPV4ObjectUUID'}, {'id': 'ICMPV6ObjectUUID', 'type': 'ICMPV6Object'}, {'id': 'ProtocolPortObjectUUID', 'type': 'ProtocolPortObject'}]
-        type: "PortObjectGroup"
+        type: PortObjectGroup
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

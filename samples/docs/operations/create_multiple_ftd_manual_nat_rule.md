@@ -19,7 +19,7 @@ The createMultipleFTDManualNatRule operation handles configuration related to [/
 | interfaceInOriginalDestination | False |
 | type | FTDManualNatRule |
 | enabled | True |
-| natType | STATIC (DEFAULT), DYNAMIC |
+| natType | STATIC |
 | interfaceIpv6 | False |
 | fallThrough | False |
 | dns | False |
@@ -40,7 +40,7 @@ The createMultipleFTDManualNatRule operation handles configuration related to [/
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | bulk | False | boolean <td colspan=3> Enables bulk actions for Manual NAT rules. |
-| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is 'before_auto' and 'after_auto'. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies manual nat rule in given section. Allowed value is before_auto and after_auto. |
 | targetIndex | False | string <td colspan=3> Creates or modifies manual nat rule at given targetIndex. It takes an integer value. |
 
 ## Example
@@ -59,9 +59,9 @@ The createMultipleFTDManualNatRule operation handles configuration related to [/
         unidirectional: False
         originalDestination: {'type': 'Network', 'id': 'network object uuid'}
         interfaceInOriginalDestination: False
-        type: "FTDManualNatRule"
+        type: FTDManualNatRule
         enabled: True
-        natType: "STATIC"
+        natType: STATIC
         interfaceIpv6: False
         fallThrough: False
         dns: False
@@ -70,7 +70,7 @@ The createMultipleFTDManualNatRule operation handles configuration related to [/
         netToNet: False
         sourceInterface: {'id': 'security zone uuid', 'type': 'SecurityZone'}
         destinationInterface: {'id': 'security zone uuid', 'type': 'SecurityZone'}
-        description: "description of nat rule"
+        description: description of nat rule
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

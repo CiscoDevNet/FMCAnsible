@@ -1,0 +1,43 @@
+# FTDVNIInterface
+
+
+**Type:** object
+
+## Properties
+* metadata
+* pathMonitoring
+* description
+* type
+* externalPort
+* enabled
+* MTU
+* mode
+* fmcAccessConfig
+* arpConfig
+* ipv4
+* ifname
+* ipv6
+* segmentId
+* multicastGroupAddress
+* links
+* id
+* vniId
+* enableSGTPropagate
+* managementOnly
+* macLearn
+* enableAntiSpoofing
+* securityZone
+* internalPort
+* activeMACAddress
+* fragmentReassembly
+* macTable
+* standbyMACAddress
+* enableDNSLookup
+* enableProxy
+* vtepID
+* overrideDefaultFragmentSetting
+* priority
+* externalSegmentId
+* version
+* internalSegmentId
+* name

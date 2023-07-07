@@ -2,18 +2,18 @@
 
 The createPacketTracerPCAPFiles operation handles configuration related to [/api/fmc_troubleshoot/v1/domain/{domainUUID}/packettracer/files](/paths//api/fmc_troubleshoot/v1/domain/{domain_uuid}/packettracer/files.md) path.&nbsp;
 ## Description
-**Creates, deletes, or retrieves PCAP files from FMC. _Check the response section for applicable examples (if any)._**
+**Creates, deletes, or retrieves PCAP files from Firewall Management Center. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | -------- |
-| payloadFile | .pcap or .pcapng file | Select a PCAP file. .pcap and .pcapng are the supported file formats. *required |
-| replaceFile | true or false | Replaces the file on disk if it already exists. By default is set to false. |
+| Parameter | Value |
+| --------- | -------- |
+| payloadFile | .pcap or .pcapng file |
+| replaceFile | true or false |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -21,8 +21,8 @@ The createPacketTracerPCAPFiles operation handles configuration related to [/api
   cisco.fmcansible.fmc_configuration:
     operation: "createPacketTracerPCAPFiles"
     data:
-        payloadFile: ".pcap or .pcapng file"
-        replaceFile: "true or false"
+        payloadFile: .pcap or .pcapng file
+        replaceFile: true or false
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

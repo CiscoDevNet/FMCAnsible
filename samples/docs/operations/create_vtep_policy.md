@@ -14,8 +14,8 @@ The createVTEPPolicy operation handles configuration related to [/api/fmc_config
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -25,7 +25,7 @@ The createVTEPPolicy operation handles configuration related to [/api/fmc_config
     data:
         nveEnable: True
         vtepEntries: [{'sourceInterface': {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interfaceUUID'}, 'nveVtepId': 1, 'nveDestinationPort': 6081, 'nveEncapsulationType': 'GENEVE'}]
-        type: "VTEPPolicy"
+        type: VTEPPolicy
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

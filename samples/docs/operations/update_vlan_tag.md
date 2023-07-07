@@ -28,12 +28,12 @@ The updateVlanTag operation handles configuration related to [/api/fmc_config/v1
     operation: "updateVlanTag"
     data:
         data: {'startTag': 10, 'endTag': 20, 'type': 'VlanTagLiteral'}
-        type: "VlanTag"
+        type: VlanTag
         overridable: True
         overrides: {'parent': {'id': 'vlan1_uuid', 'type': 'VlanTag'}, 'target': {'name': '10.10.16.29', 'id': 'target_uuid', 'type': 'Device'}}
-        description: " "
-        id: "vlan1_uuid"
-        name: "vlan1"
+        description:  
+        id: vlan1_uuid
+        name: vlan1
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

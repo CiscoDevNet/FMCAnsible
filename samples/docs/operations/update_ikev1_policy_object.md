@@ -30,16 +30,16 @@ The updateIkev1PolicyObject operation handles configuration related to [/api/fmc
   cisco.fmcansible.fmc_configuration:
     operation: "updateIkev1PolicyObject"
     data:
-        name: "ikev1policy-test-1"
-        id: "ikev1policyUUID"
+        name: ikev1policy-test-1
+        id: ikev1policyUUID
         priority: 20
         lifetimeInSeconds: 86400
         diffieHellmanGroup: 5
-        authenticationMethod: "Preshared Key"
-        encryption: "AES-128"
-        hash: "SHA"
-        type: "IKEv1Policy"
-        description: "IKEv1 Policy object description"
+        authenticationMethod: Preshared Key
+        encryption: AES-128
+        hash: SHA
+        type: IKEv1Policy
+        description: IKEv1 Policy object description
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

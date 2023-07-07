@@ -42,6 +42,39 @@
 ### Supported Operations
 * [getAllDynamicAttributeFeedConfig](../operations/get_all_dynamic_attribute_feed_config.md)
 * [updateMultipleDynamicAttributeFeedConfig](../operations/update_multiple_dynamic_attribute_feed_config.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrellaconnections/{objectId}
+
+### Supported Operations
+* [getUmbrellaConnection](../operations/get_umbrella_connection.md)
+* [updateUmbrellaConnection](../operations/update_umbrella_connection.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/operational/testumbrellaconnections
+
+### Supported Operations
+* [createTestUmbrellaConnection](../operations/create_test_umbrella_connection.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrella/datacenters
+
+### Supported Operations
+* [getAllUmbrellaDataCenter](../operations/get_all_umbrella_data_center.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrella/tunneldeployments/{objectId}
+
+### Supported Operations
+* [getUmbrellaDeploymentData](../operations/get_umbrella_deployment_data.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrella/tunneldeployments
+
+### Supported Operations
+* [createUmbrellaDeploymentData](../operations/create_umbrella_deployment_data.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrella/tunneldeployments/{containerUUID}/transcripts/{objectId}
+
+### Supported Operations
+* [getUmbrellaDeploymentTranscript](../operations/get_umbrella_deployment_transcript.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/ebssnapshot/{objectId}
+
+### Supported Operations
+* [getEBSSnapshot](../operations/get_ebs_snapshot.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/ebssnapshot
+
+### Supported Operations
+* [createEBSSnapshot](../operations/create_ebs_snapshot.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/integration/externalstorage
 
 ### Supported Operations
@@ -58,3 +91,7 @@
 
 ### Supported Operations
 * [getAllSecurexConfig](../operations/get_all_securex_config.md)
+## /api/fmc_config/v1/domain/{domainUUID}/integration/umbrellaconnections
+
+### Supported Operations
+* [getAllUmbrellaConnection](../operations/get_all_umbrella_connection.md)

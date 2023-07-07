@@ -24,8 +24,8 @@ The createInlineSet operation handles configuration related to [/api/fmc_config/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -33,16 +33,16 @@ The createInlineSet operation handles configuration related to [/api/fmc_config/
   cisco.fmcansible.fmc_configuration:
     operation: "createInlineSet"
     data:
-        name: "Inline_Set_1"
-        type: "InlineSet"
+        name: Inline_Set_1
+        type: InlineSet
         bypass: True
         standBy: True
         failSafe: True
         failopen: True
         macFiltering: False
         inlinepairs: [{'first': {'name': 's1p3', 'type': 'FPPhysicalInterface', 'id': 'FPPhysicalInterfaceUUID3'}, 'second': {'name': 's1p4', 'type': 'FPPhysicalInterface', 'id': 'FPPhysicalInterfaceUUID4'}}]
-        loadBalancingMode: "inner"
-        loadBalancingModeVlan: "inner"
+        loadBalancingMode: inner
+        loadBalancingModeVlan: inner
         mtu: 1518
         propogateLinkState: True
         strictTCPEnforcement: True

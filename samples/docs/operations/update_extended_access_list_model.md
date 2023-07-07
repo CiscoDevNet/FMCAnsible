@@ -23,8 +23,8 @@ The updateExtendedAccessListModel operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "updateExtendedAccessListModel"
     data:
-        id: "extACLObjectUUID"
-        name: "ExtendedAccessListTest"
+        id: extACLObjectUUID
+        name: ExtendedAccessListTest
         entries: [{'logLevel': 'INFORMATIONAL', 'action': 'PERMIT', 'logging': 'DEFAULT', 'logInterval': 300, 'sourceNetworks': {'literals': [{'type': 'Host', 'value': '1.1.1.1'}, {'type': 'Host', 'value': '1.1.1.1/23'}, {'type': 'Network', 'value': 'fe80::abcd/123'}], 'objects': [{'id': '00000000-0000-0ed3-0000-257698037879'}, {'id': 'dde11d62-288b-4b4c-92e0-1dad0496f14b'}]}, 'destinationNetworks': {'objects': [{'id': '00000000-0000-0ed3-0000-270582939747'}, {'id': '192c14f2-39d9-409d-81e9-357793bdf1ec'}]}}]
     path_params:
         objectId: "{{ object_id }}"

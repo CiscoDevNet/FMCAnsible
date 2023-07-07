@@ -27,11 +27,11 @@ The updateKeyChainObject operation handles configuration related to [/api/fmc_co
     operation: "updateKeyChainObject"
     data:
         keys: [{'keyId': 1, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'authAlgorithm': 'md5'}, {'keyId': 2, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DURATION', 'endLifeTimeValue': '234'}, 'authAlgorithm': 'md5'}]
-        type: "KeyChainObject"
-        name: "KeyChainObjectName1"
-        description: "description for keychain object"
+        type: KeyChainObject
+        name: KeyChainObjectName1
+        description: description for keychain object
         overridable: False
-        id: "KeyChainUUID"
+        id: KeyChainUUID
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

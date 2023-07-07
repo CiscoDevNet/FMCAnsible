@@ -14,3 +14,7 @@
 
 ### Supported Operations
 * [getGlobalPolicySearch](../operations/get_global_policy_search.md)
+## /api/fmc_config/v1/domain/{domainUUID}/search/device
+
+### Supported Operations
+* [getGlobalDeviceSearch](../operations/get_global_device_search.md)

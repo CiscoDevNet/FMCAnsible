@@ -14,7 +14,7 @@ The deleteMultipleAccessRule operation handles configuration related to [/api/fm
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | bulk | True | boolean <td colspan=3> This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk rule operations. |
-| filter | True | string <td colspan=3> To be used in conjunction with <code>bulk=true</code> for bulk deletion. Value is of format (including quotes): <code>"ids:id1,id2,..."</code>.<br/><code>ids</code> is a comma-separated list of rule IDs to be deleted. |
+| filter | True | string <td colspan=3> For bulk delete needs the filter="ids:" and with <code>bulk=true</code> flag, Value is of format (including quotes): <code>"ids:id1,id2,..."</code>.<br/><code>ids</code> is a comma-separated list of rule IDs to be deleted. For GetAll Filter criteria can be specified using the format <code>"name:filterName;timeRange:yes/no;action:filterAction;sourceNetworks:filterValue1,filterValue2...."</code>. Supported filter criteria are "name","timeRange","action","sourceNetworks","destinationNetworks","sourcePorts","destinationPorts","sourceZones","destinationZones","applications","sourceDynamicObjects","destinationDynamicObjects","vlanTags","comments","users","urls","intrusionPolicy","sourceSecurityGroupTags","fts". |
 
 ## Example
 ```yaml

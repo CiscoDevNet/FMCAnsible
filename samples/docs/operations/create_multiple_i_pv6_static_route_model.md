@@ -17,13 +17,13 @@ The createMultipleIPv6StaticRouteModel operation handles configuration related t
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for IPv6 static routes. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for IPv6 static routes. |
 
 ## Example
 ```yaml
@@ -31,11 +31,11 @@ The createMultipleIPv6StaticRouteModel operation handles configuration related t
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleIPv6StaticRouteModel"
     data:
-        interfaceName: "InterfaceLogicalName"
+        interfaceName: InterfaceLogicalName
         selectedNetworks: [{'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host1'}]
         gateway: {'object': {'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host2'}}
         metricValue: 22
-        type: "IPv6StaticRoute"
+        type: IPv6StaticRoute
         isTunneled: False
     path_params:
         containerUUID: "{{ container_uuid }}"

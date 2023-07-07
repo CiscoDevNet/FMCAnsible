@@ -23,7 +23,7 @@ The updateAsPathList operation handles configuration related to [/api/fmc_config
   cisco.fmcansible.fmc_configuration:
     operation: "updateAsPathList"
     data:
-        id: "aspathlistObjectUUID"
+        id: aspathlistObjectUUID
         entries: [{'sequence': 1, 'action': 'PERMIT', 'regularExpression': '100/15+10*200'}]
         name: 300
     path_params:

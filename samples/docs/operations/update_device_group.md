@@ -24,9 +24,9 @@ The updateDeviceGroup operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "updateDeviceGroup"
     data:
-        name: "zoom3_upd"
-        type: "DeviceGroup"
-        id: "deviceGroupUUID"
+        name: zoom3_upd
+        type: DeviceGroup
+        id: deviceGroupUUID
         members: [{'id': 'deviceUUID', 'type': 'Device', 'name': 'deviceName'}]
     path_params:
         objectId: "{{ object_id }}"

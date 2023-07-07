@@ -33,15 +33,15 @@ The updateBGPGeneralSettingModel operation handles configuration related to [/ap
   cisco.fmcansible.fmc_configuration:
     operation: "updateBGPGeneralSettingModel"
     data:
-        id: "bgpGeneralSettingsUUID"
-        name: "String"
-        asNumber: "String"
-        logNeighborChanges: "boolean"
-        maxasLimit: "Integer"
-        transportPathMtuDiscovery: "boolean"
-        fastExternalFallOver: "boolean"
-        enforceFirstAs: "boolean"
-        asnotationDot: "boolean"
+        id: bgpGeneralSettingsUUID
+        name: String
+        asNumber: String
+        logNeighborChanges: boolean
+        maxasLimit: Integer
+        transportPathMtuDiscovery: boolean
+        fastExternalFallOver: boolean
+        enforceFirstAs: boolean
+        asnotationDot: boolean
         bgptimers: {'keepAlive': 'Integer', 'holdTime': 'Integer', 'minHoldTime': 'Integer', 'type': 'bgptimers'}
         bgpGracefulRestart: {'gracefulRestart': 'boolean', 'gracefulRestartRestartTime': 'Integer', 'gracefulRestartStalePathTime': 'Integer', 'type': 'bgpgracefulrestart'}
         bestPath: {'defaultLocalPreferenceValue': 'Long', 'alwaysCompareMed': 'boolean', 'bestPathCompareRouterId': 'boolean', 'deterministicMed': 'boolean', 'bestPathMedMissingAsWorst': 'boolean', 'type': 'bgpbestpath'}

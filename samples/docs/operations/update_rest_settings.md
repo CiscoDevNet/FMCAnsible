@@ -23,8 +23,8 @@ The updateRESTSettings operation handles configuration related to [/api/fmc_tid/
   cisco.fmcansible.fmc_configuration:
     operation: "updateRESTSettings"
     data:
-        id: "publish_observables"
-        type: "settings"
+        id: publish_observables
+        type: settings
         settings: {'publish_observables': False}
     path_params:
         objectId: "{{ object_id }}"

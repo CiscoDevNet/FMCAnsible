@@ -13,7 +13,7 @@ The getAllDynamicObject operation handles configuration related to [/api/fmc_con
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | name | False | string <td colspan=3> If parameter is specified, only the Dynamic Objects matching with the specified name will be displayed. Cannot be used if object ID is specified in path. |
-| includeCount | False | string <td colspan=3> If parameter is specified, mappingsCount field will be added into metadata. Can be used if object ID is specified in path. |
+| includeCount | False | boolean <td colspan=3> If parameter is specified, mappingsCount field will be added into metadata. Can be used if object ID is specified in path. |
 | filter | False | string <td colspan=3> Specify filter criteria<ul><li>Object with ids: <code>"ids:id1,id2,..."</code></li><li>Unused objects: <code>"unusedOnly:true"</code></li><li>Name starts with: <code>"nameStartsWith:{name-pattern}"</code></li></ul> |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |

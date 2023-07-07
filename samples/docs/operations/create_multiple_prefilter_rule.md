@@ -7,38 +7,38 @@ The createMultiplePrefilterRule operation handles configuration related to [/api
 ## Data Parameters Example
 | Parameter | Value |
 | --------- | -------- |
-| action | FASTPATH/ANALYZE/BLOCK | Specifies the action to take when the conditions defined by the rule are met |
-| enabled | True | Boolean indicating whether the prefilter rule is in effect (true) or not (false). Default is true. |
-| type | PrefilterRule | Type must be PrefilterRule |
-| name | Rule1 | User-specified name of the prefilter rule. |
-| sendEventsToFMC | False | Boolean indicating whether the device will send events to the Firepower Management Center event viewer. Default is false. |
-| ruleType | PREFILTER (DEFAULT), TUNNEL | Object indicating if the Rule is Prefilter Rule or Tunnel Rule. |
-| bidirectional | False | Boolean indicating whether the rule is bidirectional. |
-| logBegin | False | Boolean indicating whether the device will log events at the beginning of the connection. Default is false. |
-| logEnd | False | Boolean indicating whether the device will log events at the end of the connection. Default is false. |
-| vlanTags | {'objects': [{'type': 'VlanTag', 'name': 'vlan_tag_1', 'id': 'VlanTagUUID1'}, {'type': 'VlanTag', 'name': 'vlan_tag_2', 'id': 'VlanTagUUID2'}]} |   |
-| sourceInterfaces | {'objects': [{'name': 'External', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]} |  |
-| destinationInterfaces | {'objects': [{'name': 'Internal', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]} |  |
-| sourcePorts | {'objects': [{'type': 'ProtocolPortObject', 'name': 'AOL', 'id': 'ProtocolPortObjectUUID'}]} |   |
-| destinationPorts | {'objects': [{'type': 'ProtocolPortObject', 'name': 'Bittorrent', 'id': 'ProtocolPortObjectUUID'}]} |  |
-| sourceNetworks | {'objects': [{'type': 'Host', 'id': 'sourceNetworkObjectUUID', 'name': 'Host1'}]} |  |
-| destinationNetworks | {'objects': [{'type': 'Host', 'id': 'destinationNetworkUUID', 'name': 'Host1'}]} |  |
-| snmpConfig | {'id': 'snmpConfigUuid', 'name': 'snmp_alert1', 'type': 'SNMPAlert'} |  |
-| syslogConfig | {'id': 'syslogConfigUuid', 'name': 'syslog_alert1', 'type': 'SyslogAlert'} |  |
-| newComments | ['comment1', 'comment2'] | Object representing the new comments provided in prefilter rule. |
+| action | FASTPATH/ANALYZE/BLOCK |
+| enabled | True |
+| type | PrefilterRule |
+| name | Rule1 |
+| sendEventsToFMC | False |
+| ruleType | PREFILTER |
+| bidirectional | False |
+| logBegin | False |
+| logEnd | False |
+| vlanTags | {'objects': [{'type': 'VlanTag', 'name': 'vlan_tag_1', 'id': 'VlanTagUUID1'}, {'type': 'VlanTag', 'name': 'vlan_tag_2', 'id': 'VlanTagUUID2'}]} |
+| sourceInterfaces | {'objects': [{'name': 'External', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]} |
+| destinationInterfaces | {'objects': [{'name': 'Internal', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]} |
+| sourcePorts | {'objects': [{'type': 'ProtocolPortObject', 'name': 'AOL', 'id': 'ProtocolPortObjectUUID'}]} |
+| destinationPorts | {'objects': [{'type': 'ProtocolPortObject', 'name': 'Bittorrent', 'id': 'ProtocolPortObjectUUID'}]} |
+| sourceNetworks | {'objects': [{'type': 'Host', 'id': 'sourceNetworkObjectUUID', 'name': 'Host1'}]} |
+| destinationNetworks | {'objects': [{'type': 'Host', 'id': 'destinationNetworkUUID', 'name': 'Host1'}]} |
+| snmpConfig | {'id': 'snmpConfigUuid', 'name': 'snmp_alert1', 'type': 'SNMPAlert'} |
+| syslogConfig | {'id': 'syslogConfigUuid', 'name': 'syslog_alert1', 'type': 'SyslogAlert'} |
+| newComments | ['comment1', 'comment2'] |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk rule operations. |
-| insertAfter | False | string | This parameter specifies that the rules will be inserted after the specified rule index. insertBefore takes precedence over insertAfter - if both are specified, the insertBefore parameter will apply. |
-| insertBefore | False | string | This parameter specifies that the rules will be inserted before the specified rule index. insertBefore takes precedence over insertAfter - if both are specified, the insertBefore parameter will apply. |
+| bulk | False | boolean <td colspan=3> This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk rule operations. |
+| insertAfter | False | number <td colspan=3> This parameter specifies that the rules will be inserted after the specified rule index. insertBefore takes precedence over insertAfter - if both are specified, the insertBefore parameter will apply. |
+| insertBefore | False | number <td colspan=3> This parameter specifies that the rules will be inserted before the specified rule index. insertBefore takes precedence over insertAfter - if both are specified, the insertBefore parameter will apply. |
 
 ## Example
 ```yaml
@@ -46,12 +46,12 @@ The createMultiplePrefilterRule operation handles configuration related to [/api
   cisco.fmcansible.fmc_configuration:
     operation: "createMultiplePrefilterRule"
     data:
-        action: "FASTPATH/ANALYZE/BLOCK"
+        action: FASTPATH/ANALYZE/BLOCK
         enabled: True
-        type: "PrefilterRule"
-        name: "Rule1"
+        type: PrefilterRule
+        name: Rule1
         sendEventsToFMC: False
-        ruleType: "PREFILTER"
+        ruleType: PREFILTER
         bidirectional: False
         logBegin: False
         logEnd: False

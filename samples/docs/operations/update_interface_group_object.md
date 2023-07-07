@@ -25,10 +25,10 @@ The updateInterfaceGroupObject operation handles configuration related to [/api/
   cisco.fmcansible.fmc_configuration:
     operation: "updateInterfaceGroupObject"
     data:
-        type: "InterfaceGroup"
-        name: "InterfaceGroupObject5"
-        id: "Interface-group-UUID-1"
-        interfaceMode: "INLINE"
+        type: InterfaceGroup
+        name: InterfaceGroupObject5
+        id: Interface-group-UUID-1
+        interfaceMode: INLINE
         interfaces: [{'type': 'FPPhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}]
     path_params:
         objectId: "{{ object_id }}"

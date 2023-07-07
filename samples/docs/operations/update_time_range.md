@@ -26,12 +26,12 @@ The updateTimeRange operation handles configuration related to [/api/fmc_config/
   cisco.fmcansible.fmc_configuration:
     operation: "updateTimeRange"
     data:
-        effectiveEndDateTime: "16/08/2018T08:00"
-        name: "test_updated"
-        type: "TimeRange"
-        id: "0050568A-906F-0ed3-0000-343597383765"
+        effectiveEndDateTime: 16/08/2018T08:00
+        name: test_updated
+        type: TimeRange
+        id: 0050568A-906F-0ed3-0000-343597383765
         overridable: False
-        description: "sample description"
+        description: sample description
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -2,7 +2,7 @@
 
 The getAllSIURLList operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/object/siurllists](/paths//api/fmc_config/v1/domain/{domain_uuid}/object/siurllists.md) path.&nbsp;
 ## Description
-**Retrieves the Security Intelligence url list object associated with the specified ID. If no ID is specified, retrieves list of all Security Intelligence url list objects.**
+**Retrieves, creates, deletes or modifies the Security Intelligence URL List object associated with the specified ID. If no ID is specified, retrieves list of all Security Intelligence URL List objects.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

@@ -19,6 +19,23 @@
 
 ### Supported Operations
 * [getChassisInterface](../operations/get_chassis_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{containerUUID}/operational/breakoutinterfaces
+
+### Supported Operations
+* [createBreakoutInterface](../operations/create_breakout_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{containerUUID}/operational/joininterfaces
+
+### Supported Operations
+* [createJoinInterface](../operations/create_join_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{containerUUID}/chassisinterfaces/{interfaceUUID}/evaluateoperation
+
+### Supported Operations
+* [getEvaluateChassisOperation](../operations/get_evaluate_chassis_operation.md)
+## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{containerUUID}/physicalinterfaces/{interfaceUUID}
+
+### Supported Operations
+* [getPhysicalInterface](../operations/get_physical_interface.md)
+* [updatePhysicalInterface](../operations/update_physical_interface.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis
 
 ### Supported Operations
@@ -31,3 +48,7 @@
 
 ### Supported Operations
 * [getAllChassisInterface](../operations/get_all_chassis_interface.md)
+## /api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{containerUUID}/physicalinterfaces
+
+### Supported Operations
+* [getAllPhysicalInterface](../operations/get_all_physical_interface.md)

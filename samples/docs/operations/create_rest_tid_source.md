@@ -26,7 +26,7 @@ The createRESTTidSource operation handles configuration related to [/api/fmc_tid
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -35,16 +35,16 @@ The createRESTTidSource operation handles configuration related to [/api/fmc_tid
     operation: "createRESTTidSource"
     data:
         startHour: 2
-        name: "Sample TAXII Feed"
-        description: "Sample TAXII Feed"
-        feedType: "stix"
-        feedContent: "stix"
-        delivery: "taxii"
-        uri: "http://hailataxii.com/taxii-discovery-service"
-        username: "username"
-        passwd: "password"
+        name: Sample TAXII Feed
+        description: Sample TAXII Feed
+        feedType: stix
+        feedContent: stix
+        delivery: taxii
+        uri: http://hailataxii.com/taxii-discovery-service
+        username: username
+        passwd: password
         refresh: 1440
-        version: "1.0.0"
+        version: 1.0.0
         downloadOn: True
         subscribedCollections: [{'collectionPollIntervalInMinutes': 0, 'collectionName': 'guest.MalwareDomainList_Hostlist', 'collectionDescription': 'guest.MalwareDomainList_Hostlist', 'collectionProtocolBinding': 'urn:taxii.mitre.org:protocol:https:1.0', 'collectionAddress': 'http://hailataxii.com:80/taxii-data', 'collectionMessageBinding': '[urn:taxii.mitre.org:message:xml:1.1]', 'type': 'taxii_collections'}]
         params: {'selfSignedServerCertificate': 'false', 'hostnameVerifier': 'allow_all'}

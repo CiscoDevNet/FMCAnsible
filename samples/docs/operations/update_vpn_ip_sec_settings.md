@@ -19,7 +19,7 @@ The updateVpnIPSecSettings operation handles configuration related to [/api/fmc_
 | doNotFragmentPolicy | NONE |
 | id | 005056A9-302C-0ed3-0000-017179869924 |
 | type | IPSecSettings |
-| links | {'self': 'https://u32c01p12-vrouter.cisco.com:8131/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/ftds2svpns/005056A9-302C-0ed3-0000-017179869721/ipsecsettings/005056A9-302C-0ed3-0000-017179869924'} |
+| links | {'self': 'https://example.cisco.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/ftds2svpns/005056A9-302C-0ed3-0000-017179869721/ipsecsettings/005056A9-302C-0ed3-0000-017179869924'} |
 | ikeV2IpsecProposal | [{'name': 'AES-GCM', 'id': '005056A9-302C-0ed3-0000-000000002010', 'type': 'IKEv2IPsecProposal'}] |
 
 ## Path Parameters
@@ -36,18 +36,18 @@ The updateVpnIPSecSettings operation handles configuration related to [/api/fmc_
     operation: "updateVpnIPSecSettings"
     data:
         tfcPackets: {'enabled': False, 'burstBytes': 0, 'payloadBytes': 0, 'timeoutSeconds': 0}
-        cryptoMapType: "STATIC"
-        ikeV2Mode: "TUNNEL"
+        cryptoMapType: STATIC
+        ikeV2Mode: TUNNEL
         enableSaStrengthEnforcement: False
         enableRRI: True
         lifetimeSeconds: 28800
         lifetimeKilobytes: 4608000
         perfectForwardSecrecy: {'enabled': False}
         validateIncomingIcmpErrorMessage: False
-        doNotFragmentPolicy: "NONE"
-        id: "005056A9-302C-0ed3-0000-017179869924"
-        type: "IPSecSettings"
-        links: {'self': 'https://u32c01p12-vrouter.cisco.com:8131/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/ftds2svpns/005056A9-302C-0ed3-0000-017179869721/ipsecsettings/005056A9-302C-0ed3-0000-017179869924'}
+        doNotFragmentPolicy: NONE
+        id: 005056A9-302C-0ed3-0000-017179869924
+        type: IPSecSettings
+        links: {'self': 'https://example.cisco.com/api/fmc_config/v1/domain/e276abec-e0f2-11e3-8169-6d9ed49b625f/policy/ftds2svpns/005056A9-302C-0ed3-0000-017179869721/ipsecsettings/005056A9-302C-0ed3-0000-017179869924'}
         ikeV2IpsecProposal: [{'name': 'AES-GCM', 'id': '005056A9-302C-0ed3-0000-000000002010', 'type': 'IKEv2IPsecProposal'}]
     path_params:
         objectId: "{{ object_id }}"

@@ -25,11 +25,11 @@ The updateExternalLookup operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateExternalLookup"
     data:
-        name: "change_name"
-        template: "http://www.example.com"
+        name: change_name
+        template: http://www.example.com
         enabled: True
-        type: "ExternalLookup"
-        id: "ExternalLookupUUID"
+        type: ExternalLookup
+        id: ExternalLookupUUID
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

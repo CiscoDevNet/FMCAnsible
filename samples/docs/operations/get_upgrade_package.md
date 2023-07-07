@@ -2,7 +2,7 @@
 
 The getUpgradePackage operation handles configuration related to [/api/fmc_platform/v1/updates/upgradepackages/{objectId}](/paths//api/fmc_platform/v1/updates/upgradepackages/{object_id}.md) path.&nbsp;
 ## Description
-**API operation for listing upgrade packages.**
+**GET: Retrieves the upgrade packages associated with the specified ID.If no ID is specified, retrieves list of all upgrade packages.DELETE: Deletes the upgrade package associated with the specified ID.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

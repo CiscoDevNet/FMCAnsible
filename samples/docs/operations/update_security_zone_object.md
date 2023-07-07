@@ -25,10 +25,10 @@ The updateSecurityZoneObject operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateSecurityZoneObject"
     data:
-        type: "SecurityZone"
-        name: "SecurityZoneObject5"
-        id: "Sec-zone-UUID-1"
-        interfaceMode: "INLINE"
+        type: SecurityZone
+        name: SecurityZoneObject5
+        id: Sec-zone-UUID-1
+        interfaceMode: INLINE
         interfaces: [{'type': 'FPPhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}]
     path_params:
         objectId: "{{ object_id }}"
