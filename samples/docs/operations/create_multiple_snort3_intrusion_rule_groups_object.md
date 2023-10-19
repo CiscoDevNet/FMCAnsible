@@ -5,21 +5,21 @@ The createMultipleSnort3IntrusionRuleGroupsObject operation handles configuratio
 **Retrieves, deletes, creates, or modifies Snort 3 intrusion rulegroup associated with the specified ID. If no ID is specified for a GET, retrieves list of all Snort 3 intrusion group objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | -------- |
-| description | Custom Intrusion Rule group1 | Description of the Snort 3 intrusion rulegroup. |
-| name | Custom RuleGroup 1 | Name of the Snort 3 intrusion rulegroup. |
-| type | IntrusionRuleGroup | Type of the response object. This value is always IntrusionRuleGroup. |
+| Parameter | Value |
+| --------- | -------- |
+| description | Custom Intrusion Rule group1 |
+| name | Custom RuleGroup 1 |
+| type | IntrusionRuleGroup |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk Snort 3 rulegroup operations. |
+| bulk | False | boolean <td colspan=3> This parameter specifies that bulk operation is being used in the query. This parameter is required for bulk Snort 3 rulegroup operations. |
 
 ## Example
 ```yaml
@@ -27,9 +27,9 @@ The createMultipleSnort3IntrusionRuleGroupsObject operation handles configuratio
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleSnort3IntrusionRuleGroupsObject"
     data:
-        description: "Custom Intrusion Rule group1"
-        name: "Custom RuleGroup 1"
-        type: "IntrusionRuleGroup"
+        description: Custom Intrusion Rule group1
+        name: Custom RuleGroup 1
+        type: IntrusionRuleGroup
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

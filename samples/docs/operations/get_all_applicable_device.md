@@ -2,7 +2,7 @@
 
 The getAllApplicableDevice operation handles configuration related to [/api/fmc_platform/v1/updates/upgradepackages/{containerUUID}/applicabledevices](/paths//api/fmc_platform/v1/updates/upgradepackages/{container_uuid}/applicabledevices.md) path.&nbsp;
 ## Description
-**Devices available for a particular upgrade package.**
+**Retrieves the devices available for a particular upgrade package associated with the specified ID.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

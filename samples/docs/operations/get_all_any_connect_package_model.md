@@ -2,7 +2,7 @@
 
 The getAllAnyConnectPackageModel operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/object/anyconnectpackages](/paths//api/fmc_config/v1/domain/{domain_uuid}/object/anyconnectpackages.md) path.&nbsp;
 ## Description
-**Retrieves the AnyConnect Package associated with the specified ID. If no ID is specified for a GET, retrieves list of all AnyConnect Package objects.**
+**Retrieves, update, deletes or creates the AnyConnect Package associated with the specified ID. If no ID is specified for a GET, retrieves list of all AnyConnect Package objects.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

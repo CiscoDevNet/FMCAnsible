@@ -24,9 +24,9 @@ The updateAccessPolicyCategory operation handles configuration related to [/api/
   cisco.fmcansible.fmc_configuration:
     operation: "updateAccessPolicyCategory"
     data:
-        id: "id_of_category"
-        type: "Category"
-        name: "Category0001"
+        id: id_of_category
+        type: Category
+        name: Category0001
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

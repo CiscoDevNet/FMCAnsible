@@ -38,18 +38,23 @@ The updateAccessRule operation handles configuration related to [/api/fmc_config
 | containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
 | domainUUID | True | string <td colspan=3> Domain UUID |
 
+## Query Parameters
+| Parameter | Required | Type | Description |
+| --------- | -------- | ---- | ----------- |
+| partialUpdate | False | boolean <td colspan=3> This field specifies whether to change the entire object or only certain attributes of it. When its value is false the whole object will change, and if the value is true then only the attributes that are specified will change. The default value of this field is false. |
+
 ## Example
 ```yaml
 - name: Execute 'updateAccessRule' operation
   cisco.fmcansible.fmc_configuration:
     operation: "updateAccessRule"
     data:
-        action: "ALLOW"
+        action: ALLOW
         enabled: False
-        type: "AccessRule"
-        name: "Rule2"
+        type: AccessRule
+        name: Rule2
         sendEventsToFMC: False
-        id: "accessRuleUUID1"
+        id: accessRuleUUID1
         vlanTags: {'objects': [{'type': 'VlanTag', 'name': 'vlan_tag_1', 'id': 'VlanTagUUID1'}, {'type': 'VlanTag', 'name': 'vlan_tag_2', 'id': 'VlanTagUUID2'}]}
         urls: {'urlCategoriesWithReputation': [{'type': 'UrlCategoryAndReputation', 'category': {'name': 'Weapons', 'id': 'URLCategoryUUID', 'type': 'URLCategory'}, 'reputation': 'BENIGN_SITES_WITH_SECURITY_RISKS'}]}
         sourceZones: {'objects': [{'name': 'External', 'id': 'SecurityZoneUUID', 'type': 'SecurityZone'}]}
@@ -71,5 +76,7 @@ The updateAccessRule operation handles configuration related to [/api/fmc_config
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"
+    query_params:
+        partialUpdate: "{{ partial_update }}"
 
 ```

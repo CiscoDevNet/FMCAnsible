@@ -24,7 +24,7 @@ The updateSnort3IntrusionRuleGroups operation handles configuration related to [
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| removeRuleOverrides | False | string <td colspan=3> Boolean value for removing the rule overrides when excluding a rulegroup from a policy. |
+| removeRuleOverrides | False | boolean <td colspan=3> Boolean value for removing the rule overrides when excluding a rulegroup from a policy. |
 
 ## Example
 ```yaml
@@ -32,12 +32,12 @@ The updateSnort3IntrusionRuleGroups operation handles configuration related to [
   cisco.fmcansible.fmc_configuration:
     operation: "updateSnort3IntrusionRuleGroups"
     data:
-        name: "Group1"
-        id: "bb79c3d4-904e-569e-80ba-ad50a8f24a67"
-        type: "IntrusionRuleGroup"
-        defaultSecurityLevel: "DISABLED"
-        description: "A description about Group1 goes here."
-        overrideSecurityLevel: "LEVEL_1"
+        name: Group1
+        id: bb79c3d4-904e-569e-80ba-ad50a8f24a67
+        type: IntrusionRuleGroup
+        defaultSecurityLevel: DISABLED
+        description: A description about Group1 goes here.
+        overrideSecurityLevel: LEVEL_1
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

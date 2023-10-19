@@ -5,22 +5,22 @@ The createMultipleTimeZoneObject operation handles configuration related to [/ap
 **Retrieves, deletes, creates and modifies the Time Zone Object. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | -------- |
-| timeZoneId | Asia/Calcutta | Unique identifier of the global time zone from the IANA time zone (tz) database. |
-| dstDayRecurrence | {'startMonth': 'JAN', 'startWeek': 'FIRST', 'startDayOfWeek': 'MON', 'startTime': '11:00', 'offset': 20, 'endWeek': 'SECOND', 'endMonth': 'FEB', 'endDayOfWeek': 'TUE', 'endTime': '11:01'} | Object fragment to configure the daylight saving by day recurrence. |
-| type | TimeZoneObject | Type of the response object. This value is always TimeZoneObject. |
-| name | TestPOSTObject | User assigned resource name. |
+| Parameter | Value |
+| --------- | -------- |
+| timeZoneId | Asia/Calcutta |
+| dstDayRecurrence | {'startMonth': 'JAN', 'startWeek': 'FIRST', 'startDayOfWeek': 'MON', 'startTime': '11:00', 'offset': 20, 'endWeek': 'SECOND', 'endMonth': 'FEB', 'endDayOfWeek': 'TUE', 'endTime': '11:01'} |
+| type | TimeZoneObject |
+| name | TestPOSTObject |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for Time Zone objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for Time Zone objects. |
 
 ## Example
 ```yaml
@@ -28,10 +28,10 @@ The createMultipleTimeZoneObject operation handles configuration related to [/ap
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleTimeZoneObject"
     data:
-        timeZoneId: "Asia/Calcutta"
+        timeZoneId: Asia/Calcutta
         dstDayRecurrence: {'startMonth': 'JAN', 'startWeek': 'FIRST', 'startDayOfWeek': 'MON', 'startTime': '11:00', 'offset': 20, 'endWeek': 'SECOND', 'endMonth': 'FEB', 'endDayOfWeek': 'TUE', 'endTime': '11:01'}
-        type: "TimeZoneObject"
-        name: "TestPOSTObject"
+        type: TimeZoneObject
+        name: TestPOSTObject
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

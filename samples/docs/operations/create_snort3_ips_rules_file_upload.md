@@ -15,7 +15,7 @@ The createSnort3IPSRulesFileUpload operation handles configuration related to [/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -23,10 +23,10 @@ The createSnort3IPSRulesFileUpload operation handles configuration related to [/
   cisco.fmcansible.fmc_configuration:
     operation: "createSnort3IPSRulesFileUpload"
     data:
-        payloadFile: ".rules or .txt format Snort3 rule file"
-        ruleGroups: "group-id1,group-id2,group-id3"
-        validateOnly: "TRUE or FALSE"
-        ruleImportMode: "ENUM (MERGE, REPLACE)"
+        payloadFile: .rules or .txt format Snort3 rule file
+        ruleGroups: group-id1,group-id2,group-id3
+        validateOnly: TRUE or FALSE
+        ruleImportMode: ENUM (MERGE, REPLACE)
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

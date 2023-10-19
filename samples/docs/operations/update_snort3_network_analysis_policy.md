@@ -29,9 +29,9 @@ The updateSnort3NetworkAnalysisPolicy operation handles configuration related to
   cisco.fmcansible.fmc_configuration:
     operation: "updateSnort3NetworkAnalysisPolicy"
     data:
-        id: "networkAnalysisPolicyUUID"
-        name: "test1_updated"
-        type: "NetworkAnalysisPolicy"
+        id: networkAnalysisPolicyUUID
+        name: test1_updated
+        type: NetworkAnalysisPolicy
         inlineDrop: 1
     path_params:
         objectId: "{{ object_id }}"

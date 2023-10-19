@@ -7,13 +7,13 @@ The createInterfaceEvent operation handles configuration related to [/api/fmc_co
 ## Data Parameters Example
 | Parameter | Value |
 | --------- | -------- |
-| action | SYNC_WITH_DEVICE (DEFAULT), ACCEPT_CHANGES |
+| action | SYNC_WITH_DEVICE |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -21,7 +21,7 @@ The createInterfaceEvent operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "createInterfaceEvent"
     data:
-        action: "SYNC_WITH_DEVICE"
+        action: SYNC_WITH_DEVICE
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

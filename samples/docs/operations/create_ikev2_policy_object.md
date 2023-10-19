@@ -20,7 +20,7 @@ The createIkev2PolicyObject operation handles configuration related to [/api/fmc
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -29,14 +29,14 @@ The createIkev2PolicyObject operation handles configuration related to [/api/fmc
     operation: "createIkev2PolicyObject"
     data:
         priority: 12
-        type: "Ikev2Policy"
+        type: Ikev2Policy
         lifetimeInSeconds: 86400
         encryptionAlgorithms: ['AES-GCM', 'AES-GCM-192', 'AES-GCM-256']
         integrityAlgorithms: ['NULL']
         prfIntegrityAlgorithms: ['SHA', 'SHA-256', 'SHA-384', 'SHA-512']
         diffieHellmanGroups: [5, 14, 19, 20, 21]
-        name: "api_ike33"
-        description: " "
+        name: api_ike33
+        description:  
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

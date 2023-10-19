@@ -7,7 +7,7 @@ The createDynamicAccessPolicy operation handles configuration related to [/api/f
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml

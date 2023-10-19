@@ -25,11 +25,11 @@ The updateSecurexConfig operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updateSecurexConfig"
     data:
-        id: "securexConfigUUID"
-        type: "SecurexConfig"
+        id: securexConfigUUID
+        type: SecurexConfig
         enabled: True
-        clientId: ""
-        clientPassword: "*********"
+        clientId: 
+        clientPassword: *********
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -9,18 +9,18 @@ The createMultipleInterfaceGroupObject operation handles configuration related t
 | --------- | -------- |
 | type | InterfaceGroup |
 | name | InterfaceGroupObject5 |
-| interfaceMode | INLINE (DEFAULT), PASSIVE, SWITCHED, ROUTED |
+| interfaceMode | INLINE |
 | interfaces | [{'type': 'PhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}, {'type': 'PhysicalInterface', 'id': 'Intf-UUID-2', 'name': 'eth2'}] |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for interface group objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for interface group objects. |
 
 ## Example
 ```yaml
@@ -28,9 +28,9 @@ The createMultipleInterfaceGroupObject operation handles configuration related t
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleInterfaceGroupObject"
     data:
-        type: "InterfaceGroup"
-        name: "InterfaceGroupObject5"
-        interfaceMode: "INLINE"
+        type: InterfaceGroup
+        name: InterfaceGroupObject5
+        interfaceMode: INLINE
         interfaces: [{'type': 'PhysicalInterface', 'id': 'Intf-UUID-1', 'name': 'eth1'}, {'type': 'PhysicalInterface', 'id': 'Intf-UUID-2', 'name': 'eth2'}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

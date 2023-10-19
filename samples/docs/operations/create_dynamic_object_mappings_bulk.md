@@ -13,12 +13,12 @@ The createDynamicObjectMappingsBulk operation handles configuration related to [
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| propagate | False | string | Control propagating dynamic object mappings. It can be ["true", "false"]. Default value is "true". |
+| propagate | False | string <td colspan=3> Control propagating dynamic object mappings. It can be ["true", "false"]. Default value is "true". |
 
 ## Example
 ```yaml

@@ -10,6 +10,18 @@ The updateFTDVTIInterface operation handles configuration related to [/api/fmc_c
 | type | VTIInterface |
 | name | Tunnel5 |
 | tunnelSource | {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'} |
+| tunnelType | STATIC |
+| tunnelId | 5 |
+| enabled | True |
+| ifname | tunnel-5 |
+| securityZone | {'id': '<security-zone-uuid>', 'type': 'SecurityZone', 'links': {'self': 'http://.....'}} |
+| borrowIPfrom | {'name': 'Loopback5', 'type': 'LoopbackInterface', 'id': 'loopback interface UUID'} |
+| ipsecMode | ipv4 |
+| id | 00000000-0000-0ed3-0000-206158430258 |
+| type | VTIInterface |
+| name | Tunnel5 |
+| tunnelSource | {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'} |
+| tunnelType | STATIC |
 | tunnelId | 5 |
 | enabled | True |
 | ifname | tunnel-5 |
@@ -31,16 +43,28 @@ The updateFTDVTIInterface operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "updateFTDVTIInterface"
     data:
-        type: "VTIInterface"
-        name: "Tunnel5"
+        type: VTIInterface
+        name: Tunnel5
         tunnelSource: {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'}
+        tunnelType: STATIC
         tunnelId: 5
         enabled: True
-        ifname: "tunnel-5"
+        ifname: tunnel-5
+        securityZone: {'id': '<security-zone-uuid>', 'type': 'SecurityZone', 'links': {'self': 'http://.....'}}
+        borrowIPfrom: {'name': 'Loopback5', 'type': 'LoopbackInterface', 'id': 'loopback interface UUID'}
+        ipsecMode: ipv4
+        id: 00000000-0000-0ed3-0000-206158430258
+        type: VTIInterface
+        name: Tunnel5
+        tunnelSource: {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'}
+        tunnelType: STATIC
+        tunnelId: 5
+        enabled: True
+        ifname: tunnel-5
         securityZone: {'id': '<security-zone-uuid>', 'type': 'SecurityZone', 'links': {'self': 'http://.....'}}
         ipv4: {'static': {'address': '2.2.2.2', 'netmask': '255.255.255.0'}}
-        ipsecMode: "ipv4"
-        id: "00000000-0000-0ed3-0000-206158430258"
+        ipsecMode: ipv4
+        id: 00000000-0000-0ed3-0000-206158430258
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

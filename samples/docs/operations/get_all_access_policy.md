@@ -13,6 +13,7 @@ The getAllAccessPolicy operation handles configuration related to [/api/fmc_conf
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | name | False | string <td colspan=3> If parameter is specified, only the policy matching with the specified name will be displayed. Cannot be used if object ID is specified in path. |
+| filter | False | string <td colspan=3> Value is of format (including quotes): <code>"locked:{true|false}"</code><br/><code>locked</code>query parameter when set to 'true' returns list of Access Policies which are locked and when set to 'false' returns policies which are unlocked. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |
@@ -26,6 +27,7 @@ The getAllAccessPolicy operation handles configuration related to [/api/fmc_conf
         domainUUID: "{{ domain_uuid }}"
     query_params:
         name: "{{ name }}"
+        filter: "{{ filter }}"
         offset: "{{ offset }}"
         limit: "{{ limit }}"
         expanded: "{{ expanded }}"

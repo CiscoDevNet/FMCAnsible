@@ -17,17 +17,21 @@ The createFTDVNIInterface operation handles configuration related to [/api/fmc_c
 | ifname | vni1 |
 | name | VNI30 |
 | enableProxy | False |
+| internalSegmentId | 8080 |
+| externalSegmentId | 8081 |
+| internalPort | 8082 |
+| externalPort | 8083 |
 | overrideDefaultFragmentSetting | {'size': 200, 'chain': 24, 'timeout': 5} |
 | arpConfig | [{'ipAddress': '101.101.101.101/25', 'macAddress': '03DC.1234.2323', 'enableAlias': False}] |
 | securityZone | {'id': 'sec_zone_id', 'type': 'SecurityZone'} |
 | ipv4 | {'static': {'address': '1.2.3.4', 'netmask': '25'}} |
-| ipv6 | {'enableIPV6': True, 'enforceEUI64': False, 'linkLocalAddress': 'FE80::', 'enableAutoConfig': True, 'enableDHCPAddrConfig': True, 'enableDHCPNonAddrConfig': False, 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0, 'enableRA': False, 'raLifeTime': 1800, 'raInterval': 200, 'addresses': [{'address': '2001::', 'prefix': '124', 'enforceEUI64': False}, {'address': '8080::', 'prefix': '12', 'enforceEUI64': True}], 'prefixes': [{'address': '2001::/124', 'default': False, 'advertisement': {'offlink': False, 'autoConfig': False, 'preferLifeTime': {'duration': {'preferLifeTime': 604800, 'validLifeTime': 2592300}, 'expirationLifeTime': {'preferDateTime': '2016-11-05T08:15:30-05:00', 'validDateTime': '2016-12-05T08:15:30-05:00'}}}}]} |
+| ipv6 | {'enableIPV6': True, 'enforceEUI64': False, 'linkLocalAddress': 'FE80::', 'enableAutoConfig': True, 'enableDHCPAddrConfig': True, 'enableDHCPNonAddrConfig': False, 'enableIPV6DadLoopbackDetect': True, 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0, 'enableRA': False, 'raLifeTime': 1800, 'raInterval': 200, 'addresses': [{'address': '2001::', 'prefix': '124', 'enforceEUI64': False}, {'address': '8080::', 'prefix': '12', 'enforceEUI64': True}], 'prefixes': [{'address': '2001::/124', 'default': False, 'advertisement': {'offlink': False, 'autoConfig': False, 'preferLifeTime': {'duration': {'preferLifeTime': 604800, 'validLifeTime': 2592300}, 'expirationLifeTime': {'preferDateTime': '2016-11-05T08:15:30-05:00', 'validDateTime': '2016-12-05T08:15:30-05:00'}}}}]} |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -35,21 +39,25 @@ The createFTDVNIInterface operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "createFTDVNIInterface"
     data:
-        type: "VNIInterface"
+        type: VNIInterface
         vniId: 5
-        multicastGroupAddress: "224.0.0.24"
+        multicastGroupAddress: 224.0.0.24
         segmentId: 501
         vtepID: 1
         enabled: True
         enableAntiSpoofing: True
-        ifname: "vni1"
-        name: "VNI30"
+        ifname: vni1
+        name: VNI30
         enableProxy: False
+        internalSegmentId: 8080
+        externalSegmentId: 8081
+        internalPort: 8082
+        externalPort: 8083
         overrideDefaultFragmentSetting: {'size': 200, 'chain': 24, 'timeout': 5}
         arpConfig: [{'ipAddress': '101.101.101.101/25', 'macAddress': '03DC.1234.2323', 'enableAlias': False}]
         securityZone: {'id': 'sec_zone_id', 'type': 'SecurityZone'}
         ipv4: {'static': {'address': '1.2.3.4', 'netmask': '25'}}
-        ipv6: {'enableIPV6': True, 'enforceEUI64': False, 'linkLocalAddress': 'FE80::', 'enableAutoConfig': True, 'enableDHCPAddrConfig': True, 'enableDHCPNonAddrConfig': False, 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0, 'enableRA': False, 'raLifeTime': 1800, 'raInterval': 200, 'addresses': [{'address': '2001::', 'prefix': '124', 'enforceEUI64': False}, {'address': '8080::', 'prefix': '12', 'enforceEUI64': True}], 'prefixes': [{'address': '2001::/124', 'default': False, 'advertisement': {'offlink': False, 'autoConfig': False, 'preferLifeTime': {'duration': {'preferLifeTime': 604800, 'validLifeTime': 2592300}, 'expirationLifeTime': {'preferDateTime': '2016-11-05T08:15:30-05:00', 'validDateTime': '2016-12-05T08:15:30-05:00'}}}}]}
+        ipv6: {'enableIPV6': True, 'enforceEUI64': False, 'linkLocalAddress': 'FE80::', 'enableAutoConfig': True, 'enableDHCPAddrConfig': True, 'enableDHCPNonAddrConfig': False, 'enableIPV6DadLoopbackDetect': True, 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0, 'enableRA': False, 'raLifeTime': 1800, 'raInterval': 200, 'addresses': [{'address': '2001::', 'prefix': '124', 'enforceEUI64': False}, {'address': '8080::', 'prefix': '12', 'enforceEUI64': True}], 'prefixes': [{'address': '2001::/124', 'default': False, 'advertisement': {'offlink': False, 'autoConfig': False, 'preferLifeTime': {'duration': {'preferLifeTime': 604800, 'validLifeTime': 2592300}, 'expirationLifeTime': {'preferDateTime': '2016-11-05T08:15:30-05:00', 'validDateTime': '2016-12-05T08:15:30-05:00'}}}}]}
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

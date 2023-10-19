@@ -10,8 +10,7 @@ The createMultipleFTDAutoNatRule operation handles configuration related to [/ap
 | originalNetwork | {'type': 'Network', 'id': 'Network object uuid'} |
 | translatedNetwork | {'type': 'Network', 'id': 'Network object uuid'} |
 | type | FTDAutoNatRule |
-| natType | STATIC (DEFAULT), DYNAMIC |
-| serviceProtocol | TCP (DEFAULT), UDP |
+| natType | STATIC |
 | interfaceIpv6 | False |
 | fallThrough | False |
 | dns | False |
@@ -24,14 +23,14 @@ The createMultipleFTDAutoNatRule operation handles configuration related to [/ap
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk actions for Auto NAT rules. |
-| section | False | string | Retrieves, creates or modifies auto nat rule in given section. Allowed value is 'auto'. |
+| bulk | False | boolean <td colspan=3> Enables bulk actions for Auto NAT rules. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies auto nat rule in given section. Allowed value is auto. |
 
 ## Example
 ```yaml
@@ -41,8 +40,8 @@ The createMultipleFTDAutoNatRule operation handles configuration related to [/ap
     data:
         originalNetwork: {'type': 'Network', 'id': 'Network object uuid'}
         translatedNetwork: {'type': 'Network', 'id': 'Network object uuid'}
-        type: "FTDAutoNatRule"
-        natType: "STATIC"
+        type: FTDAutoNatRule
+        natType: STATIC
         interfaceIpv6: False
         fallThrough: False
         dns: False

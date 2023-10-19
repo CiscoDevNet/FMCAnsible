@@ -12,7 +12,7 @@ The getAllNetmapHost operation handles configuration related to [/api/fmc_netmap
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| filter | False | string <td colspan=3> Filters for retrieve and delete operations. Values can be: <code>ipAddress:192.168.1.2</code> |
+| filter | False | string <td colspan=3> Filters for retrieve and delete operations. Values can be: <code>ipAddress:{192.168.1.2|'::ffff:c0a8:0102'}</code> |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |

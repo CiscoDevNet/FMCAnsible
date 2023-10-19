@@ -32,15 +32,15 @@ The updateRESTObservable operation handles configuration related to [/api/fmc_ti
     operation: "updateRESTObservable"
     data:
         inheritedProperty: {'publish': True, 'expirationTime': 1493929252, 'allowlist': False, 'action': 'monitor', 'ttl': 90}
-        observableType: "IPV_4_ADDR"
+        observableType: IPV_4_ADDR
         effectiveProperty: {'publish': True, 'expirationTime': 1493929252, 'allowlist': False, 'action': 'monitor', 'ttl': 90}
         indicatorCount: 1
         updatedAt: 1486153252
-        value: "ipAddressValue"
-        id: "observableUUID"
-        type: "observable"
-        name: "Observable name 2"
-        version: "1.0.0"
+        value: ipAddressValue
+        id: observableUUID
+        type: observable
+        name: Observable name 2
+        version: 1.0.0
         customProperty: {'allowlist': True}
     path_params:
         objectId: "{{ object_id }}"

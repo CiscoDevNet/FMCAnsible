@@ -13,7 +13,7 @@ The getDynamicObject operation handles configuration related to [/api/fmc_config
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| includeCount | False | string <td colspan=3> If parameter is specified, mappingsCount field will be added into metadata. Can be used if object ID is specified in path. |
+| includeCount | False | boolean <td colspan=3> If parameter is specified, mappingsCount field will be added into metadata. Can be used if object ID is specified in path. |
 
 ## Example
 ```yaml

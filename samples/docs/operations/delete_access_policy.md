@@ -13,7 +13,7 @@ The deleteAccessPolicy operation handles configuration related to [/api/fmc_conf
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| ignoreWarning | False | string <td colspan=3> Shows any warnings when deleting an access policy, if set to false. If not specified, value is set to true and warnings are ignored. Allowed values are 'true' and 'false'. |
+| ignoreWarning | False | boolean <td colspan=3> Shows any warnings when deleting an access policy, if set to false. If not specified, value is set to true and warnings are ignored. Allowed values are true and false. |
 
 ## Example
 ```yaml

@@ -13,7 +13,7 @@ The getPendingChanges operation handles configuration related to [/api/fmc_confi
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| filter | False | string <td colspan=3> The filter criteria for which the details have to be fetched - Only works when "expanded" is set to "true". Examples: ParentEntityTypes:AccessPolicy, EntityUUID:0050568C-35A0-0ed3-0000-004294969351.To fetch the historical data pass the left and right job UUID. Example LeftJobUUID:4b9fe31c-34cc-11ea-8b36-8eb5492fc3a5;RightJobUUID:4b9fe31c-34cc-11ea-8b36-8eb5492fc3a3.For filter based on User add a filter using key word UserList.Example: UserList : user1,user2.  |
+| filter | False | string <td colspan=3> The filter criteria for which the details have to be fetched - Only works when "expanded" is set to "true". Examples: ParentEntityTypes:AccessPolicy, EntityUUID:0050568C-35A0-0ed3-0000-004294969351.To fetch the historical data pass the left and right job UUID. Example LeftJobUUID:4b9fe31c-34cc-11ea-8b36-8eb5492fc3a5;RightJobUUID:4b9fe31c-34cc-11ea-8b36-8eb5492fc3a3.For filter based on User add a filter using key word UserList.Example: UserList : user1,user2. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |

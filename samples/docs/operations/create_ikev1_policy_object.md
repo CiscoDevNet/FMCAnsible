@@ -20,7 +20,7 @@ The createIkev1PolicyObject operation handles configuration related to [/api/fmc
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -28,15 +28,15 @@ The createIkev1PolicyObject operation handles configuration related to [/api/fmc
   cisco.fmcansible.fmc_configuration:
     operation: "createIkev1PolicyObject"
     data:
-        name: "ikev1policy-test-1"
+        name: ikev1policy-test-1
         priority: 20
         lifetimeInSeconds: 86400
         diffieHellmanGroup: 5
-        authenticationMethod: "Preshared Key"
-        encryption: "AES-128"
-        hash: "SHA"
-        type: "IKEv1Policy"
-        description: "IKEv1 Policy object description"
+        authenticationMethod: Preshared Key
+        encryption: AES-128
+        hash: SHA
+        type: IKEv1Policy
+        description: IKEv1 Policy object description
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

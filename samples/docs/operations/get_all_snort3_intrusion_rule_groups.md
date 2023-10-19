@@ -13,7 +13,7 @@ The getAllSnort3IntrusionRuleGroups operation handles configuration related to [
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| includeCount | False | string <td colspan=3> Boolean value if the count of rules should be calculated in the response. |
+| includeCount | False | boolean <td colspan=3> Boolean value if the count of rules should be calculated in the response. |
 | filter | False | string <td colspan=3> Value can be any of the formats (including quotes): <code>"name:Browser/Firefox"</code> or <code>"currentSecurityLevel:DISABLED"</code> or <code>"showonlyparents:{true/false}"</code> or <code>"isSystemDefined:{true/false}"</code> or <code>"includeCount:true"</code>. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |

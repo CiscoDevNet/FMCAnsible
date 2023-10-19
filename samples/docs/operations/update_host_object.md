@@ -26,12 +26,12 @@ The updateHostObject operation handles configuration related to [/api/fmc_config
   cisco.fmcansible.fmc_configuration:
     operation: "updateHostObject"
     data:
-        type: "Host"
-        value: "10.5.3.28"
+        type: Host
+        value: 10.5.3.28
         overridable: False
-        description: "Test Description"
-        id: "hostObject3UUID"
-        name: "TestHost"
+        description: Test Description
+        id: hostObject3UUID
+        name: TestHost
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

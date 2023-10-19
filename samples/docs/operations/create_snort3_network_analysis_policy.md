@@ -15,7 +15,7 @@ The createSnort3NetworkAnalysisPolicy operation handles configuration related to
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -23,8 +23,8 @@ The createSnort3NetworkAnalysisPolicy operation handles configuration related to
   cisco.fmcansible.fmc_configuration:
     operation: "createSnort3NetworkAnalysisPolicy"
     data:
-        name: "test1"
-        type: "NetworkAnalysisPolicy"
+        name: test1
+        type: NetworkAnalysisPolicy
         inlineDrop: 0
         basePolicy: {'id': 'networkAnalysisPolicyUUID', 'type': 'NetworkAnalysisPolicy'}
     path_params:

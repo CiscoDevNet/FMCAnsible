@@ -8,20 +8,22 @@ The createFTDEtherChannelInterface operation handles configuration related to [/
 | Parameter | Value |
 | --------- | -------- |
 | type | EtherChannelInterface |
-| mode | NONE(DEFAULT), INLINE, PASSIVE, TAP, ERSPAN, SWITCHPORT |
-| lacpMode | ACTIVE(DEFAULT), PASSIVE, ON|
-| lacpRate | DEFAULT(DEFAULT), NORMAL, FAST |
+| mode | NONE |
+| lacpMode | ACTIVE |
+| lacpRate | DEFAULT |
 | maxActivePhysicalInterface | 8 |
 | minActivePhysicalInterface | 1 |
 | selectedInterfaces | [{'type': 'PhysicalInterface', 'name': 'GigabitEthernet0/0', 'id': 'interface UUID'}] |
-| hardware | {'duplex': 'FULL', 'speed': 'THOUSAND', 'autoNegState': True} |
+| hardware | {'duplex': 'FULL', 'speed': 'THOUSAND', 'autoNegState': True, 'flowControlSend': 'OFF'} |
 | LLDP | {'transmit': False, 'receive': False} |
-| loadBalancing | SRC_IP_PORT(DEFAULT), DST_IP, DST_IP_PORT, DST_PORT, DST_MAC, SRC_IP, SRC_IP_PORT, SRC_PORT, SRC_MAC, SRC_DST_IP, SRC_DST_IP_PORT, SRC_DST_PORT, SRC_DST_MAC, VLAN_DST_IP, VLAN_DST_IP_PORT, VLAN_SRC_IP, VLAN_SRC_IP_PORT, VLAN_SRC_DST_IP, VLAN_SRC_DST_IP_PORT, VLAN_ONLY |
+| loadBalancing | SRC_IP_PORT |
 | etherChannelId | 1 |
 | enabled | True |
 | MTU | 1500 |
 | priority | 10 |
+| pathMonitoring | {'enable': True, 'type': 'PEER_IPV4 | PEER_IPV6 | AUTO | AUTO4 | AUTO6', 'monitoredIp': 'string'} |
 | managementOnly | False |
+| nveOnly | False |
 | securityZone | {'id': 'securityZoneUUID', 'type': 'SecurityZone'} |
 | ifname | NewEthChannel |
 | enableAntiSpoofing | False |
@@ -33,8 +35,8 @@ The createFTDEtherChannelInterface operation handles configuration related to [/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -42,23 +44,25 @@ The createFTDEtherChannelInterface operation handles configuration related to [/
   cisco.fmcansible.fmc_configuration:
     operation: "createFTDEtherChannelInterface"
     data:
-        type: "EtherChannelInterface"
-        mode: "NONE"
-        lacpMode: "ACTIVE"
-        lacpRate: "DEFAULT"
+        type: EtherChannelInterface
+        mode: NONE
+        lacpMode: ACTIVE
+        lacpRate: DEFAULT
         maxActivePhysicalInterface: 8
         minActivePhysicalInterface: 1
         selectedInterfaces: [{'type': 'PhysicalInterface', 'name': 'GigabitEthernet0/0', 'id': 'interface UUID'}]
-        hardware: {'duplex': 'FULL', 'speed': 'THOUSAND', 'autoNegState': True}
+        hardware: {'duplex': 'FULL', 'speed': 'THOUSAND', 'autoNegState': True, 'flowControlSend': 'OFF'}
         LLDP: {'transmit': False, 'receive': False}
-        loadBalancing: "SRC_IP_PORT"
+        loadBalancing: SRC_IP_PORT
         etherChannelId: 1
         enabled: True
         MTU: 1500
         priority: 10
+        pathMonitoring: {'enable': True, 'type': 'PEER_IPV4 | PEER_IPV6 | AUTO | AUTO4 | AUTO6', 'monitoredIp': 'string'}
         managementOnly: False
+        nveOnly: False
         securityZone: {'id': 'securityZoneUUID', 'type': 'SecurityZone'}
-        ifname: "NewEthChannel"
+        ifname: NewEthChannel
         enableAntiSpoofing: False
         enableSGTPropagate: True
         overrideDefaultFragmentSetting: {}

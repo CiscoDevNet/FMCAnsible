@@ -13,8 +13,8 @@ The getIntrusionPolicy operation handles configuration related to [/api/fmc_conf
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| includeCount | False | string <td colspan=3> Boolean value if the count of rules should be calculated in the response. |
-| ruleFilter | False | string <td colspan=3> [DEV ERROR: Missing description] |
+| includeCount | False | boolean <td colspan=3> Boolean value if the count of rules should be calculated in the response. |
+| ruleFilter | False | string <td colspan=3> Query Param to return rule counts based on the filter. Value is of format <code>fts:browser</code>. |
 
 ## Example
 ```yaml

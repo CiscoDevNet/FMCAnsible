@@ -48,17 +48,17 @@ The updateRESTTidSource operation handles configuration related to [/api/fmc_tid
   cisco.fmcansible.fmc_configuration:
     operation: "updateRESTTidSource"
     data:
-        uri: "http://somehost/feeds/domain.txt"
+        uri: http://somehost/feeds/domain.txt
         params: {'selfSignedServerCertificate': 'false', 'hostnameVerifier': 'allow_all'}
         nextRun: 1499922000
         consumedUnsupportedObservables: 0
-        checksum: "6A330EFFD42314B74C030C0038BAB3352F70CC5344D6CE24774BD04EFDEDB7BD"
+        checksum: 6A330EFFD42314B74C030C0038BAB3352F70CC5344D6CE24774BD04EFDEDB7BD
         lastRun: 1499836832
         totalUnsupportedObservables: 0
         totalInvalidObservables: 0
         downloadOn: True
         runNow: False
-        feedStatus: "parsing"
+        feedStatus: parsing
         consumedIndicators: 0
         totalIndicators: 0
         discardedIndicators: 0
@@ -66,16 +66,16 @@ The updateRESTTidSource operation handles configuration related to [/api/fmc_tid
         totalObservables: 0
         invalidObservables: 0
         consumedObservables: 501
-        feedType: "flatfile"
-        feedContent: "DomainNameObjectType"
-        delivery: "url"
+        feedType: flatfile
+        feedContent: DomainNameObjectType
+        delivery: url
         refresh: 1440
         property: {'ttl': '80', 'publish': True, 'action': 'block'}
-        id: "sourceUUID"
-        type: "source"
-        name: "Test URL Source"
-        description: "Test URL Source"
-        caCert: ""
+        id: sourceUUID
+        type: source
+        name: Test URL Source
+        description: Test URL Source
+        caCert: 
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

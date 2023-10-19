@@ -9,6 +9,7 @@ The createMultipleFTDVTIInterface operation handles configuration related to [/a
 | --------- | -------- |
 | type | VTIInterface |
 | tunnelSource | {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'} |
+| tunnelType | STATIC |
 | tunnelId | 5 |
 | enabled | True |
 | ifname | tunnel-5 |
@@ -20,13 +21,13 @@ The createMultipleFTDVTIInterface operation handles configuration related to [/a
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for NGFW vti interfaces. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for NGFW vti interfaces. |
 
 ## Example
 ```yaml
@@ -34,15 +35,16 @@ The createMultipleFTDVTIInterface operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleFTDVTIInterface"
     data:
-        type: "VTIInterface"
+        type: VTIInterface
         tunnelSource: {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interface UUID'}
+        tunnelType: STATIC
         tunnelId: 5
         enabled: True
-        ifname: "tunnel-5"
+        ifname: tunnel-5
         securityZone: {'id': '<security-zone-uuid>', 'type': 'SecurityZone', 'links': {'self': 'http://.....'}}
         ipv4: {'static': {'address': '169.254.100.1', 'netmask': '255.255.255.252'}}
-        ipsecMode: "ipv4"
-        id: "00000000-0000-0ed3-0000-206158430258"
+        ipsecMode: ipv4
+        id: 00000000-0000-0ed3-0000-206158430258
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

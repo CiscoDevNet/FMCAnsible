@@ -19,8 +19,8 @@ The createVirtualSwitch operation handles configuration related to [/api/fmc_con
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -28,8 +28,8 @@ The createVirtualSwitch operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "createVirtualSwitch"
     data:
-        name: "virtual_switch_3"
-        type: "VirtualSwitch"
+        name: virtual_switch_3
+        type: VirtualSwitch
         domainId: 4
         dropBPDU: False
         enableSpanningTreeProtocol: True

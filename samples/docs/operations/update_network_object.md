@@ -26,12 +26,12 @@ The updateNetworkObject operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updateNetworkObject"
     data:
-        type: "Network"
-        value: "1.2.3.0/24"
+        type: Network
+        value: 1.2.3.0/24
         overridable: False
-        description: "Test Description"
-        id: "networkObjectUUID"
-        name: "network_obj_name"
+        description: Test Description
+        id: networkObjectUUID
+        name: network_obj_name
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

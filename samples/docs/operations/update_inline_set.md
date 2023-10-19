@@ -35,17 +35,17 @@ The updateInlineSet operation handles configuration related to [/api/fmc_config/
   cisco.fmcansible.fmc_configuration:
     operation: "updateInlineSet"
     data:
-        name: "Default Inline Set"
-        id: "inlinesetUUID"
-        type: "InlineSet"
+        name: Default Inline Set
+        id: inlinesetUUID
+        type: InlineSet
         bypass: True
         standBy: True
         failSafe: True
         failopen: True
         macFiltering: False
         inlinepairs: [{'first': {'name': 's1p1', 'type': 'FPPhysicalInterface', 'id': 'FPPhysicalInterfaceUUID1'}, 'second': {'name': 's1p2', 'type': 'FPPhysicalInterface', 'id': 'FPPhysicalInterfaceUUID2'}}]
-        loadBalancingMode: "inner"
-        loadBalancingModeVlan: "inner"
+        loadBalancingMode: inner
+        loadBalancingModeVlan: inner
         mtu: 1518
         propogateLinkState: True
         strictTCPEnforcement: True

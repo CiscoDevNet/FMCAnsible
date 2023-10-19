@@ -30,9 +30,9 @@ The updateVirtualSwitch operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updateVirtualSwitch"
     data:
-        name: "virtual_switch_2"
-        id: "virtualswitchUUID2"
-        type: "VirtualSwitch"
+        name: virtual_switch_2
+        id: virtualswitchUUID2
+        type: VirtualSwitch
         domainId: 3
         dropBPDU: True
         enableSpanningTreeProtocol: False

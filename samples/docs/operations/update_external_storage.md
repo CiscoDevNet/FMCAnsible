@@ -17,8 +17,8 @@ The updateExternalStorage operation handles configuration related to [/api/fmc_c
 | remoteQueryCert | Remote Query Cert |
 | uiHost | example.com |
 | uiPort | 443 |
-| logHost | 10.20.30.40 |
-| logPort | 8514 |
+| logHosts | [{'logHost': '10.20.30.40', 'logPort': 8514, 'logId': 'logHostUUID'}] |
+| deviceMap | {'deviceUUID': 'logHostUUID'} |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
@@ -32,18 +32,18 @@ The updateExternalStorage operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "updateExternalStorage"
     data:
-        id: "externalStorageUUID"
-        type: "ExternalStorage"
+        id: externalStorageUUID
+        type: ExternalStorage
         crossLaunchEnabled: True
         doNotStoreConnectionEvents: False
         isLinaLoggingEnabled: False
-        remoteQueryHost: "example.com"
+        remoteQueryHost: example.com
         remoteQueryPort: 443
-        remoteQueryCert: "Remote Query Cert"
-        uiHost: "example.com"
+        remoteQueryCert: Remote Query Cert
+        uiHost: example.com
         uiPort: 443
-        logHost: "10.20.30.40"
-        logPort: 8514
+        logHosts: [{'logHost': '10.20.30.40', 'logPort': 8514, 'logId': 'logHostUUID'}]
+        deviceMap: {'deviceUUID': 'logHostUUID'}
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -13,7 +13,7 @@ The deleteMultipleNetmapHost operation handles configuration related to [/api/fm
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | bulk | True | boolean <td colspan=3> Enables bulk create or delete. <br>This field must be true in order to delete with a filter rather than an identifier. |
-| filter | True | string <td colspan=3> Filters for retrieve and delete operations. Values can be: <code>ipAddress:192.168.1.2</code> |
+| filter | True | string <td colspan=3> Filters for retrieve and delete operations. Values can be: <code>ipAddress:{192.168.1.2|'::ffff:c0a8:0102'}</code> |
 
 ## Example
 ```yaml

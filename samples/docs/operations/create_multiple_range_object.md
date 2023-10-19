@@ -5,22 +5,22 @@ The createMultipleRangeObject operation handles configuration related to [/api/f
 **Retrieves, deletes, creates, or modifies the address range object associated with the specified ID. If no ID is specified for a GET, retrieves list of all address range objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | -------- |
-| name | TestRange2 | User chosen resource name |
-| value | 10.4.30.40-10.4.30.50 | Actual value of range. |
-| type | Range | The unique type of this object |
-| description | Test Description |  |
+| Parameter | Value |
+| --------- | -------- |
+| name | TestRange2 |
+| value | 10.4.30.40-10.4.30.50 |
+| type | Range |
+| description | Test Description |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for range objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for range objects. |
 
 ## Example
 ```yaml
@@ -28,10 +28,10 @@ The createMultipleRangeObject operation handles configuration related to [/api/f
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleRangeObject"
     data:
-        name: "TestRange2"
-        value: "10.4.30.40-10.4.30.50"
-        type: "Range"
-        description: "Test Description"
+        name: TestRange2
+        value: 10.4.30.40-10.4.30.50
+        type: Range
+        description: Test Description
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

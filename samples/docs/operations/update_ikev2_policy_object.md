@@ -30,16 +30,16 @@ The updateIkev2PolicyObject operation handles configuration related to [/api/fmc
   cisco.fmcansible.fmc_configuration:
     operation: "updateIkev2PolicyObject"
     data:
-        id: "005056A9-5C7D-0ed3-0000-081604379285"
+        id: 005056A9-5C7D-0ed3-0000-081604379285
         priority: 12
-        type: "Ikev2Policy"
+        type: Ikev2Policy
         lifetimeInSeconds: 86400
         encryptionAlgorithms: ['AES-GCM', 'AES-GCM-192', 'AES-GCM-256']
         integrityAlgorithms: ['NULL']
         prfIntegrityAlgorithms: ['SHA', 'SHA-256', 'SHA-384', 'SHA-512']
         diffieHellmanGroups: [5, 14, 19, 20, 21]
-        name: "api_ike22"
-        description: " "
+        name: api_ike22
+        description:  
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

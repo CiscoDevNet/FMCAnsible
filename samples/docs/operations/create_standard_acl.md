@@ -5,15 +5,15 @@ The createStandardACL operation handles configuration related to [/api/fmc_confi
 **Retrieves, deletes, creates, or modifies the Standard Access List associated with the specified ID. If no ID is specified, retrieves list of all Standard Access List. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | ----------- |
-| name | StandardAccessListTest | The unique name for the Standard Access Control List object. |
-| entries | [{'action': 'PERMIT', 'networks': {'literals': [{'type': 'Host', 'value': '1.1.1.1'}], 'objects': [{'id': '00000000-0000-0ed3-0000-270582939747'}]}}] | List of networks entries that this object holds. Indicate the redistribution access: PERMIT or DENY.
+| Parameter | Value |
+| --------- | -------- |
+| name | StandardAccessListTest |
+| entries | [{'action': 'PERMIT', 'networks': {'literals': [{'type': 'Host', 'value': '1.1.1.1'}], 'objects': [{'id': '00000000-0000-0ed3-0000-270582939747'}]}}] |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -21,7 +21,7 @@ The createStandardACL operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "createStandardACL"
     data:
-        name: "StandardAccessListTest"
+        name: StandardAccessListTest
         entries: [{'action': 'PERMIT', 'networks': {'literals': [{'type': 'Host', 'value': '1.1.1.1'}], 'objects': [{'id': '00000000-0000-0ed3-0000-270582939747'}]}}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

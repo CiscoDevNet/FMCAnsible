@@ -23,8 +23,8 @@ The updateIPv6PrefixList operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateIPv6PrefixList"
     data:
-        name: "IPv6PrefixListTestC"
-        id: "ipv6prefixlistsObjectUUID"
+        name: IPv6PrefixListTestC
+        id: ipv6prefixlistsObjectUUID
         entries: [{'ipAddress': 'fe83::/10', 'sequence': 35, 'maxPrefixLength': 15, 'minPrefixLenth': 14, 'action': 'PERMIT'}]
     path_params:
         objectId: "{{ object_id }}"

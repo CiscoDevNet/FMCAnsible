@@ -25,9 +25,9 @@ The updateURLGroupObject operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateURLGroupObject"
     data:
-        id: "UrlGroupUUID1"
-        name: "urlgroup_obj1_updated"
-        type: "UrlGroup"
+        id: UrlGroupUUID1
+        name: urlgroup_obj1_updated
+        type: UrlGroup
         objects: [{'type': 'Url', 'id': 'UrlObjectUUID'}]
         literals: [{'type': 'Url', 'url': 'www.google.com'}]
     path_params:

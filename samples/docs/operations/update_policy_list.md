@@ -38,12 +38,12 @@ The updatePolicyList operation handles configuration related to [/api/fmc_config
         tag: 2211
         matchCommunityExactly: False
         metric: 111
-        name: "GlobalPL123"
-        action: "PERMIT"
+        name: GlobalPL123
+        action: PERMIT
         overridable: False
-        description: " "
-        type: "PolicyList"
-        id: "policylist-UUID"
+        description:  
+        type: PolicyList
+        id: policylist-UUID
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

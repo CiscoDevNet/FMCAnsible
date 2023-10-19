@@ -13,7 +13,7 @@ The createIPv6PrefixList operation handles configuration related to [/api/fmc_co
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -21,7 +21,7 @@ The createIPv6PrefixList operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "createIPv6PrefixList"
     data:
-        name: "IPv6PrefixListTestC"
+        name: IPv6PrefixListTestC
         entries: [{'ipAddress': 'fe83::abcd/50', 'sequence': 130, 'maxPrefixLength': 70, 'minPrefixLenth': 60, 'action': 'PERMIT'}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

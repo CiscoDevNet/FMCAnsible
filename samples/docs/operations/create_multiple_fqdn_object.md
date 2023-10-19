@@ -10,18 +10,18 @@ The createMultipleFQDNObject operation handles configuration related to [/api/fm
 | name | TestFQDN |
 | type | FQDN |
 | value | downloads.cisco.com |
-| dnsResolution | IPV4_ONLY (DEFAULT), IPV6_ONLY, IPV4_AND_IPV6 |
+| dnsResolution | IPV4_ONLY |
 | description | Test Description |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for FQDN objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for FQDN objects. |
 
 ## Example
 ```yaml
@@ -29,11 +29,11 @@ The createMultipleFQDNObject operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleFQDNObject"
     data:
-        name: "TestFQDN"
-        type: "FQDN"
-        value: "downloads.cisco.com"
-        dnsResolution: "IPV4_ONLY"
-        description: "Test Description"
+        name: TestFQDN
+        type: FQDN
+        value: downloads.cisco.com
+        dnsResolution: IPV4_ONLY
+        description: Test Description
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

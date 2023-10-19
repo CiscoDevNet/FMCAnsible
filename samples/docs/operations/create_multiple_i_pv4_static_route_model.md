@@ -18,13 +18,13 @@ The createMultipleIPv4StaticRouteModel operation handles configuration related t
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for IPv4 static routes. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for IPv4 static routes. |
 
 ## Example
 ```yaml
@@ -32,12 +32,12 @@ The createMultipleIPv4StaticRouteModel operation handles configuration related t
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleIPv4StaticRouteModel"
     data:
-        interfaceName: "InterfaceLogicalName"
+        interfaceName: InterfaceLogicalName
         selectedNetworks: [{'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host1'}]
         gateway: {'object': {'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host2'}}
         routeTracking: {'type': 'SLAMonitor', 'name': 'sla1', 'id': 'sla_monitor_id'}
         metricValue: 22
-        type: "IPv4StaticRoute"
+        type: IPv4StaticRoute
         isTunneled: False
     path_params:
         containerUUID: "{{ container_uuid }}"

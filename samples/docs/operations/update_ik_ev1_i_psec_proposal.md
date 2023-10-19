@@ -25,11 +25,11 @@ The updateIKEv1IPsecProposal operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateIKEv1IPsecProposal"
     data:
-        name: "ikev1ipsecproposal-test-1"
-        id: "ikev1ipsecproposalUUID"
-        espEncryption: "DES"
-        espHash: "NONE"
-        description: "IKEv1 IPsec object description"
+        name: ikev1ipsecproposal-test-1
+        id: ikev1ipsecproposalUUID
+        espEncryption: DES
+        espHash: NONE
+        description: IKEv1 IPsec object description
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

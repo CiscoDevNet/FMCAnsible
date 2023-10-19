@@ -2,7 +2,7 @@
 
 The getTunnelSummary operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/health/tunnelsummaries](/paths//api/fmc_config/v1/domain/{domain_uuid}/health/tunnelsummaries.md) path.&nbsp;
 ## Description
-**Retrieves aggregated summary of tunnel status for S2S VPN on all managed FTDs.**
+**Retrieves aggregated summary of tunnel status for S2S VPN on all managed Firewall Threat Defenses.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

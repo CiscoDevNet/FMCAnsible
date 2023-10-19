@@ -34,13 +34,13 @@ The updateSnort3IPSRules operation handles configuration related to [/api/fmc_co
         sid: 37062
         gid: 1
         revision: 2
-        msg: ""APP-DETECT 12P DNS request attempt""
-        ruleData: "alert udp $HOME_NET any -> any 53 ( msg:"APP-DETECT 12P DNS request attempt"; flow:to_server; byte_test:1,!&,0xF8,2; content:"|03|b32|03|i2p|00|",fast_pattern,nocase; metadata:policy max-detect-ips drop; service:dns; reference:url,geti2p.net; classtype:misc-activity; sid:37062; rev:2; )"
-        isSystemDefined: "false | true"
+        msg: "APP-DETECT 12P DNS request attempt"
+        ruleData: alert udp $HOME_NET any -> any 53 ( msg:"APP-DETECT 12P DNS request attempt"; flow:to_server; byte_test:1,!&,0xF8,2; content:"|03|b32|03|i2p|00|",fast_pattern,nocase; metadata:policy max-detect-ips drop; service:dns; reference:url,geti2p.net; classtype:misc-activity; sid:37062; rev:2; )
+        isSystemDefined: false | true
         ruleAction: [{'defaultState': 'BLOCK', 'overrideState': 'ALERT', 'policy': {'name': 'Maximum Detection', 'id': 'ccbf50d8-b908-5a56-b1a8-099773b904f2', 'type': 'IntrusionPolicy', 'inlineDrop': 0}}, {'defaultState': 'DISABLE', 'overrideState': 'BLOCK', 'policy': {'name': 'Balanced Security and Connectivity', 'id': '6c5fd197-7d58-51cc-b048-40f5a7442f4b', 'type': 'IntrusionPolicy', 'inlineDrop': 0}}, {'defaultState': 'DISABLE', 'overrideState': 'ALERT', 'policy': {'name': 'Connectivity Over Security', 'id': 'e90b3402-1dde-58b8-956e-0ba3e73b9c0a', 'type': 'IntrusionPolicy', 'inlineDrop': 0}}, {'defaultState': 'DISABLE', 'overrideState': 'DISABLE', 'policy': {'name': 'No Rules Active', 'id': '402cd584-98f0-544e-b628-0c4b40903189', 'type': 'IntrusionPolicy', 'inlineDrop': 0}}, {'defaultState': 'DISABLE', 'overrideState': 'BLOCK', 'policy': {'name': 'Security Over Connectivity', 'id': 'eb508df4-58a2-59c3-a610-500d9a9e4423', 'type': 'IntrusionPolicy', 'inlineDrop': 0}}]
-        name: " "
-        description: ""APP-DETECT 12P DNS request attempt""
-        id: "Snort3IPSRules-UUID-1"
+        name:  
+        description: "APP-DETECT 12P DNS request attempt"
+        id: Snort3IPSRules-UUID-1
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

@@ -13,8 +13,10 @@ The updateFTDPhysicalInterface operation handles configuration related to [/api/
 | name | Ethernet1/16 |
 | id | PhyIntfId |
 | mode | NONE |
-| hardware | {'speed': 'TWENTY_FIVE_THOUSAND', 'duplex': 'FULL', 'autoNegState': True, 'fecMode': 'CL108RS'} |
+| hardware | {'speed': 'TWENTY_FIVE_THOUSAND', 'duplex': 'FULL', 'autoNegState': True, 'fecMode': 'CL108RS', 'flowControlSend': 'OFF'} |
+| LLDP | {'transmit': False, 'receive': False} |
 | managementOnly | False |
+| nveOnly | False |
 | enableSGTPropagate | False |
 | ipv6 | {'enableIPV6': False} |
 
@@ -31,14 +33,16 @@ The updateFTDPhysicalInterface operation handles configuration related to [/api/
   cisco.fmcansible.fmc_configuration:
     operation: "updateFTDPhysicalInterface"
     data:
-        type: "PhysicalInterface"
+        type: PhysicalInterface
         enabled: False
         MTU: 1500
-        name: "Ethernet1/16"
-        id: "PhyIntfId"
-        mode: "NONE"
-        hardware: {'speed': 'TWENTY_FIVE_THOUSAND', 'duplex': 'FULL', 'autoNegState': True, 'fecMode': 'CL108RS'}
+        name: Ethernet1/16
+        id: PhyIntfId
+        mode: NONE
+        hardware: {'speed': 'TWENTY_FIVE_THOUSAND', 'duplex': 'FULL', 'autoNegState': True, 'fecMode': 'CL108RS', 'flowControlSend': 'OFF'}
+        LLDP: {'transmit': False, 'receive': False}
         managementOnly: False
+        nveOnly: False
         enableSGTPropagate: False
         ipv6: {'enableIPV6': False}
     path_params:

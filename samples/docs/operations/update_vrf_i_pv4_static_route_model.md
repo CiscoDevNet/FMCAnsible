@@ -30,14 +30,14 @@ The updateVrfIPv4StaticRouteModel operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "updateVrfIPv4StaticRouteModel"
     data:
-        interfaceName: "InterfaceLogicalName"
+        interfaceName: InterfaceLogicalName
         selectedNetworks: [{'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host1'}]
         gateway: {'object': {'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host2'}}
         routeTracking: {'type': 'SLAMonitor', 'name': 'sla1', 'id': 'sla_monitor_id'}
         metricValue: 50
-        type: "IPv4StaticRoute"
+        type: IPv4StaticRoute
         isTunneled: False
-        id: "ipv4StaticRouteUuid"
+        id: ipv4StaticRouteUuid
     path_params:
         objectId: "{{ object_id }}"
         virtualrouterUUID: "{{ virtualrouter_uuid }}"

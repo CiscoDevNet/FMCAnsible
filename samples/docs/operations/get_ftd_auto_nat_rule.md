@@ -14,7 +14,7 @@ The getFTDAutoNatRule operation handles configuration related to [/api/fmc_confi
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| section | False | string <td colspan=3> Retrieves, creates or modifies auto nat rule in given section. Allowed value is 'auto'. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies auto nat rule in given section. Allowed value is auto. |
 
 ## Example
 ```yaml

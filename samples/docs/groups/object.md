@@ -260,6 +260,13 @@
 
 ### Supported Operations
 * [getSIURLList](../operations/get_siurl_list.md)
+* [updateSIURLList](../operations/update_siurl_list.md)
+* [deleteSIURLList](../operations/delete_siurl_list.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/siurllists
+
+### Supported Operations
+* [getAllSIURLList](../operations/get_all_siurl_list.md)
+* [createSIURLList](../operations/create_siurl_list.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/siurlfeeds/{objectId}
 
 ### Supported Operations
@@ -322,6 +329,13 @@
 
 ### Supported Operations
 * [getSecurityGroupTag](../operations/get_security_group_tag.md)
+* [updateSecurityGroupTag](../operations/update_security_group_tag.md)
+* [deleteSecurityGroupTag](../operations/delete_security_group_tag.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/securitygrouptags
+
+### Supported Operations
+* [getAllSecurityGroupTag](../operations/get_all_security_group_tag.md)
+* [createSecurityGroupTag](../operations/create_security_group_tag.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ranges/{objectId}
 
 ### Supported Operations
@@ -449,7 +463,14 @@
 ## /api/fmc_config/v1/domain/{domainUUID}/object/certenrollments/{objectId}
 
 ### Supported Operations
-* [getVpnPKIEnrollmentModel](../operations/get_vpn_pki_enrollment_model.md)
+* [getVpnCertEnrollmentModel](../operations/get_vpn_cert_enrollment_model.md)
+* [updateVpnCertEnrollmentModel](../operations/update_vpn_cert_enrollment_model.md)
+* [deleteVpnCertEnrollmentModel](../operations/delete_vpn_cert_enrollment_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/certenrollments
+
+### Supported Operations
+* [getAllVpnCertEnrollmentModel](../operations/get_all_vpn_cert_enrollment_model.md)
+* [createVpnCertEnrollmentModel](../operations/create_vpn_cert_enrollment_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ikev2ipsecproposals/{objectId}
 
 ### Supported Operations
@@ -465,10 +486,24 @@
 
 ### Supported Operations
 * [getCertificateMapModel](../operations/get_certificate_map_model.md)
+* [updateCertificateMapModel](../operations/update_certificate_map_model.md)
+* [deleteCertificateMapModel](../operations/delete_certificate_map_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/certificatemaps
+
+### Supported Operations
+* [getAllCertificateMapModel](../operations/get_all_certificate_map_model.md)
+* [createCertificateMapModel](../operations/create_certificate_map_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectcustomattributes/{objectId}
 
 ### Supported Operations
 * [getAnyConnectCustomAttributeModel](../operations/get_any_connect_custom_attribute_model.md)
+* [updateAnyConnectCustomAttributeModel](../operations/update_any_connect_custom_attribute_model.md)
+* [deleteAnyConnectCustomAttributeModel](../operations/delete_any_connect_custom_attribute_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectcustomattributes
+
+### Supported Operations
+* [getAllAnyConnectCustomAttributeModel](../operations/get_all_any_connect_custom_attribute_model.md)
+* [createAnyConnectCustomAttributeModel](../operations/create_any_connect_custom_attribute_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectcustomattributes/{containerUUID}/overrides
 
 ### Supported Operations
@@ -477,18 +512,46 @@
 
 ### Supported Operations
 * [getAnyConnectPackageModel](../operations/get_any_connect_package_model.md)
+* [updateAnyConnectPackageModel](../operations/update_any_connect_package_model.md)
+* [deleteAnyConnectPackageModel](../operations/delete_any_connect_package_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectpackages
+
+### Supported Operations
+* [getAllAnyConnectPackageModel](../operations/get_all_any_connect_package_model.md)
+* [createAnyConnectPackageModel](../operations/create_any_connect_package_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectexternalbrowserpackages/{objectId}
 
 ### Supported Operations
 * [getAnyConnectExternalBrowserPackageModel](../operations/get_any_connect_external_browser_package_model.md)
+* [updateAnyConnectExternalBrowserPackageModel](../operations/update_any_connect_external_browser_package_model.md)
+* [deleteAnyConnectExternalBrowserPackageModel](../operations/delete_any_connect_external_browser_package_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectexternalbrowserpackages
+
+### Supported Operations
+* [getAllAnyConnectExternalBrowserPackageModel](../operations/get_all_any_connect_external_browser_package_model.md)
+* [createAnyConnectExternalBrowserPackageModel](../operations/create_any_connect_external_browser_package_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectprofiles/{objectId}
 
 ### Supported Operations
 * [getAnyConnectProfileModel](../operations/get_any_connect_profile_model.md)
+* [updateAnyConnectProfileModel](../operations/update_any_connect_profile_model.md)
+* [deleteAnyConnectProfileModel](../operations/delete_any_connect_profile_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectprofiles
+
+### Supported Operations
+* [getAllAnyConnectProfileModel](../operations/get_all_any_connect_profile_model.md)
+* [createAnyConnectProfileModel](../operations/create_any_connect_profile_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/radiusservergroups/{objectId}
 
 ### Supported Operations
 * [getRadiusServerGroupModel](../operations/get_radius_server_group_model.md)
+* [updateRadiusServerGroupModel](../operations/update_radius_server_group_model.md)
+* [deleteRadiusServerGroupModel](../operations/delete_radius_server_group_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/radiusservergroups
+
+### Supported Operations
+* [getAllRadiusServerGroupModel](../operations/get_all_radius_server_group_model.md)
+* [createMultipleRadiusServerGroupModel](../operations/create_multiple_radius_server_group_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ikev1ipsecproposals/{objectId}
 
 ### Supported Operations
@@ -504,6 +567,13 @@
 
 ### Supported Operations
 * [getIPv4AddressPool](../operations/get_i_pv4_address_pool.md)
+* [updateIPv4AddressPool](../operations/update_i_pv4_address_pool.md)
+* [deleteIPv4AddressPool](../operations/delete_i_pv4_address_pool.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/ipv4addresspools
+
+### Supported Operations
+* [getAllIPv4AddressPool](../operations/get_all_i_pv4_address_pool.md)
+* [createIPv4AddressPool](../operations/create_i_pv4_address_pool.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ipv4addresspools/{containerUUID}/overrides
 
 ### Supported Operations
@@ -512,6 +582,13 @@
 
 ### Supported Operations
 * [getIPv6AddressPool](../operations/get_i_pv6_address_pool.md)
+* [updateIPv6AddressPool](../operations/update_i_pv6_address_pool.md)
+* [deleteIPv6AddressPool](../operations/delete_i_pv6_address_pool.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/ipv6addresspools
+
+### Supported Operations
+* [getAllIPv6AddressPool](../operations/get_all_i_pv6_address_pool.md)
+* [createIPv6AddressPool](../operations/create_i_pv6_address_pool.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ipv6addresspools/{containerUUID}/overrides
 
 ### Supported Operations
@@ -520,6 +597,13 @@
 
 ### Supported Operations
 * [getSSOServer](../operations/get_sso_server.md)
+* [updateSSOServer](../operations/update_sso_server.md)
+* [deleteSSOServer](../operations/delete_sso_server.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/ssoservers
+
+### Supported Operations
+* [getAllSSOServer](../operations/get_all_sso_server.md)
+* [createMultipleSSOServer](../operations/create_multiple_sso_server.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ssoservers/{containerUUID}/overrides
 
 ### Supported Operations
@@ -539,10 +623,13 @@
 
 ### Supported Operations
 * [getHostScanPackageObject](../operations/get_host_scan_package_object.md)
+* [updateHostScanPackageObject](../operations/update_host_scan_package_object.md)
+* [deleteHostScanPackageObject](../operations/delete_host_scan_package_object.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/hostscanpackages
 
 ### Supported Operations
 * [getAllHostScanPackageObject](../operations/get_all_host_scan_package_object.md)
+* [createHostScanPackageObject](../operations/create_host_scan_package_object.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/extendedaccesslists/{objectId}
 
 ### Supported Operations
@@ -712,6 +799,17 @@
 ### Supported Operations
 * [getAllAsPathList](../operations/get_all_as_path_list.md)
 * [createAsPathList](../operations/create_as_path_list.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/bfdtemplates/{objectId}
+
+### Supported Operations
+* [getBFDTemplate](../operations/get_bfd_template.md)
+* [updateBFDTemplate](../operations/update_bfd_template.md)
+* [deleteBFDTemplate](../operations/delete_bfd_template.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/bfdtemplates
+
+### Supported Operations
+* [getAllBFDTemplate](../operations/get_all_bfd_template.md)
+* [createBFDTemplate](../operations/create_bfd_template.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ipv4prefixlists/{objectId}
 
 ### Supported Operations
@@ -742,6 +840,59 @@
 
 ### Supported Operations
 * [getGroupPolicyModel](../operations/get_group_policy_model.md)
+* [updateGroupPolicyModel](../operations/update_group_policy_model.md)
+* [deleteGroupPolicyModel](../operations/delete_group_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/grouppolicies
+
+### Supported Operations
+* [getAllGroupPolicyModel](../operations/get_all_group_policy_model.md)
+* [createMultipleGroupPolicyModel](../operations/create_multiple_group_policy_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/operational/umbrellaprotectionpolicies
+
+### Supported Operations
+* [getUmbrellaProtectionPolicy](../operations/get_umbrella_protection_policy.md)
+* [createUmbrellaProtectionPolicy](../operations/create_umbrella_protection_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/validatecertfile
+
+### Supported Operations
+* [createValidateCertFile](../operations/create_validate_cert_file.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/internalcertificates/{objectId}
+
+### Supported Operations
+* [getInternalCertificate](../operations/get_internal_certificate.md)
+* [updateInternalCertificate](../operations/update_internal_certificate.md)
+* [deleteInternalCertificate](../operations/delete_internal_certificate.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/internalcertificates
+
+### Supported Operations
+* [getAllInternalCertificate](../operations/get_all_internal_certificate.md)
+* [createInternalCertificate](../operations/create_internal_certificate.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/internalcas/{objectId}
+
+### Supported Operations
+* [getInternalCA](../operations/get_internal_ca.md)
+* [updateInternalCA](../operations/update_internal_ca.md)
+* [deleteInternalCA](../operations/delete_internal_ca.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/internalcas
+
+### Supported Operations
+* [getAllInternalCA](../operations/get_all_internal_ca.md)
+* [createInternalCA](../operations/create_internal_ca.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/downloadinternalca
+
+### Supported Operations
+* [createDownloadInternalCA](../operations/create_download_internal_ca.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/dhcpipv6pools/{objectId}
+
+### Supported Operations
+* [getDHCPIPv6Pool](../operations/get_dhcpi_pv6_pool.md)
+* [updateDHCPIPv6Pool](../operations/update_dhcpi_pv6_pool.md)
+* [deleteDHCPIPv6Pool](../operations/delete_dhcpi_pv6_pool.md)
+## /api/fmc_config/v1/domain/{domainUUID}/object/dhcpipv6pools
+
+### Supported Operations
+* [getAllDHCPIPv6Pool](../operations/get_all_dhcpi_pv6_pool.md)
+* [createDHCPIPv6Pool](../operations/create_dhcpi_pv6_pool.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/hosts/{containerUUID}/overrides
 
 ### Supported Operations
@@ -834,10 +985,6 @@
 
 ### Supported Operations
 * [getAllSIDNSFeed](../operations/get_all_sidns_feed.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/siurllists
-
-### Supported Operations
-* [getAllSIURLList](../operations/get_all_siurl_list.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/siurlfeeds
 
 ### Supported Operations
@@ -870,10 +1017,6 @@
 
 ### Supported Operations
 * [getAllEndPointDeviceType](../operations/get_all_end_point_device_type.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/securitygrouptags
-
-### Supported Operations
-* [getAllSecurityGroupTag](../operations/get_all_security_group_tag.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/ranges/{containerUUID}/overrides
 
 ### Supported Operations
@@ -894,46 +1037,6 @@
 
 ### Supported Operations
 * [getAllKeyChainObjectOverride](../operations/get_all_key_chain_object_override.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/certenrollments
-
-### Supported Operations
-* [getAllVpnPKIEnrollmentModel](../operations/get_all_vpn_pki_enrollment_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/certificatemaps
-
-### Supported Operations
-* [getAllCertificateMapModel](../operations/get_all_certificate_map_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectcustomattributes
-
-### Supported Operations
-* [getAllAnyConnectCustomAttributeModel](../operations/get_all_any_connect_custom_attribute_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectpackages
-
-### Supported Operations
-* [getAllAnyConnectPackageModel](../operations/get_all_any_connect_package_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectexternalbrowserpackages
-
-### Supported Operations
-* [getAllAnyConnectExternalBrowserPackageModel](../operations/get_all_any_connect_external_browser_package_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/anyconnectprofiles
-
-### Supported Operations
-* [getAllAnyConnectProfileModel](../operations/get_all_any_connect_profile_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/radiusservergroups
-
-### Supported Operations
-* [getAllRadiusServerGroupModel](../operations/get_all_radius_server_group_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/ipv4addresspools
-
-### Supported Operations
-* [getAllIPv4AddressPool](../operations/get_all_i_pv4_address_pool.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/ipv6addresspools
-
-### Supported Operations
-* [getAllIPv6AddressPool](../operations/get_all_i_pv6_address_pool.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/ssoservers
-
-### Supported Operations
-* [getAllSSOServer](../operations/get_all_sso_server.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/object/communitylists
 
 ### Supported Operations
@@ -942,7 +1045,3 @@
 
 ### Supported Operations
 * [getAllExtendedCommunityListOverride](../operations/get_all_extended_community_list_override.md)
-## /api/fmc_config/v1/domain/{domainUUID}/object/grouppolicies
-
-### Supported Operations
-* [getAllGroupPolicyModel](../operations/get_all_group_policy_model.md)

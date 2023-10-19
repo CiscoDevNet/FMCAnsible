@@ -2,12 +2,12 @@
 
 The createFTDS2SVpnModel operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/policy/ftds2svpns](/paths//api/fmc_config/v1/domain/{domain_uuid}/policy/ftds2svpns.md) path.&nbsp;
 ## Description
-**Retrieves, deletes, creates, or modifies the FTD Site to Site VPN topology associated with the specified ID. If no ID is specified for a GET, retrieves list of all FTD Site to Site VPN topologies. _Check the response section for applicable examples (if any)._**
+**Retrieves, deletes, creates, or modifies the Firewall Threat Defense Site to Site VPN topology associated with the specified ID. If no ID is specified for a GET, retrieves list of all Firewall Threat Defense Site to Site VPN topologies. _Check the response section for applicable examples (if any)._**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml

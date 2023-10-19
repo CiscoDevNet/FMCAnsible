@@ -25,10 +25,10 @@ The updateProtocolPortObject operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateProtocolPortObject"
     data:
-        id: "protocoPortObj1UUID"
-        name: "protocolport_obj1_updated"
-        type: "ProtocolPortObject"
-        protocol: "TCP"
+        id: protocoPortObj1UUID
+        name: protocolport_obj1_updated
+        type: ProtocolPortObject
+        protocol: TCP
         port: 1
     path_params:
         objectId: "{{ object_id }}"

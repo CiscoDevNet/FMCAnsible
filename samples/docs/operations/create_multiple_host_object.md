@@ -5,22 +5,22 @@ The createMultipleHostObject operation handles configuration related to [/api/fm
 **Retrieves, deletes, creates, or modifies the host object associated with the specified ID. If no ID is specified for a GET, retrieves list of all host objects. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | ----------- |
-| name | TestHost | The unique name for the object. |
-| type | Host | The unique type of this object (fixed). |
-| value | 10.5.3.20 | The Host IP address value for this object. |
-| description | Test Description | A description about the object. |
+| Parameter | Value |
+| --------- | -------- |
+| name | TestHost |
+| type | Host |
+| value | 10.5.3.20 |
+| description | Test Description |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for host objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for host objects. |
 
 ## Example
 ```yaml
@@ -28,10 +28,10 @@ The createMultipleHostObject operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleHostObject"
     data:
-        name: "TestHost"
-        type: "Host"
-        value: "10.5.3.20"
-        description: "Test Description"
+        name: TestHost
+        type: Host
+        value: 10.5.3.20
+        description: Test Description
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

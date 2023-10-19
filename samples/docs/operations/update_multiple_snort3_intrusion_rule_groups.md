@@ -31,12 +31,12 @@ The updateMultipleSnort3IntrusionRuleGroups operation handles configuration rela
   cisco.fmcansible.fmc_configuration:
     operation: "updateMultipleSnort3IntrusionRuleGroups"
     data:
-        name: "Group1"
-        id: "bb79c3d4-904e-569e-80ba-ad50a8f24a67"
-        type: "IntrusionRuleGroup"
-        defaultSecurityLevel: "DISABLED"
-        description: "A description about Group1 goes here."
-        overrideSecurityLevel: "LEVEL_1"
+        name: Group1
+        id: bb79c3d4-904e-569e-80ba-ad50a8f24a67
+        type: IntrusionRuleGroup
+        defaultSecurityLevel: DISABLED
+        description: A description about Group1 goes here.
+        overrideSecurityLevel: LEVEL_1
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

@@ -2,7 +2,7 @@
 
 The getTunnelStatus operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/health/tunnelstatuses](/paths//api/fmc_config/v1/domain/{domain_uuid}/health/tunnelstatuses.md) path.&nbsp;
 ## Description
-**Retrieves tunnel status for S2S VPN on all managed FTDs.**
+**Retrieves tunnel status for S2S VPN on all managed Firewall Threat Defenses.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
@@ -12,7 +12,7 @@ The getTunnelStatus operation handles configuration related to [/api/fmc_config/
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| filter | False | string <td colspan=3> The allowed filters are <code>"vpnTopologyId:{uuid}"</code> which filters the tunnel statuses by S2S VPN Topology id, <code>"deviceId:{UUID}"</code> which filters the tunnel statuses by Device id, <code>status:{TUNNEL_UP|TUNNEL_DOWN|UNKNOWN}</code> which filters the tunnel statuses by Tunnel Status and <code>"sortBy{:|<|>}{Topology|Device|Status|LastChange}"</code>. Filter operators `:` and `<` sorts in ascending order and `>` sorts in descending order.    |
+| filter | False | string <td colspan=3> The allowed filters are <code>"vpnTopologyId:{uuid}"</code> which filters the tunnel statuses by S2S VPN Topology id, <code>"deviceId:{UUID}"</code> which filters the tunnel statuses by Device id, <code>status:{TUNNEL_UP|TUNNEL_DOWN|UNKNOWN}</code> which filters the tunnel statuses by Tunnel Status, <code>"deployedStatus:{Deployed|Configured|Both}"</code> which is filters the tunnel status by it's deployed state and <code>"sortBy{:|<|>}{Topology|Device|Status|LastChange}"</code>. Filter operators `:` and `<` sorts in ascending order and `>` sorts in descending order. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |

@@ -9,7 +9,7 @@ The updatePolicyAssignment operation handles configuration related to [/api/fmc_
 | --------- | -------- |
 | type | PolicyAssignment |
 | id | policyassignmentUUID |
-| policy | {'type': 'AccessPolicy', 'name': 'AccessPolicy1', 'id': 'accesspolicyUUID'} |
+| policy | {'type': 'FTDPlatformSettingsPolicy', 'name': 'FTDPlatformSettingsPolicy1', 'id': 'ftdplatformsettingsUUID'} |
 | targets | [{'id': 'deviceUUID', 'type': 'Device', 'name': 'FTD_Device1'}] |
 
 ## Path Parameters
@@ -24,9 +24,9 @@ The updatePolicyAssignment operation handles configuration related to [/api/fmc_
   cisco.fmcansible.fmc_configuration:
     operation: "updatePolicyAssignment"
     data:
-        type: "PolicyAssignment"
-        id: "policyassignmentUUID"
-        policy: {'type': 'AccessPolicy', 'name': 'AccessPolicy1', 'id': 'accesspolicyUUID'}
+        type: PolicyAssignment
+        id: policyassignmentUUID
+        policy: {'type': 'FTDPlatformSettingsPolicy', 'name': 'FTDPlatformSettingsPolicy1', 'id': 'ftdplatformsettingsUUID'}
         targets: [{'id': 'deviceUUID', 'type': 'Device', 'name': 'FTD_Device1'}]
     path_params:
         objectId: "{{ object_id }}"

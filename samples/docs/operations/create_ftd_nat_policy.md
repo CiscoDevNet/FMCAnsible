@@ -14,7 +14,7 @@ The createFTDNatPolicy operation handles configuration related to [/api/fmc_conf
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -22,9 +22,9 @@ The createFTDNatPolicy operation handles configuration related to [/api/fmc_conf
   cisco.fmcansible.fmc_configuration:
     operation: "createFTDNatPolicy"
     data:
-        type: "FTDNatPolicy"
-        name: "NatPol5"
-        description: "nat policy for testing rest api"
+        type: FTDNatPolicy
+        name: NatPol5
+        description: nat policy for testing rest api
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

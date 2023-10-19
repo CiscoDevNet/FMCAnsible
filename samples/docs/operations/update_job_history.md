@@ -23,9 +23,9 @@ The updateJobHistory operation handles configuration related to [/api/fmc_config
   cisco.fmcansible.fmc_configuration:
     operation: "updateJobHistory"
     data:
-        id: "0050568B-9937-0ed3-0000-463856468766"
-        deploymentNote: "Updated note"
-        type: "JobHistory"
+        id: 0050568B-9937-0ed3-0000-463856468766
+        deploymentNote: Updated note
+        type: JobHistory
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

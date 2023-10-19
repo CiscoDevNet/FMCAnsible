@@ -11,6 +11,8 @@ The updateDevice operation handles configuration related to [/api/fmc_config/v1/
 | name | nachos_updated |
 | type | Device |
 | hostName | 10.20.30.40 |
+| license_caps | ['PROTECT', 'MALWARE'] |
+| performanceTier | FTDv30 |
 | prohibitPacketTransfer | True |
 
 ## Path Parameters
@@ -25,10 +27,12 @@ The updateDevice operation handles configuration related to [/api/fmc_config/v1/
   cisco.fmcansible.fmc_configuration:
     operation: "updateDevice"
     data:
-        id: "device_uuid"
-        name: "nachos_updated"
-        type: "Device"
-        hostName: "10.20.30.40"
+        id: device_uuid
+        name: nachos_updated
+        type: Device
+        hostName: 10.20.30.40
+        license_caps: ['PROTECT', 'MALWARE']
+        performanceTier: FTDv30
         prohibitPacketTransfer: True
     path_params:
         objectId: "{{ object_id }}"

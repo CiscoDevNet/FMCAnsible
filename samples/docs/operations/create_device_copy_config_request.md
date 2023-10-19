@@ -5,16 +5,16 @@ The createDeviceCopyConfigRequest operation handles configuration related to [/a
 **Copy configuration operation on device. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | ----------- |
-| sourceDevice | {'id': 'device_uuid', 'type': 'Device'} | Unique ID of the device. |
-| targetDeviceList | [{'id': 'device_uuid', 'type': 'Device'}] | Target device list is a standalone device UUID |
-| copySharedPolicies | False | Boolean value. Copies shared policies from source standalone device or HA to target standalone device based on True or False input |
+| Parameter | Value |
+| --------- | -------- |
+| sourceDevice | {'id': 'device_uuid', 'type': 'Device'} |
+| targetDeviceList | [{'id': 'device_uuid', 'type': 'Device'}] |
+| copySharedPolicies | False |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml

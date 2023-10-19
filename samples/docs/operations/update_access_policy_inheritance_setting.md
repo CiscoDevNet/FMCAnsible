@@ -24,8 +24,8 @@ The updateAccessPolicyInheritanceSetting operation handles configuration related
   cisco.fmcansible.fmc_configuration:
     operation: "updateAccessPolicyInheritanceSetting"
     data:
-        type: "AccessPolicyInheritanceSetting"
-        id: "id_of_inheritance_settings"
+        type: AccessPolicyInheritanceSetting
+        id: id_of_inheritance_settings
         basePolicy: {'type': 'AccessPolicy', 'id': 'id_of_base_policy'}
     path_params:
         objectId: "{{ object_id }}"

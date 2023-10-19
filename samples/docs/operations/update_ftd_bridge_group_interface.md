@@ -14,10 +14,11 @@ The updateFTDBridgeGroupInterface operation handles configuration related to [/a
 | MTU | 1500 |
 | ifname | bridgeGroupIntf1 |
 | managementOnly | False |
+| pathMonitoring | {'enable': True, 'type': 'PEER_IPV4 | PEER_IPV6 | AUTO | AUTO4 | AUTO6', 'monitoredIp': 'string'} |
 | ipAddress | 1.2.3.5 |
 | bridgeGroupId | 39 |
 | ipv4 | {'static': {'address': '1.2.3.5', 'netmask': '25'}} |
-| ipv6 | {'addresses': [{'address': '9090::', 'prefix': '12'}], 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0} |
+| ipv6 | {'addresses': [{'address': '9090::', 'prefix': '12'}], 'dadAttempts': 1, 'enableIPV6DadLoopbackDetect': True, 'nsInterval': 10000, 'reachableTime': 0} |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
@@ -32,17 +33,18 @@ The updateFTDBridgeGroupInterface operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "updateFTDBridgeGroupInterface"
     data:
-        id: "bridgeGroupIntfUUID"
-        type: "BridgeGroupInterface"
+        id: bridgeGroupIntfUUID
+        type: BridgeGroupInterface
         selectedInterfaces: [{'type': 'PhysicalInterface', 'name': 'GigabitEthernet0/0', 'id': 'interface UUID'}]
         enabled: True
         MTU: 1500
-        ifname: "bridgeGroupIntf1"
+        ifname: bridgeGroupIntf1
         managementOnly: False
-        ipAddress: "1.2.3.5"
+        pathMonitoring: {'enable': True, 'type': 'PEER_IPV4 | PEER_IPV6 | AUTO | AUTO4 | AUTO6', 'monitoredIp': 'string'}
+        ipAddress: 1.2.3.5
         bridgeGroupId: 39
         ipv4: {'static': {'address': '1.2.3.5', 'netmask': '25'}}
-        ipv6: {'addresses': [{'address': '9090::', 'prefix': '12'}], 'dadAttempts': 1, 'nsInterval': 10000, 'reachableTime': 0}
+        ipv6: {'addresses': [{'address': '9090::', 'prefix': '12'}], 'dadAttempts': 1, 'enableIPV6DadLoopbackDetect': True, 'nsInterval': 10000, 'reachableTime': 0}
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

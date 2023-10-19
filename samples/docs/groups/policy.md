@@ -83,7 +83,9 @@
 
 ### Supported Operations
 * [getAllFTDAutoNatRule](../operations/get_all_ftd_auto_nat_rule.md)
+* [updateMultipleFTDAutoNatRule](../operations/update_multiple_ftd_auto_nat_rule.md)
 * [createMultipleFTDAutoNatRule](../operations/create_multiple_ftd_auto_nat_rule.md)
+* [deleteMultipleFTDAutoNatRule](../operations/delete_multiple_ftd_auto_nat_rule.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdnatpolicies/{containerUUID}/manualnatrules/{objectId}
 
 ### Supported Operations
@@ -94,11 +96,18 @@
 
 ### Supported Operations
 * [getAllFTDManualNatRule](../operations/get_all_ftd_manual_nat_rule.md)
+* [updateMultipleFTDManualNatRule](../operations/update_multiple_ftd_manual_nat_rule.md)
 * [createMultipleFTDManualNatRule](../operations/create_multiple_ftd_manual_nat_rule.md)
+* [deleteMultipleFTDManualNatRule](../operations/delete_multiple_ftd_manual_nat_rule.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdnatpolicies/{containerUUID}/natrules/{objectId}
 
 ### Supported Operations
 * [getFTDNatRule](../operations/get_ftd_nat_rule.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdnatpolicies/{containerUUID}/natrules
+
+### Supported Operations
+* [getAllFTDNatRule](../operations/get_all_ftd_nat_rule.md)
+* [deleteMultipleFTDNatRule](../operations/delete_multiple_ftd_nat_rule.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/intrusionpolicies/{objectId}
 
 ### Supported Operations
@@ -157,18 +166,54 @@
 
 ### Supported Operations
 * [getFTDRAVpnModel](../operations/get_ftdra_vpn_model.md)
+* [updateFTDRAVpnModel](../operations/update_ftdra_vpn_model.md)
+* [deleteFTDRAVpnModel](../operations/delete_ftdra_vpn_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns
+
+### Supported Operations
+* [getAllFTDRAVpnModel](../operations/get_all_ftdra_vpn_model.md)
+* [createFTDRAVpnModel](../operations/create_ftdra_vpn_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/addressassignmentsettings/{objectId}
 
 ### Supported Operations
 * [getFTDRAVpnAddressAssignmentSetting](../operations/get_ftdra_vpn_address_assignment_setting.md)
+* [updateFTDRAVpnAddressAssignmentSetting](../operations/update_ftdra_vpn_address_assignment_setting.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/connectionprofiles/{objectId}
 
 ### Supported Operations
 * [getFTDRAVpnConnectionProfileModel](../operations/get_ftdra_vpn_connection_profile_model.md)
+* [updateFTDRAVpnConnectionProfileModel](../operations/update_ftdra_vpn_connection_profile_model.md)
+* [deleteFTDRAVpnConnectionProfileModel](../operations/delete_ftdra_vpn_connection_profile_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/connectionprofiles
+
+### Supported Operations
+* [getAllFTDRAVpnConnectionProfileModel](../operations/get_all_ftdra_vpn_connection_profile_model.md)
+* [createFTDRAVpnConnectionProfileModel](../operations/create_ftdra_vpn_connection_profile_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/certificatemapsettings/{objectId}
 
 ### Supported Operations
 * [getFTDRAVpnCertificateMapSettings](../operations/get_ftdra_vpn_certificate_map_settings.md)
+* [updateFTDRAVpnCertificateMapSettings](../operations/update_ftdra_vpn_certificate_map_settings.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ipseccryptomaps/{objectId}
+
+### Supported Operations
+* [getFTDRAVpnIPSecCryptoMapModel](../operations/get_ftdra_vpn_ip_sec_crypto_map_model.md)
+* [updateFTDRAVpnIPSecCryptoMapModel](../operations/update_ftdra_vpn_ip_sec_crypto_map_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ipsecadvancedsettings/{objectId}
+
+### Supported Operations
+* [getFTDRAVpnIPSecIKEv2AdvanceSettingsModel](../operations/get_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md)
+* [updateFTDRAVpnIPSecIKEv2AdvanceSettingsModel](../operations/update_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ldapattributemaps/{objectId}
+
+### Supported Operations
+* [getFTDRAVpnLDAPAttributeModel](../operations/get_ftdra_vpn_ldap_attribute_model.md)
+* [updateFTDRAVpnLDAPAttributeModel](../operations/update_ftdra_vpn_ldap_attribute_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/loadbalancesettings/{objectId}
+
+### Supported Operations
+* [getFTDRAVpnLoadBalanceSetting](../operations/get_ftdra_vpn_load_balance_setting.md)
+* [updateFTDRAVpnLoadBalanceSetting](../operations/update_ftdra_vpn_load_balance_setting.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ftds2svpns/{objectId}
 
 ### Supported Operations
@@ -206,6 +251,15 @@
 ### Supported Operations
 * [getVpnIkeSettings](../operations/get_vpn_ike_settings.md)
 * [updateVpnIkeSettings](../operations/update_vpn_ike_settings.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/s2svpnsummaries
+
+### Supported Operations
+* [getS2SVpnSummaryModel](../operations/get_s2_s_vpn_summary_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/operational/policylocks
+
+### Supported Operations
+* [getPolicyLock](../operations/get_policy_lock.md)
+* [createPolicyLock](../operations/create_policy_lock.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/prefilterpolicies/{objectId}
 
 ### Supported Operations
@@ -277,6 +331,43 @@
 
 ### Supported Operations
 * [getBlockDNSRule](../operations/get_block_dns_rule.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/umbrelladnspolicies/{objectId}
+
+### Supported Operations
+* [getUmbrellaDNSPolicy](../operations/get_umbrella_dns_policy.md)
+* [updateUmbrellaDNSPolicy](../operations/update_umbrella_dns_policy.md)
+* [deleteUmbrellaDNSPolicy](../operations/delete_umbrella_dns_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/umbrelladnspolicies
+
+### Supported Operations
+* [getAllUmbrellaDNSPolicy](../operations/get_all_umbrella_dns_policy.md)
+* [createUmbrellaDNSPolicy](../operations/create_umbrella_dns_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/umbrelladnspolicies/{containerUUID}/umbrelladnsrules/{objectId}
+
+### Supported Operations
+* [getUmbrellaDNSRule](../operations/get_umbrella_dns_rule.md)
+* [updateUmbrellaDNSRule](../operations/update_umbrella_dns_rule.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/healthpolicies/{objectId}
+
+### Supported Operations
+* [getHealthPolicy](../operations/get_health_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/flexconfigpolicies/{objectId}
+
+### Supported Operations
+* [getFlexConfig](../operations/get_flex_config.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/flexconfigpolicies
+
+### Supported Operations
+* [getAllFlexConfig](../operations/get_all_flex_config.md)
+* [createFlexConfig](../operations/create_flex_config.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/flexconfigpolicies/{containerUUID}/migrate
+
+### Supported Operations
+* [createFlexConfigMigration](../operations/create_flex_config_migration.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdplatformsettingspolicies/{objectId}
+
+### Supported Operations
+* [getFTDPlatformSettingsPolicy](../operations/get_ftd_platform_settings_policy.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/accesspolicies/{containerUUID}/defaultactions
 
 ### Supported Operations
@@ -293,10 +384,6 @@
 
 ### Supported Operations
 * [getAllAccessPolicySecurityIntelligencePolicy](../operations/get_all_access_policy_security_intelligence_policy.md)
-## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdnatpolicies/{containerUUID}/natrules
-
-### Supported Operations
-* [getAllFTDNatRule](../operations/get_all_ftd_nat_rule.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/filepolicies
 
 ### Supported Operations
@@ -309,22 +396,26 @@
 
 ### Supported Operations
 * [getAllSyslogConfig](../operations/get_all_syslog_config.md)
-## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns
-
-### Supported Operations
-* [getAllFTDRAVpnModel](../operations/get_all_ftdra_vpn_model.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/addressassignmentsettings
 
 ### Supported Operations
 * [getAllFTDRAVpnAddressAssignmentSetting](../operations/get_all_ftdra_vpn_address_assignment_setting.md)
-## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/connectionprofiles
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ipseccryptomaps
 
 ### Supported Operations
-* [getAllFTDRAVpnConnectionProfileModel](../operations/get_all_ftdra_vpn_connection_profile_model.md)
-## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/certificatemapsettings
+* [getAllFTDRAVpnIPSecCryptoMapModel](../operations/get_all_ftdra_vpn_ip_sec_crypto_map_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ipsecadvancedsettings
 
 ### Supported Operations
-* [getAllFTDRAVpnCertificateMapSettings](../operations/get_all_ftdra_vpn_certificate_map_settings.md)
+* [getAllFTDRAVpnIPSecIKEv2AdvanceSettingsModel](../operations/get_all_ftdra_vpn_ip_sec_ik_ev2_advance_settings_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/ldapattributemaps
+
+### Supported Operations
+* [getAllFTDRAVpnLDAPAttributeModel](../operations/get_all_ftdra_vpn_ldap_attribute_model.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ravpns/{containerUUID}/loadbalancesettings
+
+### Supported Operations
+* [getAllFTDRAVpnLoadBalanceSetting](../operations/get_all_ftdra_vpn_load_balance_setting.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/policy/ftds2svpns/{containerUUID}/ipsecsettings
 
 ### Supported Operations
@@ -349,3 +440,15 @@
 
 ### Supported Operations
 * [getAllDNSPolicy](../operations/get_all_dns_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/umbrelladnspolicies/{containerUUID}/umbrelladnsrules
+
+### Supported Operations
+* [getAllUmbrellaDNSRule](../operations/get_all_umbrella_dns_rule.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/healthpolicies
+
+### Supported Operations
+* [getAllHealthPolicy](../operations/get_all_health_policy.md)
+## /api/fmc_config/v1/domain/{domainUUID}/policy/ftdplatformsettingspolicies
+
+### Supported Operations
+* [getAllFTDPlatformSettingsPolicy](../operations/get_all_ftd_platform_settings_policy.md)

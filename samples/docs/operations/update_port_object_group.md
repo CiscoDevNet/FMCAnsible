@@ -24,9 +24,9 @@ The updatePortObjectGroup operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "updatePortObjectGroup"
     data:
-        id: "PortGroupObjUUID"
-        name: "portgroup_obj1_updated"
-        type: "PortObjectGroup"
+        id: PortGroupObjUUID
+        name: portgroup_obj1_updated
+        type: PortObjectGroup
         objects: [{'type': 'ICMPV4Object', 'id': 'ICMPV4ObjectUUID'}, {'id': 'ICMPV6ObjectUUID', 'type': 'ICMPV6Object'}, {'id': 'ProtocolPortObjectUUID', 'type': 'ProtocolPortObject'}]
     path_params:
         objectId: "{{ object_id }}"

@@ -27,13 +27,13 @@ The updateDynamicObject operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updateDynamicObject"
     data:
-        id: "005056AB-931D-0ed3-0000-004294967338"
-        name: "Marketing"
-        description: "IPs of marketing department changed"
-        type: "DynamicObject"
-        objectType: "IP"
-        agentId: "agent_007"
-        topicName: "aws365"
+        id: 005056AB-931D-0ed3-0000-004294967338
+        name: Marketing
+        description: IPs of marketing department changed
+        type: DynamicObject
+        objectType: IP
+        agentId: agent_007
+        topicName: aws365
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

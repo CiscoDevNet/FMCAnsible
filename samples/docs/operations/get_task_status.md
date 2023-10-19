@@ -10,6 +10,11 @@ The getTaskStatus operation handles configuration related to [/api/fmc_config/v1
 | objectId | True | string <td colspan=3> UUID of request. |
 | domainUUID | True | string <td colspan=3> Domain UUID |
 
+## Query Parameters
+| Parameter | Required | Type | Description |
+| --------- | -------- | ---- | ----------- |
+| showDetailedDeviceStatus | False | boolean <td colspan=3> Query parameter to show the detailed status of devices for type : DEVICE_DEPLOYMENT and DEVICE_ROLLBACK |
+
 ## Example
 ```yaml
 - name: Execute 'getTaskStatus' operation
@@ -18,5 +23,7 @@ The getTaskStatus operation handles configuration related to [/api/fmc_config/v1
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"
+    query_params:
+        showDetailedDeviceStatus: "{{ show_detailed_device_status }}"
 
 ```

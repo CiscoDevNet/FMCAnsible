@@ -27,12 +27,12 @@ The updateFPLogicalInterface operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateFPLogicalInterface"
     data:
-        name: "hybrid_1"
-        type: "FPLogicalInterface"
-        id: "fplogicalinterfaceUUID3"
+        name: hybrid_1
+        type: FPLogicalInterface
+        id: fplogicalinterfaceUUID3
         enabled: 0
         ipAddresses: ['10.1.1.2/18', '10.11.12.13/19']
-        interfaceType: "VLAN"
+        interfaceType: VLAN
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

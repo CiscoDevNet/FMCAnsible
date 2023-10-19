@@ -26,12 +26,12 @@ The updateDuoConfig operation handles configuration related to [/api/fmc_config/
   cisco.fmcansible.fmc_configuration:
     operation: "updateDuoConfig"
     data:
-        id: "duoConfigUUID"
-        type: "DuoConfig"
+        id: duoConfigUUID
+        type: DuoConfig
         enabled: True
-        duoIKey: "DIT8HUD89ANP1YS35MRN"
-        duoSKey: "y5jyWnedEERRMHP2Xul6LzNW8M3gtQ5ekJYQOl6J"
-        duoHostName: "api-1234.duosecurity.com"
+        duoIKey: DIT8HUD89ANP1YS35MRN
+        duoSKey: y5jyWnedEERRMHP2Xul6LzNW8M3gtQ5ekJYQOl6J
+        duoHostName: api-1234.duosecurity.com
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -23,8 +23,8 @@ The updateIPv4PrefixList operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateIPv4PrefixList"
     data:
-        name: "IPv4PrefixListTestC"
-        id: "ipv4prefixlistsObjectUUID"
+        name: IPv4PrefixListTestC
+        id: ipv4prefixlistsObjectUUID
         entries: [{'ipAddress': '11.11.11.11/25', 'sequence': 101, 'maxPrefixLength': 28, 'minPrefixLenth': 26, 'action': 'PERMIT'}]
     path_params:
         objectId: "{{ object_id }}"

@@ -25,9 +25,9 @@ The updateVlanTagGroup operation handles configuration related to [/api/fmc_conf
   cisco.fmcansible.fmc_configuration:
     operation: "updateVlanTagGroup"
     data:
-        id: "vlanGroupObj1UUID"
-        name: "vlangroup_obj1_updated"
-        type: "VlanGroupTag"
+        id: vlanGroupObj1UUID
+        name: vlangroup_obj1_updated
+        type: VlanGroupTag
         objects: [{'type': 'VlanTag', 'id': 'vlanObjectUUID'}]
         literals: [{'type': 'Vlan', 'startTag': 'valid_tag', 'endTag': 'valid_tag'}]
     path_params:

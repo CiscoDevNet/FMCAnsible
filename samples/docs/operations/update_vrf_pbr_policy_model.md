@@ -2,7 +2,7 @@
 
 The updateVrfPBRPolicyModel operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/devices/devicerecords/{containerUUID}/routing/virtualrouters/{virtualrouterUUID}/policybasedroutes/{objectId}](/paths//api/fmc_config/v1/domain/{domain_uuid}/devices/devicerecords/{container_uuid}/routing/virtualrouters/{virtualrouter_uuid}/policybasedroutes/{object_id}.md) path.&nbsp;
 ## Description
-**Retrieves, deletes, creates, or modifies the Policy Based Route associated for the specified virtual router. Also, retrieves list of all PBR policy.  _Check the response section for applicable examples (if any)._**
+**Retrieves, deletes, creates, or modifies the Policy Based Route associated for the specified virtual router. Also, retrieves list of all PBR policy. _Check the response section for applicable examples (if any)._**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

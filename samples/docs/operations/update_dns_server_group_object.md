@@ -29,11 +29,11 @@ The updateDNSServerGroupObject operation handles configuration related to [/api/
     data:
         dnsservers: [{'name-server': 'IPv4/IPv6hostaddress1'}, {'name-server': 'IPv4/IPv6hostaddress2'}]
         retries: 1
-        defaultdomain: "cisco.com"
-        type: "DNSServerGroupObject"
-        name: "DNSServerGroupObjectName1"
+        defaultdomain: cisco.com
+        type: DNSServerGroupObject
+        name: DNSServerGroupObjectName1
         timeout: 1
-        id: "DNSServerGroupObjectUUID"
+        id: DNSServerGroupObjectUUID
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"
