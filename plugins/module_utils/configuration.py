@@ -34,7 +34,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_clien
 #   copy_identity_properties, FmcUnexpectedResponse
 # from module_utils.fmc_swagger_client import OperationField, ValidationError
 
-DEFAULT_PAGE_SIZE = 10
+DEFAULT_PAGE_SIZE = 100
 DEFAULT_OFFSET = 0
 
 BAD_REQUEST_STATUS = 400
