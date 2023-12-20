@@ -1,3 +1,4 @@
 ansible==2.10.7
 urllib3==1.26.5
 lxml==4.6.3
+pynetbox
