@@ -324,7 +324,13 @@ class BaseConfigurationResource(object):
         # extract query and path params for list operation
         __, query_params, path_params = _get_user_params(params)
         # copy required params to avoid mutation of passed `params` dict
-        url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
+        # url_params = {ParamName.QUERY_PARAMS: dict(query_params), ParamName.PATH_PARAMS: dict(path_params)}
+        query_params = dict(query_params)
+        try:
+            del query_params['category']
+        except:
+            pass
+        url_params = {ParamName.QUERY_PARAMS: query_params, ParamName.PATH_PARAMS: dict(path_params)}
 
         # load list items
         item_generator = iterate_over_pageable_resource(
