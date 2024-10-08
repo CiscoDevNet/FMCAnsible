@@ -27,6 +27,10 @@ import ssl
 import base64
 from urllib import response
 from urllib.parse import urlencode
+try:
+    from ansible_collections.cisco.fmcansible.plugins.httpapi.vault import KsatVault
+except ImportError:
+    KsatVault = None
 
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
@@ -51,11 +55,22 @@ class InternalHttpClient(object):
         self.password = None
         self.access_token = None
         self.refresh_token = None
+        if KsatVault:
+            self.vault = KsatVault()
 
     def send(self, url_path, data=None, method="GET", headers=None):
         """
         Sends a request to the endpoint and returns the response body.
         """
+        # Check if we are connected to the vault
+        if self.vault:
+            tokens = self.vault.get_tokens()
+            if tokens:
+                self.access_token = tokens.get('access_token')
+                self.refresh_token = tokens.get('refresh_token')
+            else:
+                self.send_login(self.username, self.password)
+
         if headers is not None and self.access_token is not None:
             headers['X-auth-access-token'] = self.access_token
 
@@ -71,6 +86,17 @@ class InternalHttpClient(object):
         """
         Sends a login request to the endpoint using basic auth.
         """
+        # Check if we have valid tokens in vault
+        if self.vault:
+            tokens = self.vault.get_tokens()
+            if tokens:
+                self.access_token = tokens.get('access_token')
+                self.refresh_token = tokens.get('refresh_token')
+                return {
+                    'access_token': self.access_token,
+                    'refresh_token': self.refresh_token
+                }
+
         creds = username + ':' + password
         encoded_creds = base64.b64encode(creds.encode())
         encoded_creds_str = encoded_creds.decode("utf-8")
@@ -84,6 +110,14 @@ class InternalHttpClient(object):
         self.password = password
         self.access_token = res.getheader("X-auth-access-token")
         self.refresh_token = res.getheader("X-auth-refresh-token")
+
+        # Store tokens in vault
+        if self.vault:
+            self.vault.update_tokens(
+                self.access_token,
+                self.refresh_token,
+            )
+
         return {
             'access_token': self.access_token,
             'refresh_token': self.refresh_token
@@ -100,6 +134,13 @@ class InternalHttpClient(object):
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
+
+        # Store tokens in vault
+        if self.vault:
+            self.vault.update_tokens(
+                self.access_token,
+                self.refresh_token,
+            )
 
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
