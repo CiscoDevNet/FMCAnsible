@@ -30,6 +30,7 @@ from urllib.parse import urlencode
 
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
+REFRESH_PATH = "/api/fmc_platform/v1/auth/refreshtoken"
 
 
 class InternalHttpClientError(Exception):
@@ -46,14 +47,23 @@ class InternalHttpClient(object):
         # maintained on login/logout
         self._host = host
         self._login_url_path = login_url_path or LOGIN_PATH
+        self.username = None
+        self.password = None
+        self.access_token = None
+        self.refresh_token = None
 
     def send(self, url_path, data=None, method="GET", headers=None):
         """
         Sends a request to the endpoint and returns the response body.
         """
+        if headers is not None and self.access_token is not None:
+            headers['X-auth-access-token'] = self.access_token
+
         response = self._send_request(url_path, data, method, headers)
         response_body = self._parse_response_body(response)
-        self._handle_error(response_body, response.status)
+        if self._handle_error(response_body, response.status) == 2:
+            # Retry send
+            self.send(url_path, data, method, headers)
         # return the tuple just like connection.send
         return response, response_body
 
@@ -69,12 +79,27 @@ class InternalHttpClient(object):
             'Authorization': 'Basic ' + encoded_creds_str
         }
         res = self._send_request(self._login_url_path, None, "POST", headers)
-        access_token = res.getheader("X-auth-access-token")
-        refresh_token = res.getheader("X-auth-refresh-token")
+
+        self.username = username
+        self.password = password
+        self.access_token = res.getheader("X-auth-access-token")
+        self.refresh_token = res.getheader("X-auth-refresh-token")
         return {
-            'access_token': access_token,
-            'refresh_token': refresh_token
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token
         }
+
+    def send_refresh_token(self):
+        headers = {
+            'Content-Type': 'application/json',
+            'X-auth-access-token': self.access_token,
+            'X-auth-refresh-token': self.refresh_token
+        }
+        response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
+        self._handle_error(response_body, response.status)
+
+        self.access_token = response_body.getheader("X-auth-access-token")
+        self.refresh_token = response_body.getheader("X-auth-refresh-token")
 
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
@@ -103,12 +128,23 @@ class InternalHttpClient(object):
         """
         Handles an error by parsing the response, and raising an error if found in response body.
         """
-        if 'error' in response:
-            err = response.get('error')
-            msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
-            # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
-            # raise InternalHttpClientError('FMC Error: {0}'.format(msg), status_code)
-            raise InternalHttpClientError(msg, status_code)
+        if 'error' not in response:
+            return 0
+
+        err = response.get('error')
+        msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
+
+        if 'Access token invalid' in msg:
+            self.send_refresh_token()
+            return 2
+
+        if 'Invalid refresh token' in msg:
+            self.send_login(self.username, self.password)
+            return 2
+
+        # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
+        # raise InternalHttpClientError('FMC Error: {0}'.format(msg), status_code)
+        raise InternalHttpClientError(msg, status_code)
 
 
 def iter_messages(messages):
