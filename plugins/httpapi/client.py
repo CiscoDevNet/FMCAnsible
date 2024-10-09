@@ -25,8 +25,7 @@ import json
 import http.client
 import ssl
 import base64
-from urllib import response
-from urllib.parse import urlencode
+import time
 try:
     from ansible_collections.cisco.fmcansible.plugins.httpapi.vault import KsatVault
 except ImportError:
@@ -130,7 +129,7 @@ class InternalHttpClient(object):
             'X-auth-refresh-token': self.refresh_token
         }
         response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
-        self._handle_error(response_body, response.status)
+        self._handle_error(response_body, response_body.status)
 
         self.access_token = response_body.getheader("X-auth-access-token")
         self.refresh_token = response_body.getheader("X-auth-refresh-token")
@@ -181,6 +180,14 @@ class InternalHttpClient(object):
 
         if 'Invalid refresh token' in msg:
             self.send_login(self.username, self.password)
+            return 2
+
+        if int(status_code) == 429:
+            retry_after = response.getheader("Retry-After")
+            try:
+                time.sleep(int(retry_after))
+            except (TypeError, ValueError):
+                time.sleep(30)
             return 2
 
         # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
