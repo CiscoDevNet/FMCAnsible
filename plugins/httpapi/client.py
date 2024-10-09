@@ -183,10 +183,10 @@ class InternalHttpClient(object):
             return 2
 
         if int(status_code) == 429:
-            retry_after = response.getheader("Retry-After")
             try:
+                retry_after = response.getheader("Retry-After")
                 time.sleep(int(retry_after))
-            except (TypeError, ValueError):
+            except:
                 time.sleep(30)
             return 2
 
