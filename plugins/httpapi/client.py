@@ -27,6 +27,7 @@ import ssl
 import base64
 from urllib import response
 from urllib.parse import urlencode
+import time
 
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
@@ -140,6 +141,14 @@ class InternalHttpClient(object):
 
         if 'Invalid refresh token' in msg:
             self.send_login(self.username, self.password)
+            return 2
+
+        if int(status_code) == 429:
+            retry_after = response.getheader("Retry-After")
+            try:
+                time.sleep(int(retry_after))
+            except (TypeError, ValueError):
+                time.sleep(30)
             return 2
 
         # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
