@@ -110,8 +110,10 @@ class InternalHttpClient(object):
         # ex:
         #     connection.send(url, data, method=http_method, headers=BASE_HEADERS)
         method = method.upper()
+
         timeout = 60 if method == "POST" else 30
         conn = http.client.HTTPSConnection(self._host, timeout=timeout, context=ssl._create_unverified_context())
+
         conn.request(method, url_path, data, headers)
         # response
         response = conn.getresponse()

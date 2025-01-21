@@ -96,28 +96,11 @@ response:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-from os import path, remove
-from re import compile
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcConfigurationError, \
     FmcServerError, FmcUnexpectedResponse
-from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import ResponseCache
-
-CACHE_FILE = "/tmp/cache.json"
-cache = ResponseCache(CACHE_FILE)
-
-
-def extract_hosts(response_object):
-    ip_pattern = compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b')
-
-    if isinstance(response_object, list):
-        response_object = response_object[0]
-    elif not response_object.get('links', {}).get('self'):
-        return "default"
-
-    return ip_pattern.findall(response_object['links']['self'])[0]
 
 
 def main():
@@ -136,35 +119,12 @@ def main():
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)
     op_name = params['operation']
-    cache_exists = path.exists(CACHE_FILE)
-    if op_name == "getAllDomain":
-        if cache_exists:
-            remove(CACHE_FILE)
 
     try:
         resp = resource.execute_operation(op_name, params)
-        facts = construct_ansible_facts(resp, module.params)
+        module.exit_json(changed=resource.config_changed,
+                             response=resp, ansible_facts=construct_ansible_facts(resp, module.params))
 
-        if not facts:
-            module.exit_json(changed=resource.config_changed,
-                             response=resp, ansible_facts=facts)
-        if "update" in op_name:
-            module.exit_json(changed=resource.config_changed,
-                             response=resp, ansible_facts=facts)
-
-        hostname = extract_hosts(resp)
-
-        facts_copy = facts.copy()
-        name, response_body = facts_copy.popitem()
-        cache.cache_response(name, response_body, hostname)
-
-        __facts_cache = cache.get_cached_responses(hostname)
-        if __facts_cache != {}:
-            module.exit_json(changed=resource.config_changed,
-                             response=resp, ansible_facts=__facts_cache)
-        else:
-            module.exit_json(changed=resource.config_changed,
-                             response=resp, ansible_facts=facts)
 
     except FmcInvalidOperationNameError as e:
         module.fail_json(msg='Invalid operation name provided: %s' % e.operation_name)
