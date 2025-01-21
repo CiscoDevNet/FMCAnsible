@@ -15,12 +15,12 @@ The createMultipleKeyChainObject operation handles configuration related to [/ap
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for KeyChain objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for KeyChain objects. |
 
 ## Example
 ```yaml
@@ -28,8 +28,8 @@ The createMultipleKeyChainObject operation handles configuration related to [/ap
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleKeyChainObject"
     data:
-        name: "KeyChainObjectName1"
-        type: "KeyChainObject"
+        name: KeyChainObjectName1
+        type: KeyChainObject
         overridable: False
         keys: [{'keyId': 2, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DURATION', 'endLifeTimeValue': '234'}, 'authAlgorithm': 'md5'}, {'keyId': 24, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'INFINITE'}, 'authAlgorithm': 'md5'}, {'keyId': 3, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'authAlgorithm': 'md5'}, {'keyId': 34, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'authAlgorithm': 'md5'}, {'keyId': 4, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'authAlgorithm': 'md5'}, {'keyId': 5, 'authString': {'cryptoEncryptionType': 'PLAINTEXT', 'cryptoKeyString': 'keyString'}, 'acceptLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'sendLifeTime': {'startLifeTimeValue': '2018-08-25T12:14:23', 'endLifetimeType': 'DATETIME', 'endLifeTimeValue': '2018-08-27T12:14:23'}, 'authAlgorithm': 'md5'}]
     path_params:

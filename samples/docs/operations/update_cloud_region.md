@@ -23,8 +23,8 @@ The updateCloudRegion operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "updateCloudRegion"
     data:
-        id: "cloudRegionUUID"
-        type: "CloudRegion"
+        id: cloudRegionUUID
+        type: CloudRegion
         current: True
     path_params:
         objectId: "{{ object_id }}"

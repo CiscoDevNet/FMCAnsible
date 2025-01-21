@@ -2,7 +2,7 @@
 
 The getAllHostScanPackageObject operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/object/hostscanpackages](/paths//api/fmc_config/v1/domain/{domain_uuid}/object/hostscanpackages.md) path.&nbsp;
 ## Description
-**Retrieves HostScan packages. If no ID is specified for a GET, retrieves list of all HostScan packages.**
+**Retrieves, update, deletes or creates the HostScan packages. If no ID is specified for a GET, retrieves list of all HostScan packages.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |

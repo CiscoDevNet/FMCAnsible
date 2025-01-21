@@ -20,7 +20,7 @@ The createRESTDiscoveryInfo operation handles configuration related to [/api/fmc
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -28,15 +28,15 @@ The createRESTDiscoveryInfo operation handles configuration related to [/api/fmc
   cisco.fmcansible.fmc_configuration:
     operation: "createRESTDiscoveryInfo"
     data:
-        uri: "http://hailataxii.com/taxii-discovery-service"
-        username: "username"
-        passwd: "password"
-        caCert: ""
-        clientCert: ""
-        clientPrivateKey: ""
+        uri: http://hailataxii.com/taxii-discovery-service
+        username: username
+        passwd: password
+        caCert: 
+        clientCert: 
+        clientPrivateKey: 
         params: {'hostnameVerifier': 'allow_all', 'selfSignedServerCertificate': 'false'}
-        version: "0.1.0"
-        type: "source"
+        version: 0.1.0
+        type: source
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

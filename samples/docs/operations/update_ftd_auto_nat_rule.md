@@ -31,7 +31,8 @@ The updateFTDAutoNatRule operation handles configuration related to [/api/fmc_co
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| section | False | string <td colspan=3> Retrieves, creates or modifies auto nat rule in given section. Allowed value is 'auto'. |
+| partialUpdate | False | boolean <td colspan=3> This field specifies whether to change the entire object or only certain attributes of it. When its value is false the whole object will change, and if the value is true then only the attributes that are specified will change. The default value of this field is false. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies auto nat rule in given section. Allowed value is auto. |
 
 ## Example
 ```yaml
@@ -41,9 +42,9 @@ The updateFTDAutoNatRule operation handles configuration related to [/api/fmc_co
     data:
         originalNetwork: {'type': 'Network', 'id': 'Network object uuid'}
         translatedNetwork: {'type': 'Network', 'id': 'Network object uuid'}
-        id: "autoNatRuleUuid"
-        type: "FTDAutoNatRule"
-        natType: "STATIC"
+        id: autoNatRuleUuid
+        type: FTDAutoNatRule
+        natType: STATIC
         interfaceIpv6: False
         fallThrough: False
         dns: False
@@ -57,6 +58,7 @@ The updateFTDAutoNatRule operation handles configuration related to [/api/fmc_co
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"
     query_params:
+        partialUpdate: "{{ partial_update }}"
         section: "{{ section }}"
 
 ```

@@ -2,7 +2,7 @@
 
 The createRevertUpgrade operation handles configuration related to [/api/fmc_platform/v1/updates/revertupgrades](/paths//api/fmc_platform/v1/updates/revertupgrades.md) path.&nbsp;
 ## Description
-**API to trigger Revert of an upgrade. _Check the response section for applicable examples (if any)._**
+**Creates a task to revert an upgrade on an FTD. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
 | Parameter | Value |

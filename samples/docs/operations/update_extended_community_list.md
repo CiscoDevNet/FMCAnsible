@@ -26,11 +26,11 @@ The updateExtendedCommunityList operation handles configuration related to [/api
   cisco.fmcansible.fmc_configuration:
     operation: "updateExtendedCommunityList"
     data:
-        subType: "Standard"
-        type: "ExtendedCommunityList"
+        subType: Standard
+        type: ExtendedCommunityList
         entries: [{'action': 'DENY', 'sequence': 123, 'routeTarget': '1:2'}]
-        name: "EXT_COM_1"
-        id: "ExtendedCommunityListUUID"
+        name: EXT_COM_1
+        id: ExtendedCommunityListUUID
         overridable: False
     path_params:
         objectId: "{{ object_id }}"

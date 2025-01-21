@@ -13,7 +13,7 @@ The getAllPrefilterRule operation handles configuration related to [/api/fmc_con
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| ruleType | False | string <td colspan=3> If parameter is specified, only the policies with specified <code>ruleType</code> will be shown. Allowed values are 'PREFILTER' and 'TUNNEL'. Cannot be used if object ID is specified in path. |
+| ruleType | False | string <td colspan=3> If parameter is specified, only the policies with specified <code>ruleType</code> will be shown. Allowed values are PREFILTER and TUNNEL. Cannot be used if object ID is specified in path. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |

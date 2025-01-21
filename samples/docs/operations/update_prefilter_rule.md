@@ -42,14 +42,14 @@ The updatePrefilterRule operation handles configuration related to [/api/fmc_con
   cisco.fmcansible.fmc_configuration:
     operation: "updatePrefilterRule"
     data:
-        action: "FASTPATH/ANALYZE/BLOCK"
+        action: FASTPATH/ANALYZE/BLOCK
         enabled: False
-        type: "PrefilterRule"
-        name: "Rule2"
+        type: PrefilterRule
+        name: Rule2
         sendEventsToFMC: False
-        ruleType: "PREFILTER"
+        ruleType: PREFILTER
         bidirectional: False
-        id: "prefilterruleUUID1"
+        id: prefilterruleUUID1
         vlanTags: {'objects': [{'type': 'VlanTag', 'name': 'vlan_tag_1', 'id': 'VlanTagUUID1'}, {'type': 'VlanTag', 'name': 'vlan_tag_2', 'id': 'VlanTagUUID2'}]}
         sourceInterfaces: {'objects': [{'name': 'External', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]}
         destinationInterfaces: {'objects': [{'name': 'Internal', 'id': 'SecurityInterfaceUUID', 'type': 'SecurityZone'}]}

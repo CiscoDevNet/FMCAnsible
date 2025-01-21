@@ -19,12 +19,12 @@ The createMultipleVlanTag operation handles configuration related to [/api/fmc_c
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for vlan tag objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for vlan tag objects. |
 
 ## Example
 ```yaml
@@ -32,13 +32,13 @@ The createMultipleVlanTag operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleVlanTag"
     data:
-        type: "VlanTag"
-        name: "vlanobj1"
-        description: "New VlanTag test"
+        type: VlanTag
+        name: vlanobj1
+        description: New VlanTag test
         data: {'startTag': 12, 'endTag': 15}
-        type: "VlanTag"
-        name: "vlanobj2"
-        description: "New VlanTag test"
+        type: VlanTag
+        name: vlanobj2
+        description: New VlanTag test
         data: {'startTag': 112, 'endTag': 151}
     path_params:
         domainUUID: "{{ domain_uuid }}"

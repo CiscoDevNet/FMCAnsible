@@ -13,6 +13,10 @@ The getAllRealmUser operation handles configuration related to [/api/fmc_config/
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
 | filter | False | string <td colspan=3> Filter criteria can be specified using the format <code>name:name;realm:realm;groupId:groupId;resolved:resolved</code><br/><br/><code>name</code> -- Name of the user to be queried starting with...<br/><code>realm</code> -- Realm uuid for the user.<br/><code>groupId</code> -- Users with the group id. <br/><code>resolved</code> -- Either <code>true</code> or <code>false</code>.<br/> |
+| name | False | string <td colspan=3> Name of the user to be queried starting with. |
+| realm | False | string <td colspan=3> Realm uuid for the user. |
+| resolved | False | string <td colspan=3> Either <code>true</code> or <code>false</code>. |
+| groupId | False | string <td colspan=3> Users with the group id. |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |
@@ -26,6 +30,10 @@ The getAllRealmUser operation handles configuration related to [/api/fmc_config/
         domainUUID: "{{ domain_uuid }}"
     query_params:
         filter: "{{ filter }}"
+        name: "{{ name }}"
+        realm: "{{ realm }}"
+        resolved: "{{ resolved }}"
+        groupId: "{{ group_id }}"
         offset: "{{ offset }}"
         limit: "{{ limit }}"
         expanded: "{{ expanded }}"

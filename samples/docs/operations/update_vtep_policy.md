@@ -25,10 +25,10 @@ The updateVTEPPolicy operation handles configuration related to [/api/fmc_config
   cisco.fmcansible.fmc_configuration:
     operation: "updateVTEPPolicy"
     data:
-        id: "vtepPolicyUUID"
+        id: vtepPolicyUUID
         nveEnable: True
         vtepEntries: [{'sourceInterface': {'name': 'GigabitEthernet0/0', 'type': 'PhysicalInterface', 'id': 'interfaceUUID'}, 'nveVtepId': 1, 'nveDestinationPort': 6081, 'nveEncapsulationType': 'GENEVE'}]
-        type: "VTEPPolicy"
+        type: VTEPPolicy
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

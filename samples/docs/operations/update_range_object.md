@@ -25,11 +25,11 @@ The updateRangeObject operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "updateRangeObject"
     data:
-        name: "TestRange2"
-        value: "2003::3-2003::4"
-        type: "Range"
-        description: "Test Description"
-        id: "Range-obj-UUID-1"
+        name: TestRange2
+        value: 2003::3-2003::4
+        type: Range
+        description: Test Description
+        id: Range-obj-UUID-1
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

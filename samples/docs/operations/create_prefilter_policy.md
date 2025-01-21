@@ -5,16 +5,16 @@ The createPrefilterPolicy operation handles configuration related to [/api/fmc_c
 **Retrieves prefilter policy associated with the specified ID. Also, retrieves list of all prefilter policies. _Check the response section for applicable examples (if any)._**
 
 ## Data Parameters Example
-| Parameter | Value | Description |
-| --------- | -------- | ----------- |
-| type | PrefilterPolicy | Type of the prefilter policy; this value is always PrefilterPolicy. |
-| name | PrefilterPolicy1 | User-specified name of the prefilter policy. |
-| description | policy to test FMC implementation | Description of Prefilter Policy. |
+| Parameter | Value |
+| --------- | -------- |
+| type | PrefilterPolicy |
+| name | PrefilterPolicy1 |
+| description | policy to test FMC implementation |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -22,9 +22,9 @@ The createPrefilterPolicy operation handles configuration related to [/api/fmc_c
   cisco.fmcansible.fmc_configuration:
     operation: "createPrefilterPolicy"
     data:
-        type: "PrefilterPolicy"
-        name: "PrefilterPolicy1"
-        description: "policy to test FMC implementation"
+        type: PrefilterPolicy
+        name: PrefilterPolicy1
+        description: policy to test FMC implementation
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

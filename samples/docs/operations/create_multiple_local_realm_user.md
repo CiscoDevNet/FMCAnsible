@@ -7,12 +7,12 @@ The createMultipleLocalRealmUser operation handles configuration related to [/ap
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for Local Realm Users. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for Local Realm Users. |
 
 ## Example
 ```yaml

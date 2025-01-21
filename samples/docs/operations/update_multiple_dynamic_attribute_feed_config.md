@@ -26,7 +26,7 @@ The updateMultipleDynamicAttributeFeedConfig operation handles configuration rel
   cisco.fmcansible.fmc_configuration:
     operation: "updateMultipleDynamicAttributeFeedConfig"
     data:
-        subscribed: "boolean"
+        subscribed: boolean
         feeds: [{'id': 'id', 'name': 'Some text', 'description': 'Some text', 'subscribed': 'true', 'deprecated': 'false', 'type': 'DynamicAttributesFeed'}, {'id': 'id', 'name': 'Some text', 'description': 'Some text', 'subscribed': 'true', 'deprecated': 'false', 'type': 'DynamicAttributesFeed'}]
     path_params:
         domainUUID: "{{ domain_uuid }}"

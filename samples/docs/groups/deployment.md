@@ -23,6 +23,14 @@
 ### Supported Operations
 * [getJobHistory](../operations/get_job_history.md)
 * [updateJobHistory](../operations/update_job_history.md)
+## /api/fmc_config/v1/domain/{domainUUID}/deployment/jobhistories/{containerUUID}/operational/downloadreports
+
+### Supported Operations
+* [getDownloadReport](../operations/get_download_report.md)
+## /api/fmc_config/v1/domain/{domainUUID}/deployment/jobhistories/{containerUUID}/operational/emailreports
+
+### Supported Operations
+* [createEmailReport](../operations/create_email_report.md)
 ## /api/fmc_config/v1/domain/{domainUUID}/deployment/rollbackrequests
 
 ### Supported Operations

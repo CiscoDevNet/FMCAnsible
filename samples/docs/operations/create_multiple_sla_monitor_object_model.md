@@ -24,12 +24,12 @@ The createMultipleSLAMonitorObjectModel operation handles configuration related 
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| bulk | False | boolean | Enables bulk create for SLA monitor objects. |
+| bulk | False | boolean <td colspan=3> Enables bulk create for SLA monitor objects. |
 
 ## Example
 ```yaml
@@ -39,17 +39,17 @@ The createMultipleSLAMonitorObjectModel operation handles configuration related 
     data:
         interfaceNames: ['comment : interfaceNames are not allowed in POST. New Inline Interface Names can not be added via POST.']
         timeout: 5000
-        type: "SLAMonitor"
+        type: SLAMonitor
         threshold: 2
         frequency: 60
         slaId: 1
         dataSize: 28
         tos: 1
         noOfPackets: 1
-        monitorAddress: "1.1.1.1"
+        monitorAddress: 1.1.1.1
         interfaceObjects: [{'name': 'SecZone1', 'id': 'securityZoneUUID', 'type': 'SecurityZone'}, {'name': 'InterfaceGroup1', 'id': 'interfaceGroupUUID', 'type': 'InterfaceGroup'}]
-        description: "Sla monitor description"
-        name: "SLA1"
+        description: Sla monitor description
+        name: SLA1
     path_params:
         domainUUID: "{{ domain_uuid }}"
     query_params:

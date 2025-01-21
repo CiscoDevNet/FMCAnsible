@@ -17,7 +17,7 @@ The createIKEv2IPsecProposal operation handles configuration related to [/api/fm
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| domainUUID | True | string | Domain UUID |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -25,12 +25,12 @@ The createIKEv2IPsecProposal operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "createIKEv2IPsecProposal"
     data:
-        name: "ikev2ipsecproposal-test-1"
-        id: "ikev2ipsecproposalUUID"
+        name: ikev2ipsecproposal-test-1
+        id: ikev2ipsecproposalUUID
         encryptionAlgorithms: ['3DES', 'AES-192']
         integrityAlgorithms: ['SHA-256', 'SHA-512']
-        type: "IKEv2IPsecProposal"
-        description: "IKEv2 IPsec object description"
+        type: IKEv2IPsecProposal
+        description: IKEv2 IPsec object description
     path_params:
         domainUUID: "{{ domain_uuid }}"
 

@@ -13,7 +13,7 @@ The deleteSnort3IntrusionRuleGroupsObject operation handles configuration relate
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| cascadeDeleteOrphanedRules | False | string <td colspan=3> Boolean value for deleting orphan rule. Mandatory if custom rulegroup has unique/unshared rules which becomes orphan after custom rule Group delete. |
+| cascadeDeleteOrphanedRules | False | boolean <td colspan=3> Boolean value for deleting orphan rule. Mandatory if custom rulegroup has unique/unshared rules which becomes orphan after custom rule Group delete. |
 
 ## Example
 ```yaml

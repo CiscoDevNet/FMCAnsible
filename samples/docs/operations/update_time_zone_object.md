@@ -25,11 +25,11 @@ The updateTimeZoneObject operation handles configuration related to [/api/fmc_co
   cisco.fmcansible.fmc_configuration:
     operation: "updateTimeZoneObject"
     data:
-        timeZoneId: "Asia/Calcutta"
-        type: "TimeZoneObject"
-        description: "edited"
-        name: "TestPUTObject"
-        id: "timeZoneObjectId"
+        timeZoneId: Asia/Calcutta
+        type: TimeZoneObject
+        description: edited
+        name: TestPUTObject
+        id: timeZoneObjectId
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

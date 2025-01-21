@@ -13,6 +13,7 @@ The getAllAccessRule operation handles configuration related to [/api/fmc_config
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
+| filter | False | string <td colspan=3> For bulk delete needs the filter="ids:" and with <code>bulk=true</code> flag, Value is of format (including quotes): <code>"ids:id1,id2,..."</code>.<br/><code>ids</code> is a comma-separated list of rule IDs to be deleted. For GetAll Filter criteria can be specified using the format <code>"name:filterName;timeRange:yes/no;action:filterAction;sourceNetworks:filterValue1,filterValue2...."</code>. Supported filter criteria are "name","timeRange","action","sourceNetworks","destinationNetworks","sourcePorts","destinationPorts","sourceZones","destinationZones","applications","sourceDynamicObjects","destinationDynamicObjects","vlanTags","comments","users","urls","intrusionPolicy","sourceSecurityGroupTags","fts". |
 | offset | False | integer <td colspan=3> Index of first item to return. |
 | limit | False | integer <td colspan=3> Number of items to return. |
 | expanded | False | boolean <td colspan=3> If set to true, the GET response displays a list of objects with additional attributes. |
@@ -26,6 +27,7 @@ The getAllAccessRule operation handles configuration related to [/api/fmc_config
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"
     query_params:
+        filter: "{{ filter }}"
         offset: "{{ offset }}"
         limit: "{{ limit }}"
         expanded: "{{ expanded }}"

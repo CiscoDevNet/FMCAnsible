@@ -26,10 +26,10 @@ The updateVirtualRouterModel operation handles configuration related to [/api/fm
   cisco.fmcansible.fmc_configuration:
     operation: "updateVirtualRouterModel"
     data:
-        type: "VirtualRouter"
-        name: "Beta"
-        description: "Human Resource Department Virtual Router"
-        id: "virtualrouterUuid"
+        type: VirtualRouter
+        name: Beta
+        description: Human Resource Department Virtual Router
+        id: virtualrouterUuid
         interfaces: [{'id': 'interface_uuid1', 'type': 'PhysicalInterface', 'name': 'OUTSIDE'}, {'id': 'interface_uuid2', 'type': 'SubInterface', 'name': 'OUTSIDE-SUB'}]
     path_params:
         objectId: "{{ object_id }}"

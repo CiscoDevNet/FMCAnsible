@@ -28,13 +28,13 @@ The updateIPv6StaticRouteModel operation handles configuration related to [/api/
   cisco.fmcansible.fmc_configuration:
     operation: "updateIPv6StaticRouteModel"
     data:
-        interfaceName: "InterfaceLogicalName"
+        interfaceName: InterfaceLogicalName
         selectedNetworks: [{'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host1'}]
         gateway: {'object': {'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host2'}}
         metricValue: 50
-        type: "IPv6StaticRoute"
+        type: IPv6StaticRoute
         isTunneled: False
-        id: "ipv6StaticRouteUuid"
+        id: ipv6StaticRouteUuid
     path_params:
         objectId: "{{ object_id }}"
         containerUUID: "{{ container_uuid }}"

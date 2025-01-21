@@ -13,16 +13,16 @@ The createAccessPolicyCategory operation handles configuration related to [/api/
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Query Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| section | False | string | Retrieves, creates or modifies category in given section. Allowed value is 'mandatory' and 'default'. |
-| aboveCategory | False | string | creates category above specified category. |
-| insertBefore | False | string | creates category above given rule index. |
-| insertAfter | False | string | creates category below given rule index. |
+| section | False | string <td colspan=3> Retrieves, creates or modifies category in given section. Allowed value is mandatory and default. |
+| aboveCategory | False | string <td colspan=3> creates category above specified category. |
+| insertBefore | False | string <td colspan=3> creates category above given rule index. |
+| insertAfter | False | string <td colspan=3> creates category below given rule index. |
 
 ## Example
 ```yaml
@@ -30,8 +30,8 @@ The createAccessPolicyCategory operation handles configuration related to [/api/
   cisco.fmcansible.fmc_configuration:
     operation: "createAccessPolicyCategory"
     data:
-        type: "Category"
-        name: "Category0001"
+        type: Category
+        name: Category0001
     path_params:
         containerUUID: "{{ container_uuid }}"
         domainUUID: "{{ domain_uuid }}"

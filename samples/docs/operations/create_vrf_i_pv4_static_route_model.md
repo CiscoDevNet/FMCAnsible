@@ -18,9 +18,9 @@ The createVrfIPv4StaticRouteModel operation handles configuration related to [/a
 ## Path Parameters
 | Parameter | Required | Type | Description |
 | --------- | -------- | ---- | ----------- |
-| virtualrouterUUID | True | string | Unique identifier of Virtual Router |
-| containerUUID | True | string | The container id under which this specific resource is contained. |
-| domainUUID | True | string | Domain UUID |
+| virtualrouterUUID | True | string <td colspan=3> Unique identifier of Virtual Router |
+| containerUUID | True | string <td colspan=3> The container id under which this specific resource is contained. |
+| domainUUID | True | string <td colspan=3> Domain UUID |
 
 ## Example
 ```yaml
@@ -28,12 +28,12 @@ The createVrfIPv4StaticRouteModel operation handles configuration related to [/a
   cisco.fmcansible.fmc_configuration:
     operation: "createVrfIPv4StaticRouteModel"
     data:
-        interfaceName: "InterfaceLogicalName"
+        interfaceName: InterfaceLogicalName
         selectedNetworks: [{'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host1'}]
         gateway: {'object': {'type': 'Host', 'id': 'networkHostUuid', 'name': 'Host2'}}
         routeTracking: {'type': 'SLAMonitor', 'name': 'sla1', 'id': 'sla_monitor_id'}
         metricValue: 22
-        type: "IPv4StaticRoute"
+        type: IPv4StaticRoute
         isTunneled: False
     path_params:
         virtualrouterUUID: "{{ virtualrouter_uuid }}"

@@ -11,7 +11,8 @@ The updateCloudEvents operation handles configuration related to [/api/fmc_confi
 | type | CloudEventsConfig |
 | sendIntrusionEvents | False |
 | sendFileEvents | True |
-| sendConnectionEvents | True |
+| sendConnectionEvents | False |
+| sendAllConnectionEvents | True |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
@@ -25,11 +26,12 @@ The updateCloudEvents operation handles configuration related to [/api/fmc_confi
   cisco.fmcansible.fmc_configuration:
     operation: "updateCloudEvents"
     data:
-        id: "CloudEventsConfigsUUID"
-        type: "CloudEventsConfig"
+        id: CloudEventsConfigsUUID
+        type: CloudEventsConfig
         sendIntrusionEvents: False
         sendFileEvents: True
-        sendConnectionEvents: True
+        sendConnectionEvents: False
+        sendAllConnectionEvents: True
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

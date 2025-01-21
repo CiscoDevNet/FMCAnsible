@@ -27,13 +27,13 @@ The updateFQDNObject operation handles configuration related to [/api/fmc_config
   cisco.fmcansible.fmc_configuration:
     operation: "updateFQDNObject"
     data:
-        type: "FQDN"
-        value: "www.cisco.com"
-        dnsResolution: "IPV6_ONLY"
+        type: FQDN
+        value: www.cisco.com
+        dnsResolution: IPV6_ONLY
         overridable: False
-        description: "Test Description"
-        id: "5555-6666-7777-8888"
-        name: "TestFQDN"
+        description: Test Description
+        id: 5555-6666-7777-8888
+        name: TestFQDN
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

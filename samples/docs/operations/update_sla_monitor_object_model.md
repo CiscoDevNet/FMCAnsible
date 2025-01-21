@@ -36,18 +36,18 @@ The updateSLAMonitorObjectModel operation handles configuration related to [/api
     data:
         interfaceNames: ['Interface1', 'comment : For interfaceNames the only option in PUT is to remove these, no new additions of inline interface names will be allowed.']
         timeout: 5000
-        type: "SLAMonitor"
+        type: SLAMonitor
         threshold: 2
         frequency: 60
         slaId: 1
         dataSize: 28
         tos: 1
         noOfPackets: 1
-        monitorAddress: "1.1.1.2"
+        monitorAddress: 1.1.1.2
         interfaceObjects: [{'name': 'SecZone1', 'id': 'securityZoneUUID', 'type': 'SecurityZone'}, {'name': 'InterfaceGroup1', 'id': 'interfaceGroupUUID', 'type': 'InterfaceGroup'}]
-        description: "Sla monitor description updated"
-        name: "SLA1-Updated"
-        id: "slaMonitorObjectUUID"
+        description: Sla monitor description updated
+        name: SLA1-Updated
+        id: slaMonitorObjectUUID
     path_params:
         objectId: "{{ object_id }}"
         domainUUID: "{{ domain_uuid }}"

@@ -2,7 +2,7 @@
 
 The getFMCManagedChassis operation handles configuration related to [/api/fmc_config/v1/domain/{domainUUID}/chassis/fmcmanagedchassis/{objectId}](/paths//api/fmc_config/v1/domain/{domain_uuid}/chassis/fmcmanagedchassis/{object_id}.md) path.&nbsp;
 ## Description
-**Retrieves list of all chassis managed devices from FMC.**
+**Retrieves list of all chassis managed devices from Firewall Management Center.**
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
