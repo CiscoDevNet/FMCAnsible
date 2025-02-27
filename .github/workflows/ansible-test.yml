@@ -46,7 +46,7 @@ jobs:
       run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
 
     - name: Store migrated collection artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: collection
         path: .cache/collection-tarballs
