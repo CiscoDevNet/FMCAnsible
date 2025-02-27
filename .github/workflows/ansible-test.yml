@@ -35,10 +35,10 @@ jobs:
     - name: Check out code
       uses: actions/checkout@v3
     
-    - name: Set up Python 3.10
+    - name: Set up Python 3.8
       uses: actions/setup-python@v5
       with:
-        python-version: '3.11'
+        python-version: '3.8'
 
     - name: Install ansible-base (v${{ matrix.ansible }})
       run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
