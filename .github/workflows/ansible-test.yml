@@ -40,6 +40,9 @@ jobs:
       with:
         python-version: '3.8'
 
+    - name: Install ansible-core
+      run: pip install ansible-core --force-reinstall
+
     - name: Install ansible-base (v${{ matrix.ansible }})
       run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
 
