@@ -2,3 +2,4 @@ plugins/module_utils/common.py import-2.6
 plugins/module_utils/configuration.py import-2.6
 plugins/module_utils/fmc_swagger_client.py import-2.6
 plugins/modules/fmc_configuration.py import-2.6
+plugins/modules validate-modules:missing-gplv3-license
