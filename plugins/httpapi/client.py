@@ -8,8 +8,8 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: Cisco
-httpapi : fmc
+author: Cisco Netsec TME
+name: FMC Ansible Module
 short_description: Internal client for FMC
 description:
   - Wraps urllib to make specific requests to FMC endpoint and parse the responses.
