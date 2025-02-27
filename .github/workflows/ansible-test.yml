@@ -62,10 +62,10 @@ jobs:
     - build
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Python 3.10
+    - name: Set up Python 3.8
       uses: actions/setup-python@v1
       with:
-        python-version: 3.10
+        python-version: '3.8'
 
     - name: Install ansible-base (v2.18.3)
       run: pip install https://github.com/ansible/ansible/archive/v2.18.3.tar.gz --disable-pip-version-check
