@@ -77,7 +77,7 @@ jobs:
     - name: Download migrated collection artifacts
       uses: actions/download-artifact@v4
       with:
-        name: collection-*
+        name: collection-${{ strategy.index }}
         merge-multiple: true
         path: .cache/collection-tarballs
 
