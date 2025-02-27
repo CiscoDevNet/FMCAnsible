@@ -75,7 +75,7 @@ jobs:
       run: pip install https://github.com/ansible/ansible/archive/v2.18.3.tar.gz --disable-pip-version-check
 
     - name: Download migrated collection artifacts
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4
       with:
         name: collection-*
         merge-multiple: true
