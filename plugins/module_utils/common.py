@@ -189,7 +189,7 @@ def equal_values(v1, v2):
         return to_text(v1) == to_text(v2)
 
     # if type(v1) != type(v2):
-    if isinstance(v1, type(v2)):    
+    if isinstance(v1, type(v2)):
         return False
     value_type = type(v1)
 
