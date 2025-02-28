@@ -309,7 +309,7 @@ def delete_ref_duplicates(d):
         if isinstance(v, list):
             modified_d[k] = delete_ref_duplicates_from_list(v)
         # elif type(v) == dict:
-        elif isinstance(v, dcit):
+        elif isinstance(v, dict):
             modified_d[k] = delete_ref_duplicates(v)
         else:
             modified_d[k] = v
