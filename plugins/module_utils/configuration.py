@@ -738,7 +738,8 @@ def model_has_property(model, prop_name):
     """
     Gets whether the model spec object contains the specified property name.
     """
-    return model and type(model) == dict and model.get('properties') is not None and model.get('properties').get(prop_name) is not None
+    # return model and type(model) == dict and model.get('properties') is not None and model.get('properties').get(prop_name) is not None
+    return model and isinstance(model, dict) and model.get('properties') is not None and model.get('properties').get(prop_name) is not None
 
 
 def is_playbook_obj_equal_to_api_obj(obj_client, obj_server, model=None):
