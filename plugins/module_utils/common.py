@@ -78,7 +78,7 @@ def construct_ansible_facts(response, params):
             facts[params['register_as']] = response_body
         # meignw2021
         # elif response_body.get('name') and response_body.get('type'):
-        elif type(response_body) is dict and response_body.get('name') and response_body.get('type'):
+        elif isinstance(response_body, dict) and response_body.get('name') and response_body.get('type'):
             object_name = re.sub(INVALID_IDENTIFIER_SYMBOLS, '_', response_body['name'].lower())
             fact_name = '%s_%s' % (response_body['type'], object_name)
             facts[fact_name] = response_body
