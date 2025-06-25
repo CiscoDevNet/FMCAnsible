@@ -202,7 +202,7 @@ def equal_values(v1, v2):
 
 
 #def equal_objects(d1, d2, compare_common_fields_only=True):
-def equal_objects(obj1, obj2, ignored_fields=None)
+def equal_objects(obj1, obj2, ignored_fields=None):
     """
     Checks whether two objects are equal. Ignores special object properties (e.g. 'id', 'version') and
     properties with None and empty values. In case properties contains a reference to the other object,
