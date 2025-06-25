@@ -55,6 +55,9 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+bin/
+.venv/
+lib/
 
 # Doc distribution folder
 docs/dist
