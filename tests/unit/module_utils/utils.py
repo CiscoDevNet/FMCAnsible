@@ -8,7 +8,6 @@ try:
     from unittest.mock import patch
 except ImportError:
     # support for python 2.7
-    import mock
     from mock import patch
 
 from ansible.module_utils import basic
