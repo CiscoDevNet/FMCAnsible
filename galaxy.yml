@@ -20,6 +20,8 @@ tags:
   - "fmc"
   - "ftd"
 
+python_requires: ">=3.6"
+
 dependencies:
   community.general: '>=7.5.9'
   community.network: '5.0.3'
