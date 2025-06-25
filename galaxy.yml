@@ -7,7 +7,7 @@ authors:
   - joe Agster <joeaxcdw>
   - Iurii Tymoshevskyi <itymo>
   - Sameer Singh <sameesin>
-  - Jeroen Wittock
+  - Jeroen Wittock <jwittock>
 
 description: An Ansible collection for managing Cisco Secure Firewall Management Center
 
