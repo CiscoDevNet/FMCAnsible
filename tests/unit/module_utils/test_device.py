@@ -31,9 +31,9 @@ class TestFmcPlatformFactory(object):
 
     def test_factory_should_return_corresponding_platform(self):
         fmc_platform = FmcPlatformFactory.create(FmcModel.FMC_2600.value, dict(DEFAULT_MODULE_PARAMS))
-        assert type(fmc_platform) is FmcAsa5500xPlatform
+        assert isinstance(fmc_platform, FmcAsa5500xPlatform)
         fmc_platform = FmcPlatformFactory.create(FmcModel.FMC_2130.value, dict(DEFAULT_MODULE_PARAMS))
-        assert type(fmc_platform) is Fmc2100Platform
+        assert isinstance(fmc_platform, Fmc2100Platform)
 
     def test_factory_should_raise_error_with_not_supported_model(self):
         with pytest.raises(ValueError) as ex:

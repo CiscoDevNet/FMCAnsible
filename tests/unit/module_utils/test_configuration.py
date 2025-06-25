@@ -33,7 +33,7 @@ except ImportError:
     from mock import call, patch
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import iterate_over_pageable_resource, BaseConfigurationResource, \
-    OperationChecker, OperationNamePrefix, ParamName, QueryParams
+    OperationChecker, OperationNamePrefix, ParamName
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, FmcUnexpectedResponse
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError, OperationField

@@ -10,7 +10,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: 
+author:
     - Cisco Netsec TME (@cisco-netsec-tme)
 name: client
 short_description: Internal client for FMC

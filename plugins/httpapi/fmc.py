@@ -24,7 +24,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: 
+author:
     - Ansible Networking Team (@cisco-netsec-tme)
 name: fmc
 short_description: HttpApi Plugin for Cisco Secure Firewall device
@@ -261,7 +261,7 @@ class HttpApi(HttpApiBase):
         finally:
             self._ignore_http_errors = False
 
-    def update_auth(self, response, response_data):
+    def update_auth(self, response, response_text):
         # With tokens, authentication should not be checked and updated on each request
         return None
 

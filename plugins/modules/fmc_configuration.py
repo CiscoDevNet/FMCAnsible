@@ -123,7 +123,7 @@ def main():
     try:
         resp = resource.execute_operation(op_name, params)
         module.exit_json(changed=resource.config_changed,
-                        response=resp, ansible_facts=construct_ansible_facts(resp, module.params))
+                         response=resp, ansible_facts=construct_ansible_facts(resp, module.params))
 
     except FmcInvalidOperationNameError as e:
         module.fail_json(msg='Invalid operation name provided: %s' % e.operation_name)
