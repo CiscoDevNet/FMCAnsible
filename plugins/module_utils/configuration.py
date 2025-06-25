@@ -725,7 +725,7 @@ def iterate_over_pageable_resource(resource_func, params):
         # for item in items:
         #     yield item
         yield from items
-        
+
         if received_less_items_than_requested(len(items), limit):
             break
 
