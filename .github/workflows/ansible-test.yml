@@ -141,6 +141,12 @@ jobs:
           # will run on all python versions it supports.
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install urllib3 directly if it's a direct dependency
+          pip install urllib3
+
       # Install the head of the given branch (devel, stable-2.10)
       - name: Install ansible-base (${{ matrix.ansible }})
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
@@ -201,7 +207,7 @@ jobs:
           python -m pip install --upgrade pip
           # Install urllib3 directly if it's a direct dependency
           pip install urllib3
-          
+
       # Install the head of the given branch (devel, stable-2.10)
       - name: Install ansible-base (${{ matrix.ansible }})
         run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
