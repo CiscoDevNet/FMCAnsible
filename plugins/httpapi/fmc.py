@@ -53,6 +53,7 @@ import os
 import re
 
 from ansible import __version__ as ansible_version
+from ansible.errors import AnsibleError
 
 from ansible.module_utils.basic import to_text
 from ansible.errors import AnsibleConnectionFailure
