@@ -62,8 +62,9 @@ from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.plugins.httpapi import HttpApiBase
 try:
     from urllib3 import encode_multipart_formdata
-except: ImportError:
+except ImportError:
     urllib3 = None
+
 from urllib3.fields import RequestField
 from ansible.module_utils.connection import ConnectionError
 
