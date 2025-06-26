@@ -61,10 +61,18 @@ from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.plugins.httpapi import HttpApiBase
 try:
     from urllib3 import encode_multipart_formdata
-except ImportError:
-    urllib3 = None
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
 
-from urllib3.fields import RequestField
+try:
+    from urllib3.fields import RequestField
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
+
 from ansible.module_utils.connection import ConnectionError
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
@@ -310,8 +318,12 @@ class HttpApi(HttpApiBase):
         url = construct_url_path(to_url)
         self._display(HTTPMethod.POST, 'upload', url)
         with open(from_path, 'rb') as src_file:
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             rf = RequestField('fileToUpload', src_file.read(), os.path.basename(src_file.name))
             rf.make_multipart()
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             body, content_type = encode_multipart_formdata([rf])
 
             headers = dict(BASE_HEADERS)
