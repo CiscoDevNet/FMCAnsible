@@ -3,3 +3,4 @@ ansible==2.16.14
 #urllib3==1.26.5
 urllib3
 lxml==4.6.3
+requests>=2.25.0

@@ -51,6 +51,7 @@ options:
 import json
 import os
 import re
+import requests
 
 from ansible import __version__ as ansible_version
 
@@ -59,7 +60,10 @@ from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.plugins.httpapi import HttpApiBase
-from urllib3 import encode_multipart_formdata
+try:
+    from urllib3 import encode_multipart_formdata
+except: ImportError:
+    urllib3 = None
 from urllib3.fields import RequestField
 from ansible.module_utils.connection import ConnectionError
 
