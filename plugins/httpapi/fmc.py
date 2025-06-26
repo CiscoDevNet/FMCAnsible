@@ -51,7 +51,6 @@ options:
 import json
 import os
 import re
-import requests
 
 from ansible import __version__ as ansible_version
 
