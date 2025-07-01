@@ -16,6 +16,8 @@ try:
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
     from unittest.mock import MagicMock
+
+
     # Create dummy classes if 'kick' is not installed,
     # allowing module to be imported.
     class Kp(object):
