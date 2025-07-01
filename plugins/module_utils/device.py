@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from abc import ABC, abstractmethod
+from abc import ABC
 from enum import Enum
 from urllib.parse import urlparse
 
