@@ -232,4 +232,3 @@ class TestFmc4600Platform(object):
         # assert fmc_line.baseline_fp2k_fmc.called
         # assert fmc_line.disconnect.called
 '''
-
