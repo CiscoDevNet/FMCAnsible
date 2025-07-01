@@ -1,5 +1,5 @@
 namespace: cisco
-name: cisco.fmcansible
+name: fmcansible
 version: 1.0.0
 source: https://github.com/CiscoDevNet/FMCAnsible
 readme: README.md
@@ -28,9 +28,6 @@ dependencies:
   community.network: '5.0.3'
   ansible.netcommon: '5.3.0'
   ansible.utils: '5.1.2'
-  #python:
-  #  - urllib3>=1.26.0
-  #  - requests>=2.25.0
 
 repository: https://github.com/CiscoDevNet/FMCAnsible
 homepage: https://github.com/CiscoDevNet/FMCAnsible
