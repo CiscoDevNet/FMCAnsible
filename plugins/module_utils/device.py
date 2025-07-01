@@ -15,15 +15,26 @@ try:
     from kick.device.fp2k.fmc import Kp
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
+    from unittest.mock import MagicMock
     # Create dummy classes if 'kick' is not installed,
     # allowing module to be imported.
     class Kp(object):
         def __init__(self, *args, **kwargs):
             pass
 
+        def ssh_console(self):
+            mock_console = MagicMock()
+            mock_console.__enter__.return_value = mock_console
+            return mock_console
+
     class Fmc5500x(object):
         def __init__(self, *args, **kwargs):
             pass
+
+        def ssh_console(self):
+            mock_console = MagicMock()
+            mock_console.__enter__.return_value = mock_console
+            return mock_console
 
 
 class FmcConfigurationError(Exception):
