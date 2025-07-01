@@ -63,7 +63,7 @@ class AbstractFmcPlatform(ABC):
     def __init__(self, module_params=None):
         self.module_params = module_params
 
-    def install_fmc_image(self):
+    def install_fmc_image(self, module_params=None):
         raise NotImplementedError
 
     @classmethod
