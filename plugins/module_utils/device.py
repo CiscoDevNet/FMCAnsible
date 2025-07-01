@@ -17,18 +17,13 @@ try:
 except ImportError:
     # Create dummy classes if 'kick' is not installed,
     # allowing module to be imported.
-    Kp = type('Kp', (object,), {})
-    Fmc5500x = type('Fmc5500x', (object,), {})
+    class Kp(object):
+        def __init__(self, *args, **kwargs):
+            pass
 
-
-class Kp(object):
-    def __init__(self, *args, **kwargs):
-        pass
-
-
-class Fmc5500x(object):
-    def __init__(self, *args, **kwargs):
-        pass
+    class Fmc5500x(object):
+        def __init__(self, *args, **kwargs):
+            pass
 
 
 class FmcConfigurationError(Exception):
@@ -54,7 +49,6 @@ class AbstractFmcPlatform(ABC):
         raise NotImplementedError
 
     @classmethod
-    @abstractmethod
     def supports_fmc_model(cls, model):
         raise NotImplementedError
 
@@ -150,8 +144,8 @@ class FmcPlatformFactory(object):
 
     @staticmethod
     def create(model, module_params):
-        for platform_class, supported_models in FmcPlatformFactory.PLATFORM_MAPPING:
-            if model in supported_models:
+        for platform_class in FmcPlatformFactory.PLATFORMS:
+            if platform_class.supports_fmc_model(model):
                 return platform_class()
 
         raise ValueError(f"FMC model '{model}' is not supported by this module.")
