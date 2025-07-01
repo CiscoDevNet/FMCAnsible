@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 # In a real scenario, these would be actual library imports.
 
 try:
-    from kick.device.fp2k.fmc import Kp
+    # from kick.device.fp2k.fmc import Kp
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
     from unittest.mock import MagicMock
