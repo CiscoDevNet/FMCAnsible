@@ -225,23 +225,16 @@ def equal_objects(obj1, obj2, ignored_fields=None):
         return False
 
     if isinstance(obj1, dict) and isinstance(obj2, dict):
-        # Filter out ignored fields from both dictionaries before comparison
         filtered_obj1 = {k: v for k, v in obj1.items() if k not in ignored_fields}
-        filtered_obj2 = {k: v for k, v in obj2.items() if k not in ignored_fields}
-
-        if len(filtered_obj1) != len(filtered_obj2):
-            return False
 
         for key, value in filtered_obj1.items():
-            # Recursively call equal_objects, passing ignored_fields along
-            if key not in filtered_obj2 or not equal_objects(value, filtered_obj2[key], ignored_fields):
+            if key not in obj2 or not equal_objects(value, obj2[key], ignored_fields):
                 return False
         return True
     elif isinstance(obj1, list) and isinstance(obj2, list):
         if len(obj1) != len(obj2):
             return False
         for item1, item2 in zip(obj1, obj2):
-            # Pass ignored_fields in recursive call for lists of dicts
             if not equal_objects(item1, item2, ignored_fields):
                 return False
         return True
