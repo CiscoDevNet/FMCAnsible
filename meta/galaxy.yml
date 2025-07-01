@@ -1,2 +1,3 @@
-name: cisco.fmcansible
-version: 1.0.4
+name: cisco.FMCAnsible
+version: 1.0.0
+source: https://github.com/CiscoDevNet/FMCAnsible
