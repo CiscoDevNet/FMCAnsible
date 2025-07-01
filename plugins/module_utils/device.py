@@ -21,6 +21,10 @@ except ImportError:
     Fmc5500x = type('Fmc5500x', (object,), {})
 
 
+class FmcConfigurationError(Exception):
+    pass
+
+
 class FmcModel(Enum):
     FMC_1600 = 'FMC-1600'
     FMC_2110 = 'FMC-2110'
@@ -86,6 +90,44 @@ class FmcAsa5500xPlatform(AbstractFmcPlatform):
     @classmethod
     def supports_fmc_model(cls, model):
         return model in cls.SUPPORTED_MODELS
+
+
+class Fmc1600Platform(AbstractFmcPlatform):
+    def supports_fmc_model(self, model):
+        return model == FmcModel.FMC_1600.value
+
+    def install_fmc_image(self, module_params):
+        kp = Kp(module_params)
+        with kp.ssh_console() as fmc_line:
+            fmc_line.baseline_fp2k_fmc(module_params['image'])
+
+
+class Fmc2600Platform(AbstractFmcPlatform):
+    def supports_fmc_model(self, model):
+        return model == FmcModel.FMC_2600.value
+
+    def install_fmc_image(self, module_params):
+        kp = Kp(module_params)
+        with kp.ssh_console() as fmc_line:
+            fmc_line.baseline_fp2k_fmc(module_params['image'])
+
+
+class Fmc4600Platform(AbstractFmcPlatform):
+    def supports_fmc_model(self, model):
+        return model == FmcModel.FMC_4600.value
+
+    def install_fmc_image(self, module_params):
+        kp = Kp(module_params)
+        with kp.ssh_console() as fmc_line:
+            fmc_line.baseline_fp2k_fmc(module_params['image'])
+
+
+class FmcVirtualPlatform(AbstractFmcPlatform):
+    def supports_fmc_model(self, model):
+        return model == 'FMC-VIRTUAL'
+
+    def install_fmc_image(self, module_params):
+        raise FmcConfigurationError('Image installation is not supported for virtual appliances.')
 
 
 class FmcPlatformFactory(object):
