@@ -225,8 +225,6 @@ def equal_objects(obj1, obj2, ignored_fields=None):
         return False
 
     if isinstance(obj1, dict) and isinstance(obj2, dict):
-        # If both objects have an 'id', they are object references.
-        # Compare them by 'id' only.
         if 'id' in obj1 and 'id' in obj2:
             return obj1['id'] == obj2['id']
 
@@ -237,10 +235,14 @@ def equal_objects(obj1, obj2, ignored_fields=None):
                 return False
         return True
     elif isinstance(obj1, list) and isinstance(obj2, list):
-        if len(obj1) != len(obj2):
+        # Create copies with duplicates removed for comparison
+        unique_list1 = delete_ref_duplicates({'items': obj1}).get('items', [])
+        unique_list2 = delete_ref_duplicates({'items': obj2}).get('items', [])
+
+        if len(unique_list1) != len(unique_list2):
             return False
-        # The order of elements in a list is important.
-        for item1, item2 in zip(obj1, obj2):
+
+        for item1, item2 in zip(unique_list1, unique_list2):
             if not equal_objects(item1, item2, ignored_fields):
                 return False
         return True
