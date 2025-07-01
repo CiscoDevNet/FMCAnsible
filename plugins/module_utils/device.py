@@ -21,6 +21,16 @@ except ImportError:
     Fmc5500x = type('Fmc5500x', (object,), {})
 
 
+    class Kp(object):
+        def __init__(self, *args, **kwargs):
+            pass
+
+
+    class Fmc5500x(object):
+        def __init__(self, *args, **kwargs):
+            pass
+
+
 class FmcConfigurationError(Exception):
     pass
 
@@ -32,6 +42,8 @@ class FmcModel(Enum):
     FMC_2130 = 'FMC-2130'
     FMC_2600 = 'FMC-2600'
     FMC_4600 = 'FMC-4600'
+    FMC_VIRTUAL = 'FMC-VIRTUAL'
+
 
     @classmethod
     def has_value(cls, value):
@@ -39,14 +51,13 @@ class FmcModel(Enum):
 
 
 class AbstractFmcPlatform(ABC):
-    @abstractmethod
     def install_fmc_image(self, module_params):
         raise NotImplementedError
 
     @classmethod
     @abstractmethod
     def supports_fmc_model(cls, model):
-        return False
+        raise NotImplementedError
 
     @staticmethod
     def parse_rommon_file_location(location):
@@ -76,9 +87,7 @@ class Fmc2100Platform(AbstractFmcPlatform):
 
 class FmcAsa5500xPlatform(AbstractFmcPlatform):
     SUPPORTED_MODELS = [
-        FmcModel.FMC_1600.value,
-        FmcModel.FMC_2600.value,
-        FmcModel.FMC_4600.value,
+        'ASA5508', 'ASA5516'
     ]
 
     def install_fmc_image(self, module_params):
@@ -131,9 +140,13 @@ class FmcVirtualPlatform(AbstractFmcPlatform):
 
 
 class FmcPlatformFactory(object):
-    PLATFORM_MAPPING = [
-        (FmcAsa5500xPlatform, FmcAsa5500xPlatform.SUPPORTED_MODELS),
-        (Fmc2100Platform, Fmc2100Platform.SUPPORTED_MODELS),
+    PLATFORMS = [
+        Fmc1600Platform,
+        Fmc2100Platform,
+        Fmc2600Platform,
+        Fmc4600Platform,
+        FmcAsa5500xPlatform,
+        FmcVirtualPlatform,
     ]
 
     @staticmethod
