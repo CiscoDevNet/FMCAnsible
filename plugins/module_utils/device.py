@@ -60,7 +60,7 @@ class FmcModel(Enum):
 
 
 class AbstractFmcPlatform(ABC):
-    def __init__(self, module_params):
+    def __init__(self, module_params=None):
         self.module_params = module_params
 
     def install_fmc_image(self):
