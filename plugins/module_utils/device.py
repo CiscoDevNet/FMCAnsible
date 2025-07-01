@@ -95,7 +95,8 @@ class FmcAsa5500xPlatform(AbstractFmcPlatform):
 
 
 class Fmc1600Platform(AbstractFmcPlatform):
-    def supports_fmc_model(self, model):
+    @classmethod
+    def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_1600.value
 
     def install_fmc_image(self, module_params):
@@ -105,7 +106,8 @@ class Fmc1600Platform(AbstractFmcPlatform):
 
 
 class Fmc2600Platform(AbstractFmcPlatform):
-    def supports_fmc_model(self, model):
+    @classmethod
+    def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_2600.value
 
     def install_fmc_image(self, module_params):
@@ -115,7 +117,8 @@ class Fmc2600Platform(AbstractFmcPlatform):
 
 
 class Fmc4600Platform(AbstractFmcPlatform):
-    def supports_fmc_model(self, model):
+    @classmethod
+    def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_4600.value
 
     def install_fmc_image(self, module_params):
@@ -125,7 +128,8 @@ class Fmc4600Platform(AbstractFmcPlatform):
 
 
 class FmcVirtualPlatform(AbstractFmcPlatform):
-    def supports_fmc_model(self, model):
+    @classmethod
+    def supports_fmc_model(cls, model):
         return model == 'FMC-VIRTUAL'
 
     def install_fmc_image(self, module_params):
