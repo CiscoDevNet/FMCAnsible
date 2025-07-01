@@ -86,7 +86,8 @@ class Fmc2100Platform(AbstractFmcPlatform):
     ]
 
     def install_fmc_image(self, module_params=None):
-        # Implementation based on test mocks
+        # Import Kp here to allow for mocking in tests
+        from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -118,6 +119,8 @@ class Fmc1600Platform(AbstractFmcPlatform):
         return model == FmcModel.FMC_1600.value
 
     def install_fmc_image(self, module_params=None):
+        # Import Kp here to allow for mocking in tests
+        from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -129,6 +132,8 @@ class Fmc2600Platform(AbstractFmcPlatform):
         return model == FmcModel.FMC_2600.value
 
     def install_fmc_image(self, module_params=None):
+        # Import Kp here to allow for mocking in tests
+        from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -140,6 +145,8 @@ class Fmc4600Platform(AbstractFmcPlatform):
         return model == FmcModel.FMC_4600.value
 
     def install_fmc_image(self, module_params=None):
+        # Import Kp here to allow for mocking in tests
+        from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
