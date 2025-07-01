@@ -60,7 +60,10 @@ class FmcModel(Enum):
 
 
 class AbstractFmcPlatform(ABC):
-    def install_fmc_image(self, module_params):
+    def __init__(self, module_params):
+        self.module_params = module_params
+
+    def install_fmc_image(self):
         raise NotImplementedError
 
     @classmethod
@@ -82,11 +85,11 @@ class Fmc2100Platform(AbstractFmcPlatform):
         FmcModel.FMC_2130.value,
     ]
 
-    def install_fmc_image(self, module_params):
+    def install_fmc_image(self):
         # Implementation based on test mocks
-        kp = Kp(module_params)
+        kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
-            fmc_line.baseline_fp2k_fmc(module_params['image'])
+            fmc_line.baseline_fp2k_fmc(self.module_params['image'])
 
     @classmethod
     def supports_fmc_model(cls, model):
@@ -98,11 +101,11 @@ class FmcAsa5500xPlatform(AbstractFmcPlatform):
         'ASA5508', 'ASA5516'
     ]
 
-    def install_fmc_image(self, module_params):
+    def install_fmc_image(self):
         # Implementation based on test mocks
-        fmc5500x = Fmc5500x(module_params)
+        fmc5500x = Fmc5500x(self.module_params)
         with fmc5500x.ssh_console() as fmc_line:
-            fmc_line.rommon_to_new_image(module_params['image'])
+            fmc_line.rommon_to_new_image(self.module_params['image'])
 
     @classmethod
     def supports_fmc_model(cls, model):
@@ -114,10 +117,10 @@ class Fmc1600Platform(AbstractFmcPlatform):
     def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_1600.value
 
-    def install_fmc_image(self, module_params):
-        kp = Kp(module_params)
+    def install_fmc_image(self):
+        kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
-            fmc_line.baseline_fp2k_fmc(module_params['image'])
+            fmc_line.baseline_fp2k_fmc(self.module_params['image'])
 
 
 class Fmc2600Platform(AbstractFmcPlatform):
@@ -125,10 +128,10 @@ class Fmc2600Platform(AbstractFmcPlatform):
     def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_2600.value
 
-    def install_fmc_image(self, module_params):
-        kp = Kp(module_params)
+    def install_fmc_image(self):
+        kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
-            fmc_line.baseline_fp2k_fmc(module_params['image'])
+            fmc_line.baseline_fp2k_fmc(self.module_params['image'])
 
 
 class Fmc4600Platform(AbstractFmcPlatform):
@@ -136,10 +139,10 @@ class Fmc4600Platform(AbstractFmcPlatform):
     def supports_fmc_model(cls, model):
         return model == FmcModel.FMC_4600.value
 
-    def install_fmc_image(self, module_params):
-        kp = Kp(module_params)
+    def install_fmc_image(self):
+        kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
-            fmc_line.baseline_fp2k_fmc(module_params['image'])
+            fmc_line.baseline_fp2k_fmc(self.module_params['image'])
 
 
 class FmcVirtualPlatform(AbstractFmcPlatform):
@@ -147,7 +150,7 @@ class FmcVirtualPlatform(AbstractFmcPlatform):
     def supports_fmc_model(cls, model):
         return model == 'FMC-VIRTUAL'
 
-    def install_fmc_image(self, module_params):
+    def install_fmc_image(self):
         raise FmcConfigurationError('Image installation is not supported for virtual appliances.')
 
 
