@@ -98,7 +98,7 @@ class Fmc2100Platform(AbstractFmcPlatform):
 
 class FmcAsa5500xPlatform(AbstractFmcPlatform):
     SUPPORTED_MODELS = [
-        'ASA5508', 'ASA5516'
+        'ASA5508', 'ASA5516', FmcModel.FMC_4600.value
     ]
 
     def install_fmc_image(self):
