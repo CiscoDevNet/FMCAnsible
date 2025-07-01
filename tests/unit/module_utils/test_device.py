@@ -2,19 +2,19 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-import sys
-import os
+
 import pytest
 
 pytest.importorskip("kick")
 
-# Add the directory containing 'ansible_collections' to the path
-# This should resolve to '/root' in your test environment
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..', '..', '..', '..')))
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
+#from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
+#    FmcAsa5500xPlatform, Fmc2100Platform, AbstractFmcPlatform
+#from ansible_collections.cisco.fmcansible.tests.unit.test_fmc_install import DEFAULT_MODULE_PARAMS
+
+from plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
     FmcAsa5500xPlatform, Fmc2100Platform, AbstractFmcPlatform
-from ansible_collections.cisco.fmcansible.tests.unit.test_fmc_install import DEFAULT_MODULE_PARAMS
+from ..test_fmc_install import DEFAULT_MODULE_PARAMS
 
 
 class TestFmcModel(object):
