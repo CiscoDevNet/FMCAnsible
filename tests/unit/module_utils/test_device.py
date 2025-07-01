@@ -2,9 +2,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+import sys
+import os
 import pytest
 
 pytest.importorskip("kick")
+
+# Add the collection's root to the path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', '..')))
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
     FmcAsa5500xPlatform, Fmc2100Platform, AbstractFmcPlatform
