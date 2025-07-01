@@ -17,9 +17,9 @@ try:
 except ImportError:
     from unittest.mock import MagicMock
 
-
     # Create dummy classes if 'kick' is not installed,
     # allowing module to be imported.
+
     class Kp(object):
         def __init__(self, *args, **kwargs):
             pass
@@ -27,6 +27,7 @@ except ImportError:
         def ssh_console(self):
             mock_console = MagicMock()
             mock_console.__enter__.return_value = mock_console
+            mock_console.__exit__.return_value = False  # Propagate exceptions
             return mock_console
 
     class Fmc5500x(object):
@@ -36,6 +37,7 @@ except ImportError:
         def ssh_console(self):
             mock_console = MagicMock()
             mock_console.__enter__.return_value = mock_console
+            mock_console.__exit__.return_value = False  # Propagate exceptions
             return mock_console
 
 
@@ -163,6 +165,6 @@ class FmcPlatformFactory(object):
     def create(model, module_params):
         for platform_class in FmcPlatformFactory.PLATFORMS:
             if platform_class.supports_fmc_model(model):
-                return platform_class()
+                return platform_class(module_params)
 
         raise ValueError(f"FMC model '{model}' is not supported by this module.")
