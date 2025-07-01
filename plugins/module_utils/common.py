@@ -201,6 +201,48 @@ def equal_values(v1, v2):
         return v1 == v2
 
 
+def to_text(value, encoding='utf-8'):
+    """
+    Ensure a value is a text string.
+    """
+    if isinstance(value, bytes):
+        return value.decode(encoding)
+    return str(value)
+
+def equal_objects(obj1, obj2, ignored_fields=None):
+    """
+    Recursively compare two objects for equality, treating byte strings
+    and unicode strings with the same content as equal.
+    """
+    if ignored_fields is None:
+        ignored_fields = {'version', 'id'}
+
+        # Handle None cases
+    if obj1 is None and obj2 is None:
+        return True
+    if obj1 is None or obj2 is None:
+        return False
+
+    if isinstance(obj1, dict) and isinstance(obj2, dict):
+        if len(obj1) != len(obj2):
+            return False
+        for key, value in obj1.items():
+            if key not in obj2 or not equal_objects(value, obj2[key]):
+                return False
+        return True
+    elif isinstance(obj1, list) and isinstance(obj2, list):
+        if len(obj1) != len(obj2):
+            return False
+        for item1, item2 in zip(obj1, obj2):
+            if not equal_objects(item1, item2):
+                return False
+        return True
+    elif isinstance(obj1, (str, bytes)) and isinstance(obj2, (str, bytes)):
+        return to_text(obj1) == to_text(obj2)
+    else:
+        return obj1 == obj2
+
+'''
 # def equal_objects(d1, d2, compare_common_fields_only=True):
 def equal_objects(obj1, obj2, ignored_fields=None):
     """
@@ -284,7 +326,7 @@ def equal_objects(obj1, obj2, ignored_fields=None):
 
         # Different types
     return False
-
+'''
 
 def add_missing_properties_left_to_right(d1, d2):
     """
