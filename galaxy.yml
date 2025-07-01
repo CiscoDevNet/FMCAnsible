@@ -1,6 +1,6 @@
 namespace: cisco
 name: cisco.fmcansible
-version: 1.0.4
+version: 1.0.0
 source: https://github.com/CiscoDevNet/FMCAnsible
 readme: README.md
 
