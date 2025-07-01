@@ -8,9 +8,9 @@ import pytest
 pytest.importorskip("kick")
 
 
-#from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
+# from ansible_collections.cisco.fmcansible.plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
 #    FmcAsa5500xPlatform, Fmc2100Platform, AbstractFmcPlatform
-#from ansible_collections.cisco.fmcansible.tests.unit.test_fmc_install import DEFAULT_MODULE_PARAMS
+# from ansible_collections.cisco.fmcansible.tests.unit.test_fmc_install import DEFAULT_MODULE_PARAMS
 
 from plugins.module_utils.device import FmcPlatformFactory, FmcModel, \
     FmcAsa5500xPlatform, Fmc2100Platform, AbstractFmcPlatform
