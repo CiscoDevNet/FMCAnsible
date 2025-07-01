@@ -21,14 +21,14 @@ except ImportError:
     Fmc5500x = type('Fmc5500x', (object,), {})
 
 
-    class Kp(object):
-        def __init__(self, *args, **kwargs):
-            pass
+class Kp(object):
+    def __init__(self, *args, **kwargs):
+        pass
 
 
-    class Fmc5500x(object):
-        def __init__(self, *args, **kwargs):
-            pass
+class Fmc5500x(object):
+    def __init__(self, *args, **kwargs):
+        pass
 
 
 class FmcConfigurationError(Exception):
@@ -43,7 +43,6 @@ class FmcModel(Enum):
     FMC_2600 = 'FMC-2600'
     FMC_4600 = 'FMC-4600'
     FMC_VIRTUAL = 'FMC-VIRTUAL'
-
 
     @classmethod
     def has_value(cls, value):
