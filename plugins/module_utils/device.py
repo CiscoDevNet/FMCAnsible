@@ -12,7 +12,7 @@ from urllib.parse import urlparse
 # In a real scenario, these would be actual library imports.
 
 try:
-    # from kick.device.fp2k.fmc import Kp
+    from kick.device.fp2k.fmc import Kp
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
     from unittest.mock import MagicMock
@@ -87,7 +87,7 @@ class Fmc2100Platform(AbstractFmcPlatform):
 
     def install_fmc_image(self, module_params=None):
         # Import Kp here to allow for mocking in tests
-        from kick.device.fp2k.fmc import Kp
+        # from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -120,7 +120,7 @@ class Fmc1600Platform(AbstractFmcPlatform):
 
     def install_fmc_image(self, module_params=None):
         # Import Kp here to allow for mocking in tests
-        from kick.device.fp2k.fmc import Kp
+        # from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -133,7 +133,7 @@ class Fmc2600Platform(AbstractFmcPlatform):
 
     def install_fmc_image(self, module_params=None):
         # Import Kp here to allow for mocking in tests
-        from kick.device.fp2k.fmc import Kp
+        # from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
@@ -146,7 +146,7 @@ class Fmc4600Platform(AbstractFmcPlatform):
 
     def install_fmc_image(self, module_params=None):
         # Import Kp here to allow for mocking in tests
-        from kick.device.fp2k.fmc import Kp
+        # from kick.device.fp2k.fmc import Kp
         kp = Kp(self.module_params)
         with kp.ssh_console() as fmc_line:
             fmc_line.baseline_fp2k_fmc(self.module_params['image'])
