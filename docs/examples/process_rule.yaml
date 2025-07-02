@@ -1,0 +1,28 @@
+- name: Get source networks for this rule
+  fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: sourceNetworks
+    depth: 2
+    register_as: source_networks
+
+- name: Get destination networks for this rule
+  fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: destinationNetworks
+    depth: 2
+    register_as: dest_networks
+
+- name: Add rule with objects to policy output
+  set_fact:
+    policy_output: "{{ policy_output | combine({'rules': policy_output.rules + [{
+      'name': rule.name,
+      'id': rule.id,
+      'sourceNetworks': source_networks,
+      'destinationNetworks': dest_networks,
+      'action': rule.action | default(''),
+      'enabled': rule.enabled | default(true)
+    }]}) }}"

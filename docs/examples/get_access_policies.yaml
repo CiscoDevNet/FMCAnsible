@@ -1,0 +1,16 @@
+- name: Collect FMC Access Policies and Rules
+  hosts: localhost
+  connection: local
+  collections:
+    - cisco.fmcansible
+  tasks:
+    - name: Get all access policies
+      fmc_access_policies:
+        operation: getAllAccessPolicies
+        register_as: access_policies
+
+    - name: Process each access policy
+      include_tasks: process_policy.yml
+      loop: "{{ access_policies }}"
+      loop_control:
+        loop_var: policy
