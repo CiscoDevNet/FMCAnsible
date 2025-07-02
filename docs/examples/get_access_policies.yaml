@@ -1,16 +1,24 @@
 - name: Collect FMC Access Policies and Rules
-  hosts: localhost
-  connection: local
+  hosts: vfmc
+  gather_facts: no
+  connection: httpapi
   collections:
     - cisco.fmcansible
   tasks:
     - name: Get all access policies
-      fmc_access_policies:
-        operation: getAllAccessPolicies
-        register_as: access_policies
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllAccessPolicy
+        path_params:
+          domainUUID: "your-domain-uuid-here"  # Replace with your actual domain UUID
+      register: access_policies
+
+    # - name: print the access policies
+    #   debug:
+    #     var: access_policies.response['items']
 
     - name: Process each access policy
       include_tasks: process_policy.yml
-      loop: "{{ access_policies }}"
+      loop: "{{ access_policies.response['items'] }}"
       loop_control:
         loop_var: policy
+      when: access_policies is defined and access_policies | length > 0

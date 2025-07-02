@@ -1,9 +1,12 @@
 - name: Get all access rules for this policy
-  fmc_access_policies:
-    operation: getAllAccessRules
-    policy_id: "{{ policy.id }}"
-    expanded: true
-    register_as: policy_rules
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllAccessRule
+    path_params:
+      containerUUID: "{{ policy.id }}"
+      domainUUID: e276abec-e0f2-11e3-8169-6d9ed49b625f
+    query_params:
+      expanded: true
+  register: policy_rules
 
 - name: Initialize policy output
   set_fact:
@@ -14,9 +17,10 @@
 
 - name: Process each rule to get nested objects
   include_tasks: process_rule.yml
-  loop: "{{ policy_rules }}"
+  loop: "{{ policy_rules.response['items'] }}"
   loop_control:
     loop_var: rule
+  when: policy_rules.response.items | length > 0
 
 - name: Save policy output to JSON file
   copy:
