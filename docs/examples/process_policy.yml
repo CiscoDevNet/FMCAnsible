@@ -1,0 +1,24 @@
+- name: Get all access rules for this policy
+  fmc_access_policies:
+    operation: getAllAccessRules
+    policy_id: "{{ policy.id }}"
+    expanded: true
+    register_as: policy_rules
+
+- name: Initialize policy output
+  set_fact:
+    policy_output:
+      name: "{{ policy.name }}"
+      id: "{{ policy.id }}"
+      rules: []
+
+- name: Process each rule to get nested objects
+  include_tasks: process_rule.yml
+  loop: "{{ policy_rules }}"
+  loop_control:
+    loop_var: rule
+
+- name: Save policy output to JSON file
+  copy:
+    content: "{{ policy_output | to_nice_json }}"
+    dest: "{{ policy.name }}_access_policy.json"
