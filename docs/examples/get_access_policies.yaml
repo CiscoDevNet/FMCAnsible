@@ -12,10 +12,6 @@
           domainUUID: "your-domain-uuid-here"  # Replace with your actual domain UUID
       register: access_policies
 
-    # - name: print the access policies
-    #   debug:
-    #     var: access_policies.response['items']
-
     - name: Process each access policy
       include_tasks: process_policy.yml
       loop: "{{ access_policies.response['items'] }}"
