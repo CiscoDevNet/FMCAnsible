@@ -10,7 +10,6 @@ __metaclass__ = type
 
 import os
 import json
-import time
 
 
 class ResponseCache:
