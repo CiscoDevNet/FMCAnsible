@@ -279,7 +279,8 @@ def main():
                         except (FmcConfigurationError, FmcServerError) as e:
                             # If we can't get details, use the original object and provide a helpful warning
                             if hasattr(e, 'code') and e.code == 404:
-                                module.warn(f"Object not found: {obj['id']} (Type: {obj_type}). This object may have been deleted but is still referenced in the rule.")
+                                module.warn(f"Object not found: {obj['id']} (Type: {obj_type}). "
+                                            f"This object may have been deleted but is still referenced in the rule.")
                             else:
                                 module.warn(f"Could not retrieve details for object {obj['id']} (Type: {obj_type}): {str(e)}")
                             # Add whatever information we do have about the object
