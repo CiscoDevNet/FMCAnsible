@@ -160,9 +160,17 @@ def main():
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)
 
+    # Get domain_uuid from inventory if available
+    try:
+        domain_uuid = connection.get_option('domain_uuid')
+        if not domain_uuid:
+            module.fail_json(msg="domain_uuid is required but not provided in inventory")
+    except Exception as e:
+        module.fail_json(msg=f"Error retrieving domain_uuid from inventory: {str(e)}")
+
     operation = params['operation']
     query_params = {}
-    path_params = {}
+    path_params = {'domainUUID': domain_uuid}  # Add domain_uuid to path_params for all operations
 
     # Build appropriate query and path parameters based on operation
     if operation == 'getAllAccessPolicies':
