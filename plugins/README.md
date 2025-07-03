@@ -12,6 +12,12 @@
 - [FMC Access Policies Module](#fmc-access-policies-module)
   - [Operations](#operations-1)
   - [Parameters](#parameters-1)
+- [Cache Module](#cache-module)
+  - [Usage](#usage)
+  - [Methods](#methods)
+- [FMC Access Policies Role](#fmc-access-policies-role)
+  - [Role Variables](#role-variables)
+  - [Example Usage](#example-usage)
 
 
 
@@ -105,3 +111,68 @@ The module includes several parameters to customize your queries:
 - `depth` - Controls how deep to go when retrieving nested objects
 - `expanded` - When set to True, returns detailed information for objects
 - `register_as` - Specifies the Ansible fact name to register the response as
+
+## Cache Module
+
+The `cache.py` module provides a file-based cache system for storing FMC API responses to reduce redundant API calls during playbook execution.
+
+### Usage
+
+The cache module is used internally by other modules to improve performance, particularly when retrieving large amounts of data from FMC.
+
+```python
+from ansible_collections.cisco.fmcansible.plugins.module_utils.cache import ResponseCache
+
+# Initialize cache with a file path
+cache = ResponseCache('/path/to/cache_file.json')
+
+# Cache a response
+cache.cache_response('policy_rules', rules_data, 'fmc.example.com')
+
+# Retrieve cached responses
+cached_data = cache.get_cached_responses('fmc.example.com')
+```
+
+### Methods
+
+- `cache_response(name, response_body, host)` - Cache a response with a specific name for a given host
+- `get_cached_responses(host)` - Get all cached responses for a specific host
+- `clear()` - Clear the cache
+
+## FMC Access Policies Role
+
+A pre-built Ansible role for collecting and processing access policies from Cisco FMC.
+
+### Role Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `domain_uuid` | UUID of the FMC domain to use | Required |
+| `output_dir` | Directory where JSON output files will be saved | `.` (current directory) |
+| `object_depth` | How deep to retrieve nested objects | `2` |
+| `collect_ports` | Whether to collect port objects | `true` |
+
+### Example Usage
+
+```yaml
+- name: Collect FMC Access Policies and Rules
+  hosts: fmc
+  gather_facts: no
+  connection: httpapi
+  collections:
+    - cisco.fmcansible
+  vars:
+    domain_uuid: "your-domain-uuid-here"
+    output_dir: "/tmp/fmc_policies"
+    
+  pre_tasks:
+    - name: Ensure output directory exists
+      file:
+        path: "{{ output_dir }}"
+        state: directory
+      delegate_to: localhost
+      run_once: true
+      
+  roles:
+    - role: fmc_access_policies
+```
