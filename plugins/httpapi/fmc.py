@@ -24,8 +24,9 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: Ansible Networking Team
-httpapi : fmc
+author:
+    - Ansible Networking Team (@cisco-netsec-tme)
+name: fmc
 short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
   - This HttpApi plugin provides methods to connect to Cisco Secure Firewall
@@ -52,14 +53,27 @@ import os
 import re
 
 from ansible import __version__ as ansible_version
+from ansible.errors import AnsibleError
 
 from ansible.module_utils.basic import to_text
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 from ansible.module_utils.six.moves.urllib.parse import urlencode
 from ansible.plugins.httpapi import HttpApiBase
-from urllib3 import encode_multipart_formdata
-from urllib3.fields import RequestField
+try:
+    from urllib3 import encode_multipart_formdata
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
+
+try:
+    from urllib3.fields import RequestField
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
+
 from ansible.module_utils.connection import ConnectionError
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp, FmcSwaggerValidator
@@ -260,7 +274,7 @@ class HttpApi(HttpApiBase):
         finally:
             self._ignore_http_errors = False
 
-    def update_auth(self, response, response_data):
+    def update_auth(self, response, response_text):
         # With tokens, authentication should not be checked and updated on each request
         return None
 
@@ -305,8 +319,12 @@ class HttpApi(HttpApiBase):
         url = construct_url_path(to_url)
         self._display(HTTPMethod.POST, 'upload', url)
         with open(from_path, 'rb') as src_file:
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             rf = RequestField('fileToUpload', src_file.read(), os.path.basename(src_file.name))
             rf.make_multipart()
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             body, content_type = encode_multipart_formdata([rf])
 
             headers = dict(BASE_HEADERS)

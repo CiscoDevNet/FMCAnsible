@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
-#
-# Supplemental class for the HttpApi plugin.
-#
+
+# Copyright (c) 2025 Cisco and/or its affiliates.
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+
+
 from __future__ import (absolute_import, division, print_function)
 
 __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: Cisco
-httpapi : fmc
+author:
+    - Cisco Netsec TME (@cisco-netsec-tme)
+name: client
 short_description: Internal client for FMC
 description:
   - Wraps urllib to make specific requests to FMC endpoint and parse the responses.
@@ -26,7 +29,7 @@ import http.client
 import ssl
 import base64
 from urllib import response
-from urllib.parse import urlencode
+# from urllib.parse import urlencode
 import time
 
 # provided for convenience, should be

@@ -370,7 +370,7 @@ def test_add_missing_properties_left_to_right_complex_objects():
         }
     }
     add_missing_properties_left_to_right(d1, d2)
-    assert type(d2.get('destinationNetworks')) == dict
+    assert isinstance(d2.get('destinationNetworks'), dict)
     assert len(d2.get('destinationNetworks')) == 0
 
 
