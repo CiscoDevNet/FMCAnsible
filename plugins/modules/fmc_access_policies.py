@@ -69,6 +69,12 @@ options:
             - Default is 1, meaning only direct objects are retrieved.
         type: int
         default: 1
+    output_dir:
+        description:
+            - Directory where JSON output files will be saved when using the module in a playbook.
+            - The module will automatically create this directory if it doesn't exist.
+        type: str
+        default: "."
     register_as:
         description:
             - Specifies Ansible fact name that is used to register received response from the FMC device.
@@ -118,6 +124,7 @@ response:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
+import os
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
@@ -140,6 +147,7 @@ def main():
         ),
         domain_uuid=dict(type='str', required=True),
         depth=dict(type='int', default=1),
+        output_dir=dict(type='str', default="."),
         register_as=dict(type='str'),
         expanded=dict(type='bool', default=False)
     )
@@ -281,9 +289,28 @@ def main():
             else:
                 resp = {'objects': []}
 
-        module.exit_json(changed=False,
-                         response=resp,
-                         ansible_facts=construct_ansible_facts(resp, module.params))
+        # Handle output_dir parameter - save response to a file
+        output_dir = params['output_dir']
+        if output_dir:
+            # Ensure the output directory exists
+            os.makedirs(output_dir, exist_ok=True)
+
+            # Define the output file path
+            output_file = os.path.join(output_dir, 'fmc_access_policy_response.json')
+
+            # Write the response to the file
+            with open(output_file, 'w') as f:
+                import json
+                json.dump(resp, f, indent=4)
+
+            module.exit_json(changed=False,
+                             response=resp,
+                             ansible_facts=construct_ansible_facts(resp, module.params),
+                             output_file=output_file)
+        else:
+            module.exit_json(changed=False,
+                             response=resp,
+                             ansible_facts=construct_ansible_facts(resp, module.params))
 
     except FmcInvalidOperationNameError as e:
         module.fail_json(msg='Invalid operation name provided: %s' % e.operation_name)

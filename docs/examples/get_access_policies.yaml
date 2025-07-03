@@ -1,0 +1,12 @@
+---
+- name: Collect FMC Access Policies and Rules
+  hosts: vfmc
+  gather_facts: no
+  connection: httpapi
+  collections:
+    - cisco.fmcansible
+  vars_files:
+    - vars.yml
+
+  roles:
+    - role: get_access_policies
