@@ -15,10 +15,18 @@
         path: "{{ output_dir }}"
         state: directory
       delegate_to: localhost
+      run_once: true
+      become: false
+      register: dir_info
+
+    - name: Display output directory path
+      debug:
+        msg: "Output directory created at: {{ dir_info.path | realpath }}"
+      delegate_to: localhost
+      run_once: true
 
   roles:
     - role: fmc_access_policies
       vars:
         object_depth: 2         # How deep to retrieve nested objects
         collect_ports: true     # Whether to collect port objects
-

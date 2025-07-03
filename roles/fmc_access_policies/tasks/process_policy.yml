@@ -27,4 +27,5 @@
 - name: Save policy output to JSON file
   copy:
     content: "{{ policy_output | to_nice_json }}"
-    dest: "{{ output_dir | default('.') }}/{{ policy.name }}_access_policy.json"
+    dest: "{{ output_dir }}/{{ policy.name | replace('/', '_') }}_access_policy.json"
+  delegate_to: localhost
