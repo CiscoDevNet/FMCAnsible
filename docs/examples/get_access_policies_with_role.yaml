@@ -1,0 +1,24 @@
+---
+- name: Collect FMC Access Policies and Rules
+  hosts: vfmc
+  gather_facts: no
+  connection: httpapi
+  collections:
+    - cisco.fmcansible
+  vars:
+    domain_uuid: "your-domain-uuid-here"  # Replace with your actual domain UUID
+    output_dir: "/tmp/fmc_policies"       # Directory to store output files
+
+  pre_tasks:
+    - name: Ensure output directory exists
+      file:
+        path: "{{ output_dir }}"
+        state: directory
+      delegate_to: localhost
+
+  roles:
+    - role: fmc_access_policies
+      vars:
+        object_depth: 2         # How deep to retrieve nested objects
+        collect_ports: true     # Whether to collect port objects
+
