@@ -2,7 +2,7 @@
 domain_uuid: "your-domain-uuid-here"  # Replace with your actual FMC domain UUID
 
 # Output settings
-output_dir: "outputs/fmc_policies"
+output_dir: "outputs"
 
 # Collection parameters
 # TODO: Check what the maximum depth can be for nested objects and consider
