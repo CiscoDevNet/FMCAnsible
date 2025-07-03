@@ -1,4 +1,4 @@
-# FMC Access Policies Role
+# Get Access Policies Role
 
 This Ansible role collects and processes access policies from Cisco Firepower Management Center (FMC). It provides a structured approach to retrieving access policies, their rules, and the objects referenced within those rules.
 
@@ -39,7 +39,7 @@ This Ansible role collects and processes access policies from Cisco Firepower Ma
       run_once: true
       
   roles:
-    - role: fmc_access_policies
+    - role: get_access_policies
       vars:
         object_depth: 2
         collect_ports: true

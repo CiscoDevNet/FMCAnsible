@@ -15,7 +15,7 @@
 - [Cache Module](#cache-module)
   - [Usage](#usage)
   - [Methods](#methods)
-- [FMC Access Policies Role](#fmc-access-policies-role)
+- [Get Access Policies Role](#get-access-policies-role)
   - [Role Variables](#role-variables)
   - [Example Usage](#example-usage)
 
@@ -139,7 +139,7 @@ cached_data = cache.get_cached_responses('fmc.example.com')
 - `get_cached_responses(host)` - Get all cached responses for a specific host
 - `clear()` - Clear the cache
 
-## FMC Access Policies Role
+## Get Access Policies Role
 
 A pre-built Ansible role for collecting and processing access policies from Cisco FMC.
 
@@ -174,5 +174,5 @@ A pre-built Ansible role for collecting and processing access policies from Cisc
       run_once: true
       
   roles:
-    - role: fmc_access_policies
+    - role: get_access_policies
 ```

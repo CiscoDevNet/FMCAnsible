@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  role_name: fmc_access_policies
+  role_name: get_access_policies
   author: Cisco Systems
   description: Role to collect and process access policies from Cisco FMC
   company: Cisco Systems, Inc.
