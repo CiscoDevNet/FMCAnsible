@@ -63,6 +63,12 @@ options:
             - Type of objects to retrieve when using getNestedObjects operation.
         type: str
         choices: ['sourceNetworks', 'destinationNetworks', 'sourcePorts', 'destinationPorts', 'applications', 'urls']
+    domain_uuid:
+        description:
+            - Domain UUID of the FMC.
+            - This is required for all operations.
+        required: true
+        type: str
     depth:
         description:
             - The depth level for nested object retrieval, controlling how many levels of nesting to process.
