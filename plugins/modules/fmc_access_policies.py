@@ -231,15 +231,32 @@ def main():
                     enriched_objects = []
                     for obj in objects_list:
                         # Get detailed object information
+                        obj_type = obj.get('type', '')
+                        # Determine the appropriate operation based on object type
+                        if obj_type.lower().endswith('networks'):
+                            get_obj_operation = 'getNetworkObject'
+                        elif obj_type.lower().endswith('ports'):
+                            get_obj_operation = 'getPortObject'
+                        elif obj_type.lower().endswith('urls'):
+                            get_obj_operation = 'getUrlObject'
+                        elif obj_type.lower().endswith('applications'):
+                            get_obj_operation = 'getApplicationObject'
+                        else:
+                            # Default to a generic operation for unknown types
+                            get_obj_operation = 'getAllAccessPolicies'  # Using a known valid operation
+                            module.warn(f"Unknown object type: {obj_type}. Cannot retrieve details.")
+                            enriched_objects.append(obj)
+                            continue
+
                         obj_params = {
-                            'operation': 'getObject',
+                            'operation': get_obj_operation,
                             'path_params': {
                                 'objectId': obj['id'],
-                                'objectType': obj['type']
+                                'domainUUID': domain_uuid
                             }
                         }
                         try:
-                            obj_details = resource.execute_operation('getObject', obj_params)
+                            obj_details = resource.execute_operation(get_obj_operation, obj_params)
                             enriched_objects.append(obj_details)
                         except (FmcConfigurationError, FmcServerError, FmcUnexpectedResponse, ValidationError) as e:
                             # If we can't get details, use the original object
