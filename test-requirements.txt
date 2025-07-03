@@ -1,3 +1,4 @@
+ansible>=2.17.0
 coverage==4.5.4
 mock
 pycodestyle
@@ -8,7 +9,8 @@ pytest-xdist
 pytest-mock
 six
 units
-urllib3==1.26.5
+#urllib3==1.26.5
+urllib3
 voluptuous
 yamllint
 enum34

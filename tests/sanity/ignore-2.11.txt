@@ -1,0 +1,4 @@
+plugins/module_utils/configuration.py import-2.7!skip
+plugins/module_utils/configuration.py compile-2.7!skip
+plugins/modules/fmc_configuration.py import-2.7!skip
+plugins/modules/fmc_configuration.py compile-2.7!skip

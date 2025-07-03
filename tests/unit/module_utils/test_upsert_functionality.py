@@ -5,7 +5,6 @@ __metaclass__ = type
 import copy
 import json
 import unittest
-
 import pytest
 
 try:
@@ -16,8 +15,7 @@ except ImportError:
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import FmcServerError, HTTPMethod, ResponseParams, FmcConfigurationError
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import DUPLICATE_NAME_ERROR_MESSAGE, UNPROCESSABLE_ENTITY_STATUS, \
-    MULTIPLE_DUPLICATES_FOUND_ERROR, BaseConfigurationResource, FmcInvalidOperationNameError, QueryParams, \
-    ADD_OPERATION_NOT_SUPPORTED_ERROR, ParamName
+    MULTIPLE_DUPLICATES_FOUND_ERROR, BaseConfigurationResource, FmcInvalidOperationNameError, ADD_OPERATION_NOT_SUPPORTED_ERROR
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
 
 ADD_RESPONSE = {'status': 'Object added'}

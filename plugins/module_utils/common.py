@@ -78,7 +78,7 @@ def construct_ansible_facts(response, params):
             facts[params['register_as']] = response_body
         # meignw2021
         # elif response_body.get('name') and response_body.get('type'):
-        elif type(response_body) is dict and response_body.get('name') and response_body.get('type'):
+        elif isinstance(response_body, dict) and response_body.get('name') and response_body.get('type'):
             object_name = re.sub(INVALID_IDENTIFIER_SYMBOLS, '_', response_body['name'].lower())
             fact_name = '%s_%s' % (response_body['type'], object_name)
             facts[fact_name] = response_body
@@ -188,7 +188,8 @@ def equal_values(v1, v2):
     if is_string(v1) and is_string(v2):
         return to_text(v1) == to_text(v2)
 
-    if type(v1) != type(v2):
+    # if type(v1) != type(v2):
+    if isinstance(v1, type(v2)):
         return False
     value_type = type(v1)
 
@@ -200,7 +201,60 @@ def equal_values(v1, v2):
         return v1 == v2
 
 
-def equal_objects(d1, d2, compare_common_fields_only=True):
+def to_text(value, encoding='utf-8'):
+    """
+    Ensure a value is a text string.
+    """
+    if isinstance(value, bytes):
+        return value.decode(encoding)
+    return str(value)
+
+
+def equal_objects(obj1, obj2, ignored_fields=None):
+    """
+    Recursively compare two objects for equality, treating byte strings
+    and unicode strings with the same content as equal, and ignoring
+    specified fields in dictionaries.
+    """
+    if ignored_fields is None:
+        ignored_fields = {'version', 'id'}
+
+    if obj1 is None and obj2 is None:
+        return True
+    if obj1 is None or obj2 is None:
+        return False
+
+    if isinstance(obj1, dict) and isinstance(obj2, dict):
+        if 'id' in obj1 and 'id' in obj2:
+            return obj1['id'] == obj2['id']
+
+        filtered_obj1 = {k: v for k, v in obj1.items() if k not in ignored_fields}
+
+        for key, value in filtered_obj1.items():
+            if key not in obj2 or not equal_objects(value, obj2[key], ignored_fields):
+                return False
+        return True
+    elif isinstance(obj1, list) and isinstance(obj2, list):
+        # Create copies with duplicates removed for comparison
+        unique_list1 = delete_ref_duplicates({'items': obj1}).get('items', [])
+        unique_list2 = delete_ref_duplicates({'items': obj2}).get('items', [])
+
+        if len(unique_list1) != len(unique_list2):
+            return False
+
+        for item1, item2 in zip(unique_list1, unique_list2):
+            if not equal_objects(item1, item2, ignored_fields):
+                return False
+        return True
+    elif isinstance(obj1, (str, bytes)) and isinstance(obj2, (str, bytes)):
+        return to_text(obj1) == to_text(obj2)
+    else:
+        return obj1 == obj2
+
+
+'''
+# def equal_objects(d1, d2, compare_common_fields_only=True):
+def equal_objects(obj1, obj2, ignored_fields=None):
     """
     Checks whether two objects are equal. Ignores special object properties (e.g. 'id', 'version') and
     properties with None and empty values. In case properties contains a reference to the other object,
@@ -211,10 +265,12 @@ def equal_objects(d1, d2, compare_common_fields_only=True):
 
     :type d1: dict
     :type d2: dict
-    :type compare_common_fields_only: bool
+    :type ignored_fields ignoring specified fiels
     :return: True if passed objects and their properties are equal. Otherwise, returns False.
     """
 
+    """
+    # original code block
     def prepare_data_for_comparison(d, keys):
         d = dict((k, v) for k, v in d.items() if k not in NON_COMPARABLE_PROPERTIES and v)
         d = delete_ref_duplicates(d)
@@ -229,6 +285,58 @@ def equal_objects(d1, d2, compare_common_fields_only=True):
     d1 = prepare_data_for_comparison(d1, common_keys)
     d2 = prepare_data_for_comparison(d2, common_keys)
     return equal_dicts(d1, d2, compare_by_reference=False)
+    """
+    # New code block
+    if ignored_fields is None:
+        ignored_fields = {'version', 'id'}
+
+        # Handle None cases
+    if obj1 is None and obj2 is None:
+        return True
+    if obj1 is None or obj2 is None:
+        return False
+
+        # Handle primitive types
+    if not isinstance(obj1, (dict, list)) or not isinstance(obj2, (dict, list)):
+        return obj1 == obj2
+
+        # Handle lists
+    if isinstance(obj1, list) and isinstance(obj2, list):
+        if len(obj1) != len(obj2):
+            return False
+        # For object references, compare by id if available
+        return all(equal_objects(item1, item2, ignored_fields)
+                   for item1, item2 in zip(obj1, obj2))
+
+        # Handle dictionaries
+    if isinstance(obj1, dict) and isinstance(obj2, dict):
+        # Filter out ignored fields
+        filtered_obj1 = {k: v for k, v in obj1.items() if k not in ignored_fields}
+        filtered_obj2 = {k: v for k, v in obj2.items() if k not in ignored_fields}
+
+        # If both have 'id' field and they match, consider objects equal
+        if 'id' in obj1 and 'id' in obj2:
+            if obj1['id'] == obj2['id']:
+                return True
+
+        # Get all keys from both objects
+        all_keys = set(filtered_obj1.keys()) | set(filtered_obj2.keys())
+
+        # Compare common keys only (allows for different fields)
+        common_keys = set(filtered_obj1.keys()) & set(filtered_obj2.keys())
+        if not common_keys:
+            return True  # No common keys to compare
+
+        # Compare each common key recursively
+        for key in common_keys:
+            if not equal_objects(filtered_obj1[key], filtered_obj2[key], ignored_fields):
+                return False
+
+        return True
+
+        # Different types
+    return False
+'''
 
 
 def add_missing_properties_left_to_right(d1, d2):
@@ -254,7 +362,8 @@ def add_missing_properties_left_to_right(d1, d2):
             else:
                 new_obj = empty_value(d1[key])
             d2[key] = new_obj
-        elif type(d1[key]) == dict and type(d2[key]) == dict:
+        # elif type(d1[key]) == dict and type(d2[key]) == dict:
+        elif isinstance(d1[key], dict) and isinstance(d2[key], dict):
             add_missing_properties_left_to_right(d1[key], d2[key])
 
 
@@ -284,7 +393,8 @@ def delete_ref_duplicates(d):
     """
 
     def delete_ref_duplicates_from_list(refs):
-        if all(type(i) == dict and is_object_ref(i) for i in refs):
+        # if all(type(i) == dict and is_object_ref(i) for i in refs):
+        if all(isinstance(i, dict) and is_object_ref(i) for i in refs):
             unique_reference_map = OrderedDict()
             for i in refs:
                 # some nested objects do not include type, so supply fallback value just in case
@@ -302,9 +412,11 @@ def delete_ref_duplicates(d):
     # meignw2021
     # for k, v in iteritems(d):
     for k, v in d.items():
-        if type(v) == list:
+        # if type(v) == list:
+        if isinstance(v, list):
             modified_d[k] = delete_ref_duplicates_from_list(v)
-        elif type(v) == dict:
+        # elif type(v) == dict:
+        elif isinstance(v, dict):
             modified_d[k] = delete_ref_duplicates(v)
         else:
             modified_d[k] = v
