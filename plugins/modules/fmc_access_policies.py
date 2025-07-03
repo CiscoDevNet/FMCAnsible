@@ -19,6 +19,7 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# TODO: remove the need for pre_task in get_access_policies_with_role.yml playbook.
 # TODO: Create feature testing for this module to ensure it works as expected.
 
 from __future__ import absolute_import, division, print_function
