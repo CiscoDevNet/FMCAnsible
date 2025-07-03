@@ -18,7 +18,6 @@ accessrule_name: "rule1"
 #------------------------------------------------------
 networkobject_name: "value"
 networkobject_ip: "value"
-accesspolicy_name: "value"
 
 #------------------------------------------------------
 ## Access_rule_delete
@@ -29,16 +28,17 @@ accesspolicy_name: "value"
 #------------------------------------------------------
 ## Data_dns_settings
 #------------------------------------------------------
-dnsserevergroup_name: "value"
-dnsserver1_ip: "value"
-dnsserver2_ip: "value"
+dnsservergroup_name: "value"
+dnsserver1_ip_primary: "value"
+dnsserver2_ip_primary: "value"
 
 #------------------------------------------------------
 ## Dnsserevergroup_create
 #------------------------------------------------------
-dnsserevergroup_name: "value"
-dnsserver1_ip: "value"
-dnsserver2_ip: "value"
+# Using values defined in Data_dns_settings section above
+# dnsservergroup_name: "value"
+# dnsserver1_ip: "value"
+# dnsserver2_ip: "value"
 
 #------------------------------------------------------
 ## Dnsserevergroup_delete
@@ -66,7 +66,7 @@ delete_natpolicy_name: "natpol1"
 #------------------------------------------------------
 ## Natrule_delete
 #------------------------------------------------------
-delete_natpolicy_name: "natpol1"
+# Using delete_natpolicy_name from Natpolicy_delete section
 delete_natrule_name: "rule1"
 
 #------------------------------------------------------
@@ -74,8 +74,7 @@ delete_natrule_name: "rule1"
 #------------------------------------------------------
 networkobject_ftd1_name: "value"
 networkobject_ftd2_value: "value"
-networkobject_ftd1_name: "value"
-networkobject_ftd2_value: "value"
+# Removed duplicates
 networkgroup_name: "value"
 
 #------------------------------------------------------
@@ -98,7 +97,7 @@ delete_prefilterpolicy_name: "pol1"
 #------------------------------------------------------
 ## Prefilter_rule_delete
 #------------------------------------------------------
-delete_prefilterpolicy_name: "pol1"
+# Using delete_prefilterpolicy_name from Prefilter_policy_delete section
 delete_prefilterrule_name: "rule1"
 
 #------------------------------------------------------
