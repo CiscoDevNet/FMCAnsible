@@ -7,3 +7,4 @@ ansible_network_os=cisco.fmcansible.fmc
 [vfmc:vars]
 network_type=HOST
 domain_uuid=your-domain-uuid-here
+

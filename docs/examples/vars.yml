@@ -1,3 +1,6 @@
+# FMC connection parameters
+domain_uuid: "your-domain-uuid-here"  # Replace with your actual FMC domain UUID
+
 # Output settings
 output_dir: "outputs/fmc_policies"
 

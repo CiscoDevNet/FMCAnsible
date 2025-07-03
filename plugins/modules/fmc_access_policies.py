@@ -21,6 +21,7 @@
 
 # TODO: remove the need for pre_task in get_access_policies_with_role.yml playbook.
 # TODO: Create feature testing for this module to ensure it works as expected.
+# TODO: Validate domain UUID to be present and correct in inventory
 
 from __future__ import absolute_import, division, print_function
 
@@ -137,6 +138,7 @@ def main():
             type='str',
             choices=['sourceNetworks', 'destinationNetworks', 'sourcePorts', 'destinationPorts', 'applications', 'urls']
         ),
+        domain_uuid=dict(type='str', required=True),
         depth=dict(type='int', default=1),
         register_as=dict(type='str'),
         expanded=dict(type='bool', default=False)
@@ -160,13 +162,10 @@ def main():
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)
 
-    # Get domain_uuid from inventory if available
-    try:
-        domain_uuid = connection.get_option('domain_uuid')
-        if not domain_uuid:
-            module.fail_json(msg="domain_uuid is required but not provided in inventory")
-    except Exception as e:
-        module.fail_json(msg=f"Error retrieving domain_uuid from inventory: {str(e)}")
+    # Use domain_uuid provided directly to the module
+    domain_uuid = params['domain_uuid']
+    if not domain_uuid:
+        module.fail_json(msg="domain_uuid is required")
 
     operation = params['operation']
     query_params = {}
