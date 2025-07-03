@@ -61,8 +61,8 @@ class ResponseCache:
         Cache a response for a given name and host.
 
         If a response with the same name already exists:
-        - If both old and new are dictionaries, the new one replaces the old one
-        - If either is a list or they're different types, create a list of both
+        - If both responses are identical dictionaries, the new one replaces the old one
+        - If they are different dictionaries or different types, combine them into a list
 
         Args:
             name (str): Name identifier for the response
@@ -75,9 +75,16 @@ class ResponseCache:
         if name in self._cache[host]:
             existing_response = self._cache[host][name]
 
-            # If both are dictionaries with the same structure, replace
-            if isinstance(existing_response, dict) and isinstance(response_body, dict):
-                self._cache[host][name] = response_body
+            # If both are dictionaries, check if they are the same
+            if (isinstance(existing_response, dict) and
+                isinstance(response_body, dict)):
+
+                # If dictionaries are different, combine them into a list
+                if existing_response != response_body:
+                    self._cache[host][name] = [response_body, existing_response]
+                else:
+                    # If dictionaries are the same, replace with the new one
+                    self._cache[host][name] = response_body
             else:
                 # Convert existing to list if it's not already
                 if not isinstance(existing_response, list):
@@ -89,10 +96,8 @@ class ResponseCache:
                 else:
                     new_responses = response_body
 
-                # Combine and deduplicate (simple approach)
-                combined = new_responses + existing_response
-                # Simple deduplication based on string representation
-                self._cache[host][name] = combined
+                # Combine the lists
+                self._cache[host][name] = new_responses + existing_response
         else:
             self._cache[host][name] = response_body
 
