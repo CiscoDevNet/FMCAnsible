@@ -7,6 +7,7 @@
     rule_id: "{{ rule.id }}"
     object_type: sourceNetworks
     depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
   register: source_networks
 
 - name: Get destination networks for this rule
@@ -16,6 +17,7 @@
     rule_id: "{{ rule.id }}"
     object_type: destinationNetworks
     depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
   register: dest_networks
 
 - name: Get source ports for this rule
@@ -25,6 +27,7 @@
     rule_id: "{{ rule.id }}"
     object_type: sourcePorts
     depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
   register: source_ports
   when: collect_ports | default(true)
 
@@ -35,6 +38,7 @@
     rule_id: "{{ rule.id }}"
     object_type: destinationPorts
     depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
   register: dest_ports
   when: collect_ports | default(true)
 
