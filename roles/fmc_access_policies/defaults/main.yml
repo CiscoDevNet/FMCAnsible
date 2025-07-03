@@ -2,7 +2,7 @@
 # Default variables for fmc_access_policies role
 
 # FMC connection parameters
-domain_uuid: "e276abec-e0f2-11e3-8169-6d9ed49b625f"  # Default domain UUID, should be overridden
+domain_uuid: "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb"  # Default domain UUID, should be overridden
 
 # Configuration parameters
 object_depth: 2        # How deep to retrieve nested objects

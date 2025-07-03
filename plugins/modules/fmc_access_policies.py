@@ -41,7 +41,7 @@ author: "Cisco Systems (@cisco)"
 options:
     operation:
         description:
-            - The name of the operation to execute. Available operations include 'getAllAccessPolicies', 
+            - The name of the operation to execute. Available operations include 'getAllAccessPolicies',
               'getAccessPolicy', 'getAllAccessRules', 'getAccessRule'
         required: true
         type: str
@@ -231,8 +231,9 @@ def main():
                         try:
                             obj_details = resource.execute_operation('getObject', obj_params)
                             enriched_objects.append(obj_details)
-                        except:
+                        except (FmcConfigurationError, FmcServerError, FmcUnexpectedResponse, ValidationError) as e:
                             # If we can't get details, use the original object
+                            module.warn(f"Could not retrieve details for object {obj['id']}: {str(e)}")
                             enriched_objects.append(obj)
 
                     # Replace the response with the enriched objects
@@ -243,8 +244,8 @@ def main():
                 resp = {'objects': []}
 
         module.exit_json(changed=False,
-                        response=resp,
-                        ansible_facts=construct_ansible_facts(resp, module.params))
+                         response=resp,
+                         ansible_facts=construct_ansible_facts(resp, module.params))
 
     except FmcInvalidOperationNameError as e:
         module.fail_json(msg='Invalid operation name provided: %s' % e.operation_name)
