@@ -233,8 +233,12 @@ def main():
                         # Get detailed object information
                         obj_type = obj.get('type', '')
                         # Determine the appropriate operation based on object type
-                        if obj_type.lower().endswith('networks'):
+                        if obj_type.lower() == 'networkgroup' or obj_type.lower() == 'networkobject':
                             get_obj_operation = 'getNetworkObject'
+                        elif obj_type.lower().endswith('networks'):
+                            get_obj_operation = 'getNetworkObject'
+                        elif obj_type.lower() == 'protocolportobject' or obj_type.lower().endswith('portobject'):
+                            get_obj_operation = 'getPortObject'
                         elif obj_type.lower().endswith('ports'):
                             get_obj_operation = 'getPortObject'
                         elif obj_type.lower().endswith('urls'):
