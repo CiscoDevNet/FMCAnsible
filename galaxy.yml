@@ -1,7 +1,6 @@
 namespace: cisco
 name: fmcansible
 version: 1.0.0
-source: https://github.com/CiscoDevNet/FMCAnsible
 readme: README.md
 
 authors:
@@ -20,8 +19,6 @@ tags:
   - "firewall"
   - "fmc"
   - "ftd"
-
-python_requires: ">=3.6"
 
 dependencies:
   community.general: '>=7.5.9'

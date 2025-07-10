@@ -1,0 +1,31 @@
+---
+# Tasks for processing an individual access policy
+- name: Get all access rules for this policy
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllAccessRule
+    path_params:
+      containerUUID: "{{ policy.id }}"
+      domainUUID: "{{ domain_uuid }}"
+    query_params:
+      expanded: true
+  register: policy_rules
+
+- name: Initialize policy output
+  set_fact:
+    policy_output:
+      name: "{{ policy.name }}"
+      id: "{{ policy.id }}"
+      rules: []
+
+- name: Process each rule to get nested objects
+  include_tasks: process_rule.yml
+  loop: "{{ policy_rules.response['items'] | default([]) }}"
+  loop_control:
+    loop_var: rule
+  when: policy_rules.response is defined and policy_rules.response['items'] is defined and policy_rules.response['items'] | length > 0
+
+- name: Save policy output to JSON file
+  copy:
+    content: "{{ policy_output | to_nice_json }}"
+    dest: "{{ output_dir }}/{{ policy.name | replace('/', '_') }}_access_policy.json"
+  delegate_to: localhost

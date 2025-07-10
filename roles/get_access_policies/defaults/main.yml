@@ -1,0 +1,13 @@
+---
+# Default variables for get_access_policies role
+
+# FMC connection parameters
+domain_uuid: "aaaaaaaa-0000-1111-2222-bbbbbbbbbbbb"  # Default domain UUID, should be overridden
+
+# Configuration parameters
+object_depth: 2        # How deep to retrieve nested objects
+collect_ports: true    # Whether to collect port objects
+output_dir: "."        # Directory where JSON output files will be saved
+
+# Advanced parameters
+expand_policy_rules: true  # Whether to retrieve expanded rule information

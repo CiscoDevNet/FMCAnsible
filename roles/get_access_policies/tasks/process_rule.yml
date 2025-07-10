@@ -1,0 +1,56 @@
+---
+# Tasks for processing an individual access rule
+- name: Get source networks for this rule
+  cisco.fmcansible.fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: sourceNetworks
+    depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
+  register: source_networks
+
+- name: Get destination networks for this rule
+  cisco.fmcansible.fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: destinationNetworks
+    depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
+  register: dest_networks
+
+- name: Get source ports for this rule
+  cisco.fmcansible.fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: sourcePorts
+    depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
+  register: source_ports
+  when: collect_ports | default(true)
+
+- name: Get destination ports for this rule
+  cisco.fmcansible.fmc_access_policies:
+    operation: getNestedObjects
+    policy_id: "{{ policy.id }}"
+    rule_id: "{{ rule.id }}"
+    object_type: destinationPorts
+    depth: "{{ object_depth | default(2) }}"
+    domain_uuid: "{{ domain_uuid }}"
+  register: dest_ports
+  when: collect_ports | default(true)
+
+- name: Add rule with objects to policy output
+  set_fact:
+    policy_output: "{{ policy_output | combine({'rules': policy_output.rules + [{
+      'name': rule.name,
+      'id': rule.id,
+      'sourceNetworks': source_networks.response | default({}),
+      'destinationNetworks': dest_networks.response | default({}),
+      'sourcePorts': source_ports.response | default({}) if collect_ports | default(true) else {},
+      'destinationPorts': dest_ports.response | default({}) if collect_ports | default(true) else {},
+      'action': rule.action | default(''),
+      'enabled': rule.enabled | default(true)
+    }]}) }}"

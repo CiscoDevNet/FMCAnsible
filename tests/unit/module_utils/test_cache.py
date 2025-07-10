@@ -1,4 +1,3 @@
-'''
 from __future__ import absolute_import, division, print_function
 
 import unittest
@@ -95,4 +94,3 @@ class TestResponseCache(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-'''
