@@ -1,0 +1,4 @@
+---
+version: "7.7.0-89"
+ha_pair_names: 
+  - "HA-Pair-1"
