@@ -439,3 +439,7 @@ This example demonstartes how to query newtwork object using filters
  For example: /object/networks?filter=nameOrValue:ansible-test
 * if description parameter is specified for the security zone object ansible will return **"changed"** on each run even if values are not changed.
 * Inconsistent error message and HTTP status for duplicate object error
+
+## Downloading and using development version of the Module
+
+ansible-galaxy collection install git+https://github.com/CiscoDevNet/FMCAnsible.git,git_branch_name
