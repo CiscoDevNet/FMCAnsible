@@ -331,11 +331,11 @@ class HttpApi(HttpApiBase):
     def upload_file(self, from_path, to_url):
         if not HAS_URLLIB3:
             raise ConnectionError("urllib3 is required for file upload functionality. Please install urllib3.")
-            
+
         url = construct_url_path(to_url)
         self._display(HTTPMethod.POST, 'upload', url)
         with open(from_path, 'rb') as src_file:
-            
+
             rf = RF('fileToUpload', src_file.read(), os.path.basename(src_file.name))
             rf.make_multipart()
             body, content_type = emf([rf])
