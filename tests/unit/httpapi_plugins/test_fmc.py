@@ -51,11 +51,13 @@ class FakeFmcHttpApiPlugin(HttpApi):
         super(FakeFmcHttpApiPlugin, self).__init__(conn, False)
         self.hostvars = {
             'token_path': '/testLoginUrl',
-            'spec_path': '/testSpecUrl'
+            'spec_path': '/testSpecUrl',
+            'cdfmc': False,
+            'token': None
         }
 
     def get_option(self, var):
-        return self.hostvars[var]
+        return self.hostvars.get(var, None)
 
     def set_option(self, option, value):
         self.hostvars[option] = value
