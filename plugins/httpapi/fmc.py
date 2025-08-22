@@ -24,7 +24,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: "Ansible Networking Team" - Main
+author: Ansible Networking Team - Main
 name: FMC_API_client
 short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
@@ -227,7 +227,7 @@ class HttpApi(HttpApiBase):
 
     def _send_login_request(self, payload, url):
         self._display(HTTPMethod.POST, 'login', url)
-        response, response_data = self._send_auth_request(
+        response, response_text = self._send_auth_request(
             url, json.dumps(payload), method=HTTPMethod.POST, headers=BASE_HEADERS
         )
         response_auth = response.info()
@@ -276,7 +276,7 @@ class HttpApi(HttpApiBase):
         finally:
             self._ignore_http_errors = False
 
-    def update_auth(self, response, response_data):
+    def update_auth(self, response, response_text):
         # With tokens, authentication should not be checked and updated on each request
         return None
 
@@ -332,22 +332,22 @@ class HttpApi(HttpApiBase):
             headers['Content-Type'] = content_type
             headers['Content-Length'] = len(body)
 
-            dummy, response_data = self._send(url, data=body, method=HTTPMethod.POST, headers=headers)
-            value = self._get_response_value(response_data)
+            dummy, response_text = self._send(url, data=body, method=HTTPMethod.POST, headers=headers)
+            value = self._get_response_value(response_text)
             self._display(HTTPMethod.POST, 'upload:response', value)
             return self._response_to_json(value)
 
     def download_file(self, from_url, to_path, path_params=None):
         url = construct_url_path(from_url, path_params=path_params)
         self._display(HTTPMethod.GET, 'download', url)
-        response, response_data = self._send(url, data=None, method=HTTPMethod.GET, headers=BASE_HEADERS)
+        response, response_text = self._send(url, data=None, method=HTTPMethod.GET, headers=BASE_HEADERS)
 
         if os.path.isdir(to_path):
             filename = extract_filename_from_headers(response.info())
             to_path = os.path.join(to_path, filename)
 
         with open(to_path, "wb") as output_file:
-            output_file.write(response_data.getvalue())
+            output_file.write(response_text.getvalue())
         self._display(HTTPMethod.GET, 'downloaded', to_path)
 
     def handle_httperror(self, exc):
