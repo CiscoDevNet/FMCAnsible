@@ -45,6 +45,20 @@ options:
     default: '/api/api-explorer/fmc.json'
     vars:
       - name: ansible_httpapi_fmc_spec_path
+  cdfmc:
+    type: bool
+    description:
+      - Specifies if the connection is to a Cisco Defense FMC
+    default: False
+    vars:
+      - name: ansible_httpapi_cdfmc
+  token:
+    type: str
+    description:
+      - Authentication token for CDFMC connection
+    default: ''
+    vars:
+      - name: ansible_httpapi_token
 """
 
 import json
@@ -108,6 +122,8 @@ class HttpApi(HttpApiBase):
         self._ignore_http_errors = False
         self._use_internal_client = use_internal_client
         self._http_client = None
+        self.token = None
+        self.cdfmc = False
 
     @property
     def http_client(self):
@@ -127,6 +143,15 @@ class HttpApi(HttpApiBase):
         return self._http_client
 
     def login(self, username, password):
+        # For CDFMC, we just need to set the bearer token
+        if self.get_option('cdfmc'):
+            self.cdfmc = True
+            self.token = self.get_option('token')
+            if not self.token:
+                raise AnsibleConnectionFailure('Token is required when using CDFMC')
+            BASE_HEADERS['Authorization'] = 'Bearer {0}'.format(self.token)
+            return
+            
         def request_token_payload(username, password):
             return {
                 'grant_type': 'password',
@@ -162,20 +187,10 @@ class HttpApi(HttpApiBase):
             self.access_token = response['X-auth-access-token']
             self.global_domain = response['global']
             self.domains = response['DOMAINS']
-            print('don_domains')
-            print(self.refresh_token)
-            print(self.access_token)
-            print(self.global_domain)
-            print(self.domains)
-            print(type(self.domains))
             global domains_struct
             domains_struct = self.domains
             domains_struct = json.loads(domains_struct)
-            print(domains_struct)
-            print(type(domains_struct))
-            print('don_domains1')
             BASE_HEADERS['X-auth-access-token'] = self.access_token
-            print(BASE_HEADERS)
         except KeyError:
             raise ConnectionError(
                 'Server returned response without token info during connection authentication: %s' % response)
@@ -240,6 +255,8 @@ class HttpApi(HttpApiBase):
         self.access_token = None
 
     def _require_login(self):
+        if self.cdfmc:
+            return False
         return self.access_token is None
 
     def _send_auth_request(self, path, data, **kwargs):
@@ -277,7 +294,7 @@ class HttpApi(HttpApiBase):
             if self._require_login():
                 self._login(self.connection.get_option('remote_user'), self.connection.get_option('password'))
 
-            if self.access_token is None and self.refresh_token is None:
+            if self.access_token is None and self.cdfmc is False and self.token is None:
                 return self._handle_send_error(http_method, "Verify your credentials or check the maximum number of allowed concurrent logins.", 401)
 
             response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
@@ -357,10 +374,17 @@ class HttpApi(HttpApiBase):
     def _login(self, username, password):
         if self.http_client:
             # login via http client
-            login_obj = self.http_client.send_login(username, password)
-            self.access_token = login_obj['access_token']
-            self.refresh_token = login_obj['refresh_token']
-            BASE_HEADERS['X-auth-access-token'] = self.access_token
+            if self.get_option('cdfmc'):
+                self.cdfmc = True
+                self.token = self.get_option('token')
+                if not self.token:
+                    raise AnsibleConnectionFailure('Token is required when using CDFMC')
+                BASE_HEADERS['Authorization'] = 'Bearer {0}'.format(self.token)
+            else:
+                login_obj = self.http_client.send_login(username, password)
+                self.access_token = login_obj['access_token']
+                self.refresh_token = login_obj['refresh_token']
+                BASE_HEADERS['X-auth-access-token'] = self.access_token
         else:
             # login using default approach
             return self.login(username, password)
