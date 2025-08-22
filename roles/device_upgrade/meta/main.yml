@@ -1,0 +1,26 @@
+---
+galaxy_info:
+  role_name: device_upgrade
+  author: Cisco Systems
+  description: Role to perform device upgrades and readiness checks in Cisco FMC
+  company: Cisco Systems, Inc.
+  license: GPL-3.0-or-later
+  min_ansible_version: 2.10.0
+
+  platforms:
+    - name: GenericLinux
+      versions:
+        - all
+    - name: GenericUNIX
+      versions:
+        - all
+
+  galaxy_tags:
+    - cisco
+    - firepower
+    - fmc
+    - security
+    - networking
+    - upgrade
+
+dependencies: []

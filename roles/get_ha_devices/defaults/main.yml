@@ -1,0 +1,18 @@
+---
+# Default variables for get_ha_devices role
+
+# FMC connection parameters
+domain_uuid: ""  # Required - FMC domain UUID
+register_as: "ha_devices"  # Default name to register HA devices as
+
+# Query options
+expanded: true  # Whether to retrieve expanded HA device information
+
+# Output options
+output_dir: "."  # Directory where JSON output files will be saved
+save_to_file: false  # Whether to save the HA devices list to a file
+
+# Filtering options
+ha_pair_names: []  # List of HA pair names to filter by
+filter_by_names: false  # Whether to apply name filtering
+build_target_lists: false  # Whether to build target container and device lists for operations

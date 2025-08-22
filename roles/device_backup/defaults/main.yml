@@ -1,0 +1,20 @@
+---
+# Default variables for device_backup role
+
+# FMC connection parameters
+domain_uuid: ""  # Required - FMC domain UUID
+register_as: "device_backup"  # Default name to register backup result as
+
+# Backup parameters
+target_devices: []  # Required - List of target devices/containers for backup
+retrieve_to_fmc: true  # Whether to retrieve backup to FMC management center
+
+# Task monitoring options
+wait_for_completion: true  # Whether to wait for backup completion
+max_retries: 60  # Maximum number of retries for status checks
+retry_delay: 30  # Delay between status checks (seconds)
+verify_success: true  # Whether to verify backup completed successfully
+
+# Output options
+output_dir: "."  # Directory where JSON output files will be saved
+save_to_file: false  # Whether to save the backup task info to a file

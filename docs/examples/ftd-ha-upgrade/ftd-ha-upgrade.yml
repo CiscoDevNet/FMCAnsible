@@ -1,0 +1,96 @@
+---
+- name: FTD HA Upgrade via FMC - Role-based Implementation
+  hosts: fmc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.fmcansible
+
+  vars_files:
+    - vars.yml
+
+  roles:
+    # Step 1: Get FMC domains
+    - role: get_domains
+      vars:
+        register_as: fmc_domains
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+    # Step 2: Get upgrade packages and filter by version
+    - role: get_upgrade_packages
+      vars:
+        register_as: upgrade_packages
+        version_filter: "{{ version }}"
+        filter_by_version: true
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+    # Step 3: Get HA devices and build target lists
+    - role: get_ha_devices
+      vars:
+        domain_uuid: "{{ fmc_domains[0].uuid }}"
+        register_as: ha_devices
+        filter_by_names: true
+        build_target_lists: true
+        expanded: true
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+    # Step 4: Create backup of HA devices
+    - role: device_backup
+      vars:
+        domain_uuid: "{{ fmc_domains[0].uuid }}"
+        target_devices: "{{ ha_devices_target_containers }}"
+        register_as: device_backup
+        retrieve_to_fmc: true
+        wait_for_completion: true
+        verify_success: true
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+    # Step 5: Perform readiness check
+    - role: device_upgrade
+      vars:
+        domain_uuid: "{{ fmc_domains[0].uuid }}"
+        upgrade_package: "{{ upgrade_packages_filtered }}"
+        target_devices: "{{ ha_devices_target_devices }}"
+        readiness_check_only: true
+        register_as: readiness_check
+        wait_for_completion: true
+        auto_upgrade_cancel: false
+        verify_success: true
+        max_retries: 30
+        retry_delay: 60
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+    # Step 6: Perform actual upgrade
+    - role: device_upgrade
+      vars:
+        domain_uuid: "{{ fmc_domains[0].uuid }}"
+        upgrade_package: "{{ upgrade_packages_filtered }}"
+        target_devices: "{{ ha_devices_target_devices }}"
+        readiness_check_only: false
+        enable_upgrade_revert: true
+        auto_upgrade_cancel: true
+        register_as: device_upgrade
+        wait_for_completion: true
+        verify_success: true
+        max_retries: 60
+        retry_delay: 60
+        save_to_file: true
+        output_dir: "{{ output_directory | default('.') }}"
+
+  post_tasks:
+    - name: Display upgrade summary
+      debug:
+        msg:
+          - "=== FTD HA Upgrade Summary ==="
+          - "Domain: {{ fmc_domains[0].name }}"
+          - "Upgrade Package: {{ upgrade_packages_filtered.name }}"
+          - "HA Pairs Upgraded: {{ ha_pair_names | join(', ') }}"
+          - "Backup Status: {{ device_backup_status.status | default('Not Available') }}"
+          - "Readiness Check Status: {{ readiness_check_status.status | default('Not Available') }}"
+          - "Upgrade Status: {{ device_upgrade_status.status | default('Not Available') }}"
+          - "=== End Summary ==="

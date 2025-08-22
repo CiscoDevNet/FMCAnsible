@@ -1,0 +1,72 @@
+---
+# Main tasks file for get_ha_devices role
+- name: Get all HA device containers
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllFTDHADeviceContainer
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+    query_params:
+      expanded: "{{ expanded | bool }}"
+    register_as: "{{ register_as }}"
+
+- name: Save HA devices to JSON file
+  copy:
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
+    dest: "{{ output_dir }}/ha_devices.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display found HA devices
+  debug:
+    msg: "Found {{ ansible_facts[register_as] | length }} HA device pair(s): {{ ansible_facts[register_as] | map(attribute='name') | list | join(', ') }}"
+
+- name: Filter HA devices by names
+  set_fact:
+    filtered_ha_devices: >-
+      {{ ansible_facts[register_as] 
+        | selectattr('name','in', ha_pair_names)
+        | list }}
+  when: 
+    - ha_pair_names is defined 
+    - ha_pair_names | length > 0
+    - filter_by_names | bool
+
+- name: Set filtered HA devices fact
+  set_fact:
+    "{{ register_as }}_filtered": "{{ filtered_ha_devices }}"
+  when: filtered_ha_devices is defined
+
+- name: Display filtered HA devices
+  debug:
+    msg: "Selected HA device pairs: {{ filtered_ha_devices | map(attribute='name') | list | join(', ') }}"
+  when: filtered_ha_devices is defined
+
+- name: Build target containers list
+  set_fact:
+    ha_target_containers: >-
+      [{% for device in filtered_ha_devices %}
+        { "id": "{{ device.id }}",
+          "type": "HAContainer",
+          "name": "{{ device.name }}" }{{ "," if not loop.last else "" }}{% endfor %}]
+  when: 
+    - filtered_ha_devices is defined
+    - build_target_lists | bool
+
+- name: Build target devices list (primary devices)
+  set_fact:
+    ha_target_devices: >-
+      [{% for device in filtered_ha_devices %}
+        { "id": "{{ device.primary.id }}",
+          "type": "Device",
+          "name": "{{ device.primary.name }}" }{{ "," if not loop.last else "" }}{% endfor %}]
+  when: 
+    - filtered_ha_devices is defined
+    - build_target_lists | bool
+
+- name: Set target lists facts
+  set_fact:
+    "{{ register_as }}_target_containers": "{{ ha_target_containers | from_yaml }}"
+    "{{ register_as }}_target_devices": "{{ ha_target_devices | from_yaml }}"
+  when: 
+    - ha_target_containers is defined
+    - ha_target_devices is defined
