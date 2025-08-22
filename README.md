@@ -6,7 +6,7 @@ and execution of operational tasks on Cisco Secure Firewall Management Centre (F
 **Supports both traditional FMC and Cisco Defense FMC (cdFMC) deployments with Bearer token authentication.**
 
 This module has been tested against the following ansible versions: **2.9.17, 2.10.5**
-This module has been tested against the following cisco Secure Firewall Management Center versions: **7.0, 7.1, 7.2, 7.3**
+This module has been tested against the following cisco Secure Firewall Management Center versions up to **7.6**
 
 ## Included Content
 
@@ -128,8 +128,8 @@ ansible_network_os=cisco.fmcansible.fmc
 
 ### Getting Your cdFMC Bearer Token
 
-1. Log into your Cisco Defense Orchestrator (CDO) portal
-2. Navigate to your cdFMC instance
+1. Log into your **Security Cloud Control (SCC) portal**
+2. Navigate to **Administration > API User Management**
 3. Generate or retrieve your API token from the appropriate section
 4. Use this token as the `ansible_httpapi_token` value
 
