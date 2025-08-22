@@ -1,0 +1,78 @@
+---
+# Main tasks file for device_backup role
+- name: Validate required variables
+  assert:
+    that:
+      - domain_uuid is defined
+      - domain_uuid | length > 0
+      - target_devices is defined
+      - target_devices | length > 0
+    fail_msg: "domain_uuid and target_devices are required variables"
+
+- name: Create backup of devices
+  cisco.fmcansible.fmc_configuration:
+    operation: createDeviceBackup
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+    data:
+      type: "DEVICE_BACKUP"
+      devices: "{{ target_devices }}"
+      retrieveToManagementCenter: "{{ retrieve_to_fmc | bool }}"
+    register_as: "{{ register_as }}"
+  register: backup_result
+
+- name: Set backup task fact
+  set_fact:
+    "{{ register_as }}_task_id": "{{ ansible_facts[register_as].metadata.task.id }}"
+
+- name: Save backup task info to JSON file
+  copy:
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
+    dest: "{{ output_dir }}/backup_task.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display backup task information
+  debug:
+    msg: 
+      - "Backup task initiated successfully"
+      - "Task ID: {{ ansible_facts[register_as].metadata.task.id }}"
+      - "Devices to backup: {{ target_devices | length }}"
+
+- name: Wait for backup completion
+  cisco.fmcansible.fmc_configuration:
+    operation: getTaskStatus
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+      objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
+    register_as: backup_status_check
+  register: backup_status
+  until: backup_status_check.status == "COMPLETED" or backup_status_check.status == "FAILED"
+  retries: "{{ max_retries }}"
+  delay: "{{ retry_delay }}"
+  when: wait_for_completion | bool
+
+- name: Set backup status fact
+  set_fact:
+    "{{ register_as }}_status": "{{ backup_status.response }}"
+  when: 
+    - wait_for_completion | bool
+    - backup_status is defined
+
+- name: Verify backup success
+  assert:
+    that: backup_status.response.status == "COMPLETED"
+    fail_msg: "Backup failed: {{ backup_status.response.error | default('Unknown error') }}"
+    success_msg: "Backup completed successfully for {{ target_devices | length }} device(s)!"
+  when: 
+    - wait_for_completion | bool
+    - verify_success | bool
+
+- name: Display backup completion status
+  debug:
+    msg:
+      - "Backup Status: {{ backup_status.response.status }}"
+      - "Message: {{ backup_status.response.message | default('No message') }}"
+  when: 
+    - wait_for_completion | bool
+    - backup_status is defined
