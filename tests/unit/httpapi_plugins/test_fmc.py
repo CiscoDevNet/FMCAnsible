@@ -57,8 +57,8 @@ class FakeFmcHttpApiPlugin(HttpApi):
     def get_option(self, var):
         return self.hostvars[var]
 
-    def set_option(self, var, val):
-        self.hostvars[var] = val
+    def set_option(self, option, value):
+        self.hostvars[option] = value
 
 
 class TestFmcHttpApi(unittest.TestCase):
@@ -398,7 +398,7 @@ class TestFmcHttpApi(unittest.TestCase):
     def _connection_response(response, status=200):
         response_mock = mock.Mock()
         response_mock.getcode.return_value = status
-        response_text = json.dumps(response) if type(response) is dict else response
+        response_text = json.dumps(response) if isinstance(response, dict) else response
         response_data = BytesIO(response_text.encode() if response_text else ''.encode())
         return response_mock, response_data
 
@@ -412,7 +412,7 @@ class TestFmcHttpApi(unittest.TestCase):
             'global': 'e276abec-e0f2-11e3-8169-6d9ed49b625f',
             'DOMAINS': '[{"uuid": "e276abec-e0f2-11e3-8169-6d9ed49b625f", "name":"Global"}]'
         }
-        if apply_base_headers and type(response_headers) is dict:
+        if apply_base_headers and isinstance(response_headers, dict):
             headers_dict = base_headers.copy()
             # rename tokens if needed
             headers_dict['X-auth-access-token'] = response_headers.get('X-auth-access-token') or response_headers.get('access_token') \

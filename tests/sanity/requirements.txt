@@ -8,7 +8,9 @@ pytest-xdist
 pytest-mock
 six
 units
-urllib3==1.26.5
+#urllib3==1.26.5
+urllib3
+requests
 voluptuous
 yamllint
 enum34

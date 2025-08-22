@@ -1,7 +1,8 @@
 # Cisco Secure Firewall Management Center (FMC) Ansible Collection
 
 An Ansible Collection that automates configuration management 
-and execution of operational tasks on Cisco Secure Firewall Management Centre (FMC) devices using FMC REST API. 
+and execution of operational tasks on Cisco Secure Firewall Management Centre (FMC) devices using FMC REST API. This module is essentially a wrapper to take an Ansible playbook and converts each play into an FMC API call. The advantage of this is that it does not need to be updated with new versions of FMC. A downside to this approach is that the playbooks do not have the traditional Ansible look and feel.
+We are planning to build templates and roles to try and make the Ansible playbooks more feel like typical Ansible and easier to learn and use.
 
 **Supports both traditional FMC and Cisco Defense FMC (cdFMC) deployments with Bearer token authentication.**
 

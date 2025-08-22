@@ -1,9 +1,3 @@
-# README FIRST
-# 1. replace "NAMESPACE" and "COLLECTION_NAME" with the correct name in the env section (e.g. with 'community' and 'mycollection')
-# 2. If you don't have unit tests remove that section
-# 3. If your collection depends on other collections ensure they are installed, see "Install collection dependencies"
-# If you need help please ask in #ansible-devel on Freenode IRC
-
 name: CI
 on:
   # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
@@ -15,7 +9,7 @@ on:
     - cron: '0 6 * * *'
 env:
   NAMESPACE: cisco
-  COLLECTION_NAME: fmcansible 
+  COLLECTION_NAME: fmcansible
 
 jobs:
 
@@ -26,18 +20,23 @@ jobs:
 
   build:
     name: Build collection
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
-        ansible: [2.9.17, 2.10.5]
+        # ansible: [2.9.17, 2.10.5]
+        # ansible: [2.18.3, 2.17.9, 2.16.14]
+        ansible: [2.18.3]
     steps:
     - name: Check out code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v1
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v5
       with:
-        python-version: 3.8
+        python-version: '3.11'
+
+    - name: Install ansible-core
+      run: pip install ansible-core --force-reinstall
 
     - name: Install ansible-base (v${{ matrix.ansible }})
       run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
@@ -46,9 +45,9 @@ jobs:
       run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
 
     - name: Store migrated collection artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
-        name: collection
+        name: collection-${{ strategy.index }}
         path: .cache/collection-tarballs
 
 ###
@@ -61,18 +60,19 @@ jobs:
     - build
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Python 3.8
+    - name: Set up Python 3.11
       uses: actions/setup-python@v1
       with:
-        python-version: 3.8
+        python-version: '3.11'
 
-    - name: Install ansible-base (v2.11.0)
-      run: pip install https://github.com/ansible/ansible/archive/v2.11.0.tar.gz --disable-pip-version-check
+    - name: Install ansible-base (v2.18.3)
+      run: pip install https://github.com/ansible/ansible/archive/v2.18.3.tar.gz --disable-pip-version-check
 
     - name: Download migrated collection artifacts
-      uses: actions/download-artifact@v1
+      uses: actions/download-artifact@v4
       with:
-        name: collection
+        name: collection-${{ strategy.index }}
+        merge-multiple: true
         path: .cache/collection-tarballs
 
     - name: Install the collection tarball
@@ -94,9 +94,9 @@ jobs:
       run: if grep -E 'ERROR' .cache/collection-tarballs/log.txt; then exit 1; else exit 0; fi
 
     - name: Store galaxy_importer check log file
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
-        name: galaxy-importer-log
+        name: galaxy-importer-log-${{ strategy.index }}
         path: .cache/collection-tarballs/importer_result.json
 
 ###
@@ -109,8 +109,11 @@ jobs:
     strategy:
       matrix:
         ansible:
-          - stable-2.9
-          - stable-2.10
+          # - stable-2.9
+          # - stable-2.10
+          # - stable-2.16
+          - stable-2.17
+          - stable-2.18
           # It's important that Sanity is tested against all stable-X.Y branches
           # Testing against `devel` may fail as new tests are added.
           # - stable-2.9 # Only if your collection supports Ansible 2.9
@@ -130,7 +133,13 @@ jobs:
         with:
           # it is just required to run that once as "ansible-test sanity" in the docker image
           # will run on all python versions it supports.
-          python-version: 3.8
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install urllib3 directly if it's a direct dependency
+          pip install urllib3
 
       # Install the head of the given branch (devel, stable-2.10)
       - name: Install ansible-base (${{ matrix.ansible }})
@@ -161,8 +170,11 @@ jobs:
     strategy:
       matrix:
         ansible:
-          - stable-2.9
-          - stable-2.10
+          # - stable-2.9
+          # - stable-2.10
+          # - stable-2.16
+          - stable-2.17
+          - stable-2.18
           # It's important that Sanity is tested against all stable-X.Y branches
           # Testing against `devel` may fail as new tests are added.
           # - stable-2.9 # Only if your collection supports Ansible 2.9
@@ -178,11 +190,17 @@ jobs:
           path: ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           # it is just required to run that once as "ansible-test sanity" in the docker image
           # will run on all python versions it supports.
-          python-version: 3.8
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          # Install urllib3 directly if it's a direct dependency
+          pip install urllib3
 
       # Install the head of the given branch (devel, stable-2.10)
       - name: Install ansible-base (${{ matrix.ansible }})

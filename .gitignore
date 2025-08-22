@@ -55,6 +55,10 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+bin/
+.venv/
+lib/
+pyvenv.cfg
 
 # Doc distribution folder
 docs/dist
