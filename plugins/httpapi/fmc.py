@@ -24,8 +24,8 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: Ansible Networking Team
-httpapi : fmc
+author: Ansible_Networking_Team
+name: FMC_API_client
 short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
   - This HttpApi plugin provides methods to connect to Cisco Secure Firewall
