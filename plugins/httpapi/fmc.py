@@ -25,7 +25,7 @@ __metaclass__ = type
 DOCUMENTATION = """
 ---
 author: First Last (@name)
-  - Ansible Networking Team (ansible-networking-team)
+  - Ansible Networking Team (@cisco-netsec-team)
 name: fmc
 short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
@@ -67,7 +67,7 @@ import os
 import re
 
 from ansible import __version__ as ansible_version
-from ansible.errors import AnsibleConnectionFailure
+from ansible.errors import AnsibleConnectionFailure, AnsibleError
 from ansible.module_utils.basic import to_text
 from ansible.module_utils.connection import ConnectionError
 from ansible.module_utils.six.moves.urllib.error import HTTPError
@@ -79,16 +79,25 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_clien
     FmcSwaggerParser, FmcSwaggerValidator, SpecProp)
 
 # InternalHttpClient import removed due to missing module
-InternalHttpClient = None
+try:
+    from ansible_collections.cisco.fmcansible.plugins.httpapi.client import \
+        InternalHttpClient
+except ImportError:
+    InternalHttpClient = None
 
-# Optional urllib3 imports for file upload functionality
 try:
     from urllib3 import encode_multipart_formdata
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
+
+try:
     from urllib3.fields import RequestField
-    HAS_URLLIB3 = True
-except ImportError:
-    HAS_URLLIB3 = False
-    # Don't set to None to avoid Pylance warnings
+except ImportError as imp_exc:
+    URLLIB3_IMPORT_ERROR = imp_exc
+else:
+    URLLIB3_IMPORT_ERROR = None
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
@@ -329,15 +338,15 @@ class HttpApi(HttpApiBase):
             return self._handle_send_error(http_method, e, status_code)
 
     def upload_file(self, from_path, to_url):
-        if not HAS_URLLIB3:
-            raise ConnectionError("urllib3 is required for file upload functionality. Please install urllib3.")
-
         url = construct_url_path(to_url)
         self._display(HTTPMethod.POST, 'upload', url)
         with open(from_path, 'rb') as src_file:
-
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             rf = RequestField('fileToUpload', src_file.read(), os.path.basename(src_file.name))
             rf.make_multipart()
+            if URLLIB3_IMPORT_ERROR:
+                raise AnsibleError('urllib3 must be installed to use this plugin') from URLLIB3_IMPORT_ERROR
             body, content_type = encode_multipart_formdata([rf])
 
             headers = dict(BASE_HEADERS)
