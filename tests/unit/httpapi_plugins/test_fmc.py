@@ -25,20 +25,23 @@ import unittest
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
-from ansible.module_utils.six import BytesIO, PY3, StringIO
+from ansible.module_utils.six import PY3, BytesIO, StringIO
 from ansible.module_utils.six.moves.urllib.error import HTTPError
 
 try:
     from unittest import mock
-    from unittest.mock import patch, mock_open
+    from unittest.mock import mock_open, patch
 except ImportError:
     # support for python 2.7
     import mock
     from mock import patch, mock_open
 
-from ansible_collections.cisco.fmcansible.plugins.httpapi.fmc import HttpApi, BASE_HEADERS, TOKEN_PATH_TEMPLATE, DEFAULT_API_VERSIONS
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, ResponseParams
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import FmcSwaggerParser, SpecProp
+from ansible_collections.cisco.fmcansible.plugins.httpapi.fmc import (
+    BASE_HEADERS, DEFAULT_API_VERSIONS, TOKEN_PATH_TEMPLATE, HttpApi)
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
+    HTTPMethod, ResponseParams)
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
+    FmcSwaggerParser, SpecProp)
 
 if PY3:
     BUILTINS_NAME = 'builtins'
