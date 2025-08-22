@@ -24,7 +24,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 ---
-author: Ansible_Networking_Team
+author: "Ansible Networking Team" - Main
 name: FMC_API_client
 short_description: HttpApi Plugin for Cisco Secure Firewall device
 description:
@@ -79,11 +79,8 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_clien
 from urllib3 import encode_multipart_formdata
 from urllib3.fields import RequestField
 
-try:
-    from ansible_collections.cisco.fmcansible.plugins.httpapi.client import \
-        InternalHttpClient
-except ImportError:
-    InternalHttpClient = None
+# InternalHttpClient import removed due to missing module
+InternalHttpClient = None
 
 BASE_HEADERS = {
     'Content-Type': 'application/json',
@@ -153,7 +150,7 @@ class HttpApi(HttpApiBase):
                 raise AnsibleConnectionFailure('Token is required when using CDFMC')
             BASE_HEADERS['Authorization'] = 'Bearer {0}'.format(self.token)
             return
-            
+
         def request_token_payload(username, password):
             return {
                 'grant_type': 'password',
