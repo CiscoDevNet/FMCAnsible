@@ -1,0 +1,42 @@
+---
+# Main tasks file for get_upgrade_packages role
+- name: Get all upgrade packages
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllUpgradePackage
+    register_as: "{{ register_as }}"
+
+- name: Save upgrade packages to JSON file
+  copy:
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
+    dest: "{{ output_dir }}/upgrade_packages.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display found upgrade packages
+  debug:
+    msg: "Found {{ ansible_facts[register_as] | length }} upgrade package(s): {{ ansible_facts[register_as] | map(attribute='name') | list | join(', ') }}"
+
+- name: Find package by version filter
+  set_fact:
+    filtered_package: >-
+      {{ ansible_facts[register_as] 
+        | selectattr('name','contains', version_filter)
+        | list | first }}
+  when: 
+    - version_filter is defined 
+    - version_filter | length > 0
+    - filter_by_version | bool
+  failed_when: 
+    - version_filter is defined
+    - filter_by_version | bool
+    - (ansible_facts[register_as] | selectattr('name','contains', version_filter) | list | length == 0)
+
+- name: Set filtered package fact
+  set_fact:
+    "{{ register_as }}_filtered": "{{ filtered_package }}"
+  when: filtered_package is defined
+
+- name: Display filtered package
+  debug:
+    msg: "Selected upgrade package: {{ filtered_package.name }} (ID: {{ filtered_package.id }})"
+  when: filtered_package is defined

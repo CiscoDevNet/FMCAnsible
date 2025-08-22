@@ -1,0 +1,17 @@
+---
+# Main tasks file for get_domains role
+- name: Get all FMC domains
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllDomain
+    register_as: "{{ register_as }}"
+
+- name: Save domains to JSON file
+  copy:
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
+    dest: "{{ output_dir }}/fmc_domains.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display found domains
+  debug:
+    msg: "Found {{ ansible_facts[register_as] | length }} domain(s): {{ ansible_facts[register_as] | map(attribute='name') | list | join(', ') }}"

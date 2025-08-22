@@ -1,0 +1,9 @@
+---
+# Variables for FTD HA Upgrade
+version: "7.7.0-89"  # Version string to filter upgrade packages
+ha_pair_names: 
+  - "HA-Pair-1"
+  # - "HA-Pair-2"  # Uncomment and add more HA pairs as needed
+
+# Optional: Output directory for saving task results and logs
+output_directory: "./ftd_upgrade_logs"

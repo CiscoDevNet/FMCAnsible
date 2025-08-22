@@ -1,0 +1,147 @@
+---
+- name: FTD HA Upgrade via FMC
+  hosts: fmc
+  gather_facts: false
+  connection: httpapi
+  collections:
+    - cisco.fmcansible
+
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Fetch FMC domains
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllDomain
+        register_as: fmc_domains
+
+    - name: Retrieve all upgrade packages
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllUpgradePackage
+        register_as: pkg_list
+
+    - name: Select package by name
+      set_fact:
+        upgrade_pkg: >-
+          {{ pkg_list
+            | selectattr('name','issuperset', version)
+            | list | first }}
+      failed_when: upgrade_pkg is not defined
+
+    - name: Retrieve all devices in HA
+      cisco.fmcansible.fmc_configuration:
+        operation: getAllFTDHADeviceContainer
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+        query_params:
+          expanded: true
+      register: all_devices_in_ha
+
+    - name: Build targets list from names
+      set_fact:
+        targets: |-
+          [{% for name in ha_pair_names %}
+            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).id }}",
+              "type": "HAContainer",
+              "name": "{{ name }}" }{{ "," if not loop.last else "" }}{% endfor %}]
+
+    - name: Build target devices list from names
+      set_fact:
+        target_devices: |-
+          [{% for name in ha_pair_names %}
+            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).primary.id }}",
+              "type": "Device",
+              "name": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).primary.name }}" },
+              {{ "," if not loop.last else "" }}{% endfor %}]
+
+    - name: Create backup of devices
+      cisco.fmcansible.fmc_configuration:
+        operation: createDeviceBackup
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+        data:
+          type: "DEVICE_BACKUP"
+          devices: "{{ targets | from_yaml }}"
+          retrieveToManagementCenter: true
+        register_as: backup
+
+    - name: Wait for backup completion
+      cisco.fmcansible.fmc_configuration:
+        operation: getTaskStatus
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+          objectId: "{{ backup.metadata.task.id }}"
+        register_as: backup_status
+      until: backup_status.status == "COMPLETED" or backup_status.status == "FAILED"
+      retries: 60
+      delay: 30
+
+    - name: Verify backup success
+      assert:
+        that: backup_status.status == "COMPLETED"
+        fail_msg: "Backup failed: {{ backup_status.error | default('Unknown error') }}"
+        success_msg: "Backup completed successfully for {{ ha_pair_names | length }} HA Pair(s)!"
+
+    - name: About the Readiness Check
+      debug:
+        msg: "Starting readiness check for upgrade package '{{ upgrade_pkg.name }}' on HA devices: {{ ha_pair_names | join(', ') }}.
+               The readiness check identifies issues including database integrity, version inconsistencies, and device registration. Do not reboot or shut down an appliance during the readiness check."
+
+    - name: Start readiness check
+      cisco.fmcansible.fmc_configuration:
+        operation: createUpgrade
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+        data:
+          upgradePackage:
+            id: "{{ upgrade_pkg.id }}"
+            type: "UpgradePackage"
+          targets: "{{ target_devices | from_yaml }}"
+          readinessCheckOnly: true
+        register_as: readiness
+
+    - name: Poll readiness check status
+      cisco.fmcansible.fmc_configuration:
+        operation: getTaskStatus
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+          objectId: "{{ readiness.metadata.task.id }}"
+        register_as: readiness_status
+      until: readiness_status.status == "COMPLETED" or readiness_status.status == "FAILED"
+      retries: 30
+      delay: 60
+
+    - name: Fail if readiness failed
+      fail:
+        msg: "Readiness check failed: {{ readiness_status }}"
+      when: readiness_status.status == "FAILED"
+
+    - name: Launch HA upgrade
+      cisco.fmcansible.fmc_configuration:
+        operation: createUpgrade
+        data:
+          upgradePackage:
+            id: "{{ upgrade_pkg.id }}"
+            type: "UpgradePackage"
+          targets: "{{ target_devices | from_yaml }}"
+          readinessCheckOnly: false
+          enableUpgradeRevert: true
+          autoUpgradeCancel: true
+        register_as: upgrade_run
+
+    - name: Poll upgrade status
+      cisco.fmcansible.fmc_configuration:
+        operation: getTaskStatus
+        path_params:
+          domainUUID: "{{ fmc_domains[0].uuid }}"
+          objectId: "{{ upgrade_run.metadata.task.id }}"
+        register_as: upgrade_status
+      until: upgrade_status.status == "COMPLETED" or upgrade_status.status == "FAILED"
+      retries: 60
+      delay: 60
+
+    - name: Show upgrade outcome
+      debug:
+        msg:
+          - "Upgrade Status: {{ upgrade_status.status }}"
+          - "Errors/Warnings: {{ upgrade_status.message | default('None') }}"

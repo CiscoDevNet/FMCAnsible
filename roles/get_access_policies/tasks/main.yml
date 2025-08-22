@@ -1,0 +1,15 @@
+---
+# Main tasks file for get_access_policies role
+- name: Get all access policies
+  cisco.fmcansible.fmc_configuration:
+    operation: getAllAccessPolicy
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+  register: access_policies
+
+- name: Process each access policy
+  include_tasks: process_policy.yml
+  loop: "{{ access_policies.response['items'] }}"
+  loop_control:
+    loop_var: policy
+  when: access_policies is defined and access_policies.response['items'] | length > 0

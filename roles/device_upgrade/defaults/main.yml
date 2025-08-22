@@ -1,0 +1,23 @@
+---
+# Default variables for device_upgrade role
+
+# FMC connection parameters
+domain_uuid: ""  # Required - FMC domain UUID
+register_as: "device_upgrade"  # Default name to register upgrade result as
+
+# Upgrade parameters
+upgrade_package: {}  # Required - Upgrade package object with id and name
+target_devices: []  # Required - List of target devices for upgrade
+readiness_check_only: false  # Whether to perform only readiness check
+enable_upgrade_revert: true  # Whether to enable upgrade revert option
+auto_upgrade_cancel: true  # Whether to enable auto upgrade cancel
+
+# Task monitoring options
+wait_for_completion: true  # Whether to wait for upgrade completion
+max_retries: 60  # Maximum number of retries for status checks (upgrade can take longer)
+retry_delay: 60  # Delay between status checks (seconds) - upgrade checks need longer intervals
+verify_success: true  # Whether to verify upgrade completed successfully
+
+# Output options
+output_dir: "."  # Directory where JSON output files will be saved
+save_to_file: false  # Whether to save the upgrade task info to a file

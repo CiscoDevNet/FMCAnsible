@@ -1,0 +1,13 @@
+---
+# Default variables for get_upgrade_packages role
+
+# FMC connection parameters
+register_as: "upgrade_packages"  # Default name to register packages as
+
+# Output options
+output_dir: "."  # Directory where JSON output files will be saved
+save_to_file: false  # Whether to save the package list to a file
+
+# Filtering options
+version_filter: ""  # String to filter packages by version/name (e.g., "7.7.0")
+filter_by_version: false  # Whether to apply version filtering

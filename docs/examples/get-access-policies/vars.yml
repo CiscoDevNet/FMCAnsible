@@ -1,0 +1,11 @@
+# FMC connection parameters
+domain_uuid: "your-domain-uuid-here"  # Replace with your actual FMC domain UUID
+
+# Output settings
+output_dir: "outputs"
+
+# Collection parameters
+# TODO: Check what the maximum depth can be for nested objects and consider
+#       hardcoding to the maximum depth so we do not bother user with this.
+object_depth: 2         # How deep to retrieve nested objects
+collect_ports: true     # Whether to collect port objects

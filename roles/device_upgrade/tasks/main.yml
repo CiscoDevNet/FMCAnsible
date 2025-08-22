@@ -1,0 +1,93 @@
+---
+# Main tasks file for device_upgrade role
+- name: Validate required variables
+  assert:
+    that:
+      - domain_uuid is defined
+      - domain_uuid | length > 0
+      - upgrade_package is defined
+      - upgrade_package.id is defined
+      - target_devices is defined
+      - target_devices | length > 0
+    fail_msg: "domain_uuid, upgrade_package, and target_devices are required variables"
+
+- name: Display upgrade information
+  debug:
+    msg:
+      - "Starting {% if readiness_check_only %}readiness check{% else %}upgrade{% endif %} for package '{{ upgrade_package.name | default(upgrade_package.id) }}' on {{ target_devices | length }} device(s)"
+      - "Readiness check only: {{ readiness_check_only }}"
+      - "Enable upgrade revert: {{ enable_upgrade_revert }}"
+      - "Auto upgrade cancel: {{ auto_upgrade_cancel }}"
+
+- name: Perform readiness check or upgrade
+  cisco.fmcansible.fmc_configuration:
+    operation: createUpgrade
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+    data:
+      upgradePackage:
+        id: "{{ upgrade_package.id }}"
+        type: "UpgradePackage"
+      targets: "{{ target_devices }}"
+      readinessCheckOnly: "{{ readiness_check_only | bool }}"
+      enableUpgradeRevert: "{{ enable_upgrade_revert | bool }}"
+      autoUpgradeCancel: "{{ auto_upgrade_cancel | bool }}"
+    register_as: "{{ register_as }}"
+  register: upgrade_result
+
+- name: Set upgrade task fact
+  set_fact:
+    "{{ register_as }}_task_id": "{{ ansible_facts[register_as].metadata.task.id }}"
+
+- name: Save upgrade task info to JSON file
+  copy:
+    content: "{{ ansible_facts[register_as] | to_nice_json }}"
+    dest: "{{ output_dir }}/{% if readiness_check_only %}readiness_check{% else %}upgrade{% endif %}_task.json"
+  delegate_to: localhost
+  when: save_to_file | bool
+
+- name: Display upgrade task information
+  debug:
+    msg: 
+      - "{% if readiness_check_only %}Readiness check{% else %}Upgrade{% endif %} task initiated successfully"
+      - "Task ID: {{ ansible_facts[register_as].metadata.task.id }}"
+      - "Devices: {{ target_devices | length }}"
+
+- name: Wait for task completion
+  cisco.fmcansible.fmc_configuration:
+    operation: getTaskStatus
+    path_params:
+      domainUUID: "{{ domain_uuid }}"
+      objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
+    register_as: upgrade_status_check
+  register: upgrade_status
+  until: upgrade_status_check.status == "COMPLETED" or upgrade_status_check.status == "FAILED"
+  retries: "{{ max_retries }}"
+  delay: "{{ retry_delay }}"
+  when: wait_for_completion | bool
+
+- name: Set upgrade status fact
+  set_fact:
+    "{{ register_as }}_status": "{{ upgrade_status.response }}"
+  when: 
+    - wait_for_completion | bool
+    - upgrade_status is defined
+
+- name: Verify upgrade/readiness check success
+  assert:
+    that: upgrade_status.response.status == "COMPLETED"
+    fail_msg: "{% if readiness_check_only %}Readiness check{% else %}Upgrade{% endif %} failed: {{ upgrade_status.response.error | default(upgrade_status.response.message | default('Unknown error')) }}"
+    success_msg: "{% if readiness_check_only %}Readiness check{% else %}Upgrade{% endif %} completed successfully for {{ target_devices | length }} device(s)!"
+  when: 
+    - wait_for_completion | bool
+    - verify_success | bool
+
+- name: Display task completion status
+  debug:
+    msg:
+      - "{% if readiness_check_only %}Readiness Check{% else %}Upgrade{% endif %} Status: {{ upgrade_status.response.status }}"
+      - "Message: {{ upgrade_status.response.message | default('No message') }}"
+      - "{% if upgrade_status.response.error is defined %}Error: {{ upgrade_status.response.error }}{% endif %}"
+  when: 
+    - wait_for_completion | bool
+    - upgrade_status is defined

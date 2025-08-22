@@ -1,0 +1,9 @@
+---
+# Default variables for get_domains role
+
+# FMC connection parameters
+register_as: "fmc_domains"  # Default name to register domains as
+
+# Output options
+output_dir: "."  # Directory where JSON output files will be saved
+save_to_file: false  # Whether to save the domain list to a file
