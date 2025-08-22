@@ -299,10 +299,10 @@ class HttpApi(HttpApiBase):
                 else:
                     return self._handle_send_error(http_method, "Unauthorized", 401)
 
-            response, response_data = self._send(url, data, method=http_method, headers=BASE_HEADERS)
+            response, response_text = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
-            # response_data is bytearray, so convert to string
-            value = self._get_response_value(response_data)
+            # response_text is bytearray, so convert to string
+            value = self._get_response_value(response_text)
             self._display(http_method, 'response', value)
 
             return {
