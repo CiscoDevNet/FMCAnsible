@@ -313,8 +313,6 @@ class HttpApi(HttpApiBase):
             if self.access_token is None and self.refresh_token is None:
                 if self.cdfmc is True and self.token is None:
                     return self._handle_send_error(http_method, "Verify your credentials or check the maximum number of allowed concurrent logins.", 401)
-                else:
-                    return self._handle_send_error(http_method, "Unauthorized", 401)
 
             response, response_text = self._send(url, data, method=http_method, headers=BASE_HEADERS)
 
