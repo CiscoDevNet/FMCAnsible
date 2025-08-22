@@ -83,8 +83,8 @@ InternalHttpClient = None
 
 # Optional urllib3 imports for file upload functionality
 try:
-    from urllib3 import encode_multipart_formdata
-    from urllib3.fields import RequestField
+    from urllib3 import encode_multipart_formdata as emf
+    from urllib3.fields import RequestField as RF
     HAS_URLLIB3 = True
 except ImportError:
     HAS_URLLIB3 = False
@@ -335,9 +335,6 @@ class HttpApi(HttpApiBase):
         url = construct_url_path(to_url)
         self._display(HTTPMethod.POST, 'upload', url)
         with open(from_path, 'rb') as src_file:
-            # These imports are guaranteed to be available due to HAS_URLLIB3 check above
-            from urllib3 import encode_multipart_formdata as emf
-            from urllib3.fields import RequestField as RF
             
             rf = RF('fileToUpload', src_file.read(), os.path.basename(src_file.name))
             rf.make_multipart()
