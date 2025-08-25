@@ -26,10 +26,13 @@ import copy
 from functools import partial
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
+    FmcConfigurationError, FmcServerError, FmcUnexpectedResponse, HTTPMethod,
+    ResponseParams, add_missing_properties_left_to_right,
+    copy_identity_properties, delete_props_not_in_model, equal_objects)
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
+    OperationField, ValidationError)
 
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod, equal_objects, delete_props_not_in_model, \
-    FmcServerError, ResponseParams, copy_identity_properties, add_missing_properties_left_to_right, FmcUnexpectedResponse, FmcConfigurationError
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import OperationField, ValidationError
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
 #   copy_identity_properties, FmcUnexpectedResponse
 # from module_utils.fmc_swagger_client import OperationField, ValidationError
@@ -334,7 +337,8 @@ class BaseConfigurationResource(object):
 
     def _find_existing_object(self, model_name, path_params, object_id):
         get_operation = self._find_get_operation(model_name)
-        if not get_operation:
+        delete_operation = self._find_delete_operation(model_name)
+        if not get_operation or not delete_operation:
             return None
         path_params_for_find = (path_params or {}).copy()
         # only set objectId if it has a value - this is so validation will fail
@@ -493,6 +497,12 @@ class BaseConfigurationResource(object):
             op for op, op_spec in operations.items()
             if self._operation_checker.is_get_operation(op, op_spec)), None)
 
+    def _find_delete_operation(self, model_name):
+        operations = self.get_operation_specs_by_model_name(model_name) or {}
+        return next((
+            op for op, op_spec in operations.items()
+            if self._operation_checker.is_delete_operation(op, op_spec)), None)
+
     def delete_object(self, operation_name, params):
         def is_not_found_error(err):
             # note: FMC normally returns 404 for not found
@@ -524,11 +534,15 @@ class BaseConfigurationResource(object):
         model_name = self.get_operation_spec(operation_name)[OperationField.MODEL_NAME]
         model = self._conn.get_model_spec(model_name)
         existing_object = self._find_existing_object(model_name, path_params, object_id)
-        if not existing_object:
+        if not existing_object and not data:
             raise FmcConfigurationError(NOT_EXISTS_ERROR_STR)
+        elif data and not existing_object:
+            # If there are data but no existing object, we need to create it or update it.
+            return self.send_general_request(operation_name, params)
         elif is_playbook_obj_equal_to_api_obj(data, existing_object, model):
             return existing_object
 
+        # Never gets here. To this part of the code.
         return self.send_general_request(operation_name, params)
 
     def list_objects(self, operation_name, params):
