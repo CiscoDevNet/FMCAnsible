@@ -225,11 +225,20 @@ def equal_objects(obj1, obj2, ignored_fields=None):
         return False
 
     if isinstance(obj1, dict) and isinstance(obj2, dict):
-        # Check if both are reference objects (have IDs)
-        if is_object_ref(obj1) and is_object_ref(obj2):
+        # Check if both are simple reference objects (only have basic reference fields like id, name, type)
+        # Full objects (like access rules, policies, etc.) should be compared by their fields even if they have IDs
+        def is_simple_reference(obj):
+            if not is_object_ref(obj):
+                return False
+            # Consider it a simple reference if it only has basic fields (id, name, type, and maybe a few others)
+            basic_fields = {'id', 'name', 'type', 'version', 'links', 'ignored_field'}
+            non_basic_fields = set(obj.keys()) - basic_fields
+            return len(non_basic_fields) <= 1  # Allow one additional field beyond basic reference fields
+        
+        if is_simple_reference(obj1) and is_simple_reference(obj2):
             return equal_object_refs(obj1, obj2)
         
-        # If one has ID but not the other, or neither has ID, compare by fields
+        # For all other objects (including full FMC objects with IDs), compare by fields
         # Filter out ignored fields from both objects
         filtered_obj1 = {k: v for k, v in obj1.items() if k not in ignored_fields}
         filtered_obj2 = {k: v for k, v in obj2.items() if k not in ignored_fields}
