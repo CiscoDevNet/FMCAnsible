@@ -218,7 +218,7 @@ def equal_objects(obj1, obj2, ignored_fields=None):
     """
     if ignored_fields is None:
         # Use the standard non-comparable properties, plus 'ignored_field' for tests
-        ignored_fields = set(NON_COMPARABLE_PROPERTIES) | {'ignored_field', 'enabled'}
+        ignored_fields = set(NON_COMPARABLE_PROPERTIES) | {'ignored_field'}
 
     if obj1 is None and obj2 is None:
         return True
