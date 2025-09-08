@@ -5,7 +5,7 @@ action_groups:
     - fmc_access_policies
     - fmc_facts
 
-# Map network OS to facts module
-network_os_map:
+# Network OS to module mappings for gather_facts
+network_os_fact_modules:
   cisco.fmcansible.fmc: cisco.fmcansible.fmc_facts
-  cisco.fmc.fmc: cisco.fmcansible.fmc_facts
+  fmc: cisco.fmcansible.fmc_facts

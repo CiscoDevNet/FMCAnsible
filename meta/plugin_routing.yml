@@ -1,10 +1,12 @@
-# meta/plugin_routing.yml
+# meta/plugin_routing.yml  
 plugin_routing:
   modules:
-    cisco.fmcansible.fmc_facts:
+    fmc_facts:
       redirect: cisco.fmcansible.fmc_facts
+  
+  # Network OS routing for gather_facts
   network_os:
     cisco.fmcansible.fmc:
       facts: cisco.fmcansible.fmc_facts
-    cisco.fmc.fmc:
+    fmc:
       facts: cisco.fmcansible.fmc_facts
