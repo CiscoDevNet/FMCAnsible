@@ -1,11 +1,6 @@
-requires_ansible: '>=2.10.0'
+requires_ansible: ">=2.10.0"
 action_groups:
   fmc:
     - fmc_configuration
     - fmc_access_policies
     - fmc_facts
-
-# Network OS to module mappings for gather_facts
-network_os_fact_modules:
-  cisco.fmcansible.fmc: cisco.fmcansible.fmc_facts
-  fmc: cisco.fmcansible.fmc_facts
