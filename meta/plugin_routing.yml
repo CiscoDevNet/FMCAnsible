@@ -1,10 +1,10 @@
 # meta/plugin_routing.yml
 plugin_routing:
-  facts:
+  modules:
+    cisco.fmcansible.fmc_facts:
+      redirect: cisco.fmcansible.fmc_facts
+  network_os:
     cisco.fmcansible.fmc:
-      redirect: cisco.fmcansible.fmc_facts
-      # deprecation:
-        # warning_text: "The 'cisco.fmcansible.fmc' network_os value is deprecated. Please use 'cisco.fmc.fmc' instead."
-        # version: "2.0.0"
+      facts: cisco.fmcansible.fmc_facts
     cisco.fmc.fmc:
-      redirect: cisco.fmcansible.fmc_facts
+      facts: cisco.fmcansible.fmc_facts

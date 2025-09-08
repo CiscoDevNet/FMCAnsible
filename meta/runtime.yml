@@ -1,1 +1,11 @@
 requires_ansible: '>=2.10.0'
+action_groups:
+  fmc:
+    - fmc_configuration
+    - fmc_access_policies
+    - fmc_facts
+
+# Map network OS to facts module
+network_os_map:
+  cisco.fmcansible.fmc: cisco.fmcansible.fmc_facts
+  cisco.fmc.fmc: cisco.fmcansible.fmc_facts
