@@ -34,7 +34,7 @@ short_description: Gather facts from Cisco FMC devices over REST API
 description:
     - Gathers facts from Cisco FMC devices including domains, devices, access policies, 
       network objects, and other configuration elements. All operations are performed over REST API.
-version_added: "1.0.0"
+version_added: "1.0.10"
 author: "Cisco Systems (@cisco)"
 
 options:
@@ -60,14 +60,6 @@ options:
             - This is useful when you want to limit fact gathering to a specific domain for performance.
         type: str
         required: false
-    
-notes:
-    - This module requires the FMC device to have REST API enabled.
-    - The connection must be made with a user that has appropriate privileges for the operations.
-    - Large FMC environments may take some time to gather all facts. Consider using specific gather_subset options.
-
-extends_documentation_fragment:
-    - cisco.fmcansible.fmc
 """
 
 EXAMPLES = """
@@ -161,11 +153,14 @@ ansible_facts:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
-
-from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
-from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import ValidationError
-from ansible_collections.cisco.fmcansible.plugins.module_utils.common import construct_ansible_facts, FmcConfigurationError, \
-    FmcServerError, FmcUnexpectedResponse
+from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
+    FmcConfigurationError, FmcServerError, FmcUnexpectedResponse,
+    construct_ansible_facts)
+from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import (
+    BaseConfigurationResource, CheckModeException,
+    FmcInvalidOperationNameError)
+from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import \
+    ValidationError
 
 
 def gather_domains(resource):
@@ -236,7 +231,7 @@ def gather_physical_interfaces(resource, domain_uuid, device_id):
                 'containerUUID': device_id
             }
         }
-        return resource.execute_operation('getAllPhysicalInterface', params)
+        return resource.execute_operation('getAllFTDPhysicalInterface', params)
     except Exception as e:
         # Return empty list if operation fails
         return []
