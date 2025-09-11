@@ -34,7 +34,7 @@ short_description: Gather facts from Cisco FMC devices over REST API
 description:
     - Gathers facts from Cisco FMC devices including domains, devices, access policies, 
       network objects, and other configuration elements. All operations are performed over REST API.
-version_added: "1.0.10"
+version_added: "1.0.0"
 author: "Cisco Systems (@cisco)"
 
 options:
@@ -53,7 +53,8 @@ options:
             - "device_groups: gathers device groups for all domains"
         type: list
         elements: str
-        default: ['all']
+        choices: ['all', 'min', 'domains', 'devices', 'access_policies', 'physical_interfaces', 'network_objects', 'port_objects', 'security_zones', 'device_groups']
+        default: ['min']
     domain_uuid:
         description:
             - Specific domain UUID to gather facts for. If not specified, facts are gathered for all domains.
