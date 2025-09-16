@@ -1,36 +1,31 @@
 - hosts: all
   connection: httpapi
   vars_files:
-    - vars.yml  
+    - vars.yml
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Get Prefilter Policy
       cisco.fmcansible.fmc_configuration:
         operation: "getAllPrefilterPolicy"
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         filters:
-          name: '{{ delete_prefilterpolicy_name }}'
+          name: "{{ delete_prefilterpolicy_name }}"
         register_as: prefpolicy
 
     - name: Get Prefilter Rule
       cisco.fmcansible.fmc_configuration:
         operation: "getAllPrefilterRule"
         path_params:
-            containerUUID: "{{ prefpolicy[0].id }}"
-            domainUUID: "{{ domain[0].uuid }}"
+          containerUUID: "{{ prefpolicy[0].id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         filters:
-          name: '{{ delete_prefilterrule_name }}'
+          name: "{{ delete_prefilterrule_name | default('NGFW-Prefilter-Policy10') }}"
         register_as: prefrule
 
     - name: delete Prefilter Rule
       cisco.fmcansible.fmc_configuration:
         operation: deletePrefilterRule
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          containerUUID: '{{ prefpolicy[0].id }}'
-          objectId: '{{ prefrule[0].id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          containerUUID: "{{ prefpolicy[0].id }}"
+          objectId: "{{ prefrule[0].id }}"

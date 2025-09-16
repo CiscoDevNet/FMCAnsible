@@ -1,25 +1,20 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Get all SecurityZone objects
       cisco.fmcansible.fmc_configuration:
         operation: getAllSecurityZoneObject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: zones
 
     - name: Get an IPv4 network object
       cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         query_params:
-          filter: 'nameOrValue:any-ipv4'
+          filter: "nameOrValue:any-ipv4"
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: network_results
 
     - name: Create NAT Policy
@@ -29,7 +24,7 @@
           name: NAT-Policy-1
           type: FTDNatPolicy
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: natpolicy
 
     - name: Setup an inside-outside NAT rule
@@ -48,5 +43,5 @@
           enabled: True
           type: FTDManualNatRule
         path_params:
-          containerUUID: '{{ natpolicy.id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ natpolicy.id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

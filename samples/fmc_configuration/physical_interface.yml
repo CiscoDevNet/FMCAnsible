@@ -3,24 +3,19 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Get Devices
       cisco.fmcansible.fmc_configuration:
         operation: getAllDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: device_list
 
     - name: Get Physical Interfaces
       cisco.fmcansible.fmc_configuration:
         operation: getAllFTDPhysicalInterface
         path_params:
-          containerUUID: '{{ device_list[0].id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ device_list[0].id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: physical_interfaces
 
     - name: Setup Outside Interface with static IP
@@ -38,9 +33,9 @@
           type: physicalinterface
           name: GigabitEthernet0/0
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          containerUUID: '{{ device_list[0].id }}'
-          objectId: '{{ physical_interfaces[0].id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          containerUUID: "{{ device_list[0].id }}"
+          objectId: "{{ physical_interfaces[0].id }}"
 
     - name: Setup Inside Interface with static IP
       cisco.fmcansible.fmc_configuration:
@@ -57,9 +52,9 @@
           type: physicalinterface
           name: GigabitEthernet0/1
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          containerUUID: '{{ device_list[0].id }}'
-          objectId: '{{ physical_interfaces[1].id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          containerUUID: "{{ device_list[0].id }}"
+          objectId: "{{ physical_interfaces[1].id }}"
 
     - name: Setup Interface with DHCP
       cisco.fmcansible.fmc_configuration:
@@ -76,6 +71,6 @@
           type: physicalinterface
           name: GigabitEthernet0/1
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          containerUUID: '{{ device_list[0].id }}'
-          objectId: '{{ physical_interfaces[1].id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          containerUUID: "{{ device_list[0].id }}"
+          objectId: "{{ physical_interfaces[1].id }}"

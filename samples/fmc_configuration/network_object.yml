@@ -16,7 +16,7 @@
           value: "{{ networkobject_ftd2_value | default('10.10.30.0/24') }}"
           type: Network
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create a network object for Cisco FTD 2
       cisco.fmcansible.fmc_configuration:
@@ -26,7 +26,7 @@
           value: "{{ networkobject_ftd2_value | default('10.10.40.0/24') }}"
           type: Network
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create a Cisco network group
       cisco.fmcansible.fmc_configuration:
@@ -35,9 +35,9 @@
           name: "{{ networkgroup_name | default('netg-1') }}"
           type: networkgroup
           objects:
-            - id: '{{ Network_net_15.id }}'
-              type: '{{ Network_net_15.type }}'
-            - id: '{{ Network_net_13.id }}'
-              type: '{{ Network_net_13.type }}'
+            - id: "{{ Network_net_15.id }}"
+              type: "{{ Network_net_15.type }}"
+            - id: "{{ Network_net_13.id }}"
+              type: "{{ Network_net_13.type }}"
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
