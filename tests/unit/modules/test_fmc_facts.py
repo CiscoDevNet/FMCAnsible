@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python
 
 """
 Simple test script to verify the FmcFactsBase class works correctly
@@ -46,48 +46,48 @@ class MockResource:
 
 def test_facts_gathering():
     """Test that facts gathering works correctly"""
-    
+
     print("Testing FmcFactsBase...")
-    
+
     # Create mock resource
     mock_resource = MockResource()
-    
+
     # Create facts gatherer
     facts_gatherer = FmcFactsBase(mock_resource)
-    
+
     # Test minimal facts gathering
     print("Testing minimal facts gathering...")
     facts = facts_gatherer.gather_facts(['min'])
-    
+
     assert 'fmc' in facts
     assert 'domains' in facts['fmc']
     assert 'devices' in facts['fmc']
     assert 'access_policies' in facts['fmc']
-    
+
     print("✓ Minimal facts gathering works")
-    
+
     # Test file and intrusion policies
     print("Testing file and intrusion policies...")
     facts = facts_gatherer.gather_facts(['domains', 'file_policies', 'intrusion_policies'])
-    
+
     assert 'file_policies' in facts['fmc']
     assert 'intrusion_policies' in facts['fmc']
-    
+
     print("✓ File and intrusion policies work")
-    
+
     # Test all facts gathering
     print("Testing all facts gathering...")
     facts = facts_gatherer.gather_facts(['all'])
-    
-    expected_keys = ['domains', 'devices', 'access_policies', 'file_policies', 
-                    'intrusion_policies', 'physical_interfaces', 'network_objects', 
+
+    expected_keys = ['domains', 'devices', 'access_policies', 'file_policies',
+                    'intrusion_policies', 'physical_interfaces', 'network_objects',
                     'port_objects', 'security_zones', 'device_groups']
-    
+
     for key in expected_keys:
         assert key in facts['fmc'], f"Missing key: {key}"
-    
+
     print("✓ All facts gathering works")
-    
+
     print("All tests passed! ✅")
 
 if __name__ == '__main__':

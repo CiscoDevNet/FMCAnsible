@@ -126,8 +126,7 @@ import traceback
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
-    FmcConfigurationError, FmcServerError, FmcUnexpectedResponse,
-    construct_ansible_facts)
+    FmcConfigurationError, FmcServerError, FmcUnexpectedResponse)
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import (
     BaseConfigurationResource, CheckModeException,
     FmcInvalidOperationNameError)
@@ -143,8 +142,8 @@ def main():
             'type': 'list',
             'elements': 'str',
             'default': ['min'],  # Changed default to 'min' for performance
-            'choices': ['all', 'min', 'domains', 'devices', 'access_policies', 'file_policies', 
-                       'intrusion_policies', 'physical_interfaces', 'network_objects', 
+            'choices': ['all', 'min', 'domains', 'devices', 'access_policies', 'file_policies',
+                       'intrusion_policies', 'physical_interfaces', 'network_objects',
                        'port_objects', 'security_zones', 'device_groups']
         },
         'domain_uuid': {
@@ -158,7 +157,7 @@ def main():
 
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)
-    
+
     params = module.params
     gather_subset = params['gather_subset']
     domain_uuid = params.get('domain_uuid')
@@ -167,7 +166,7 @@ def main():
         # Use the facts gathering class
         facts_gatherer = FmcFactsBase(resource)
         facts = facts_gatherer.gather_facts(gather_subset, domain_uuid)
-        
+
         module.exit_json(changed=False, ansible_facts=facts)
 
     except FmcInvalidOperationNameError as e:
@@ -189,7 +188,7 @@ def main():
             'type': str(type(e).__name__),
             'traceback': traceback.format_exc()
         }
-        module.fail_json(msg='Unexpected error while gathering facts: %s' % str(e), 
+        module.fail_json(msg='Unexpected error while gathering facts: %s' % str(e),
                          error_details=error_details)
 
 

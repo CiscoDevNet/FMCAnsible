@@ -24,16 +24,16 @@ __metaclass__ = type
 
 class FmcFactsBase(object):
     """Base class for FMC facts gathering"""
-    
+
     def __init__(self, resource):
         self.resource = resource
-    
+
     def gather_facts(self, gather_subset, domain_uuid=None):
         """Main facts gathering method"""
         # Normalize gather_subset for performance optimization
         if 'all' in gather_subset:
-            gather_subset = ['domains', 'devices', 'access_policies', 'file_policies', 
-                           'intrusion_policies', 'physical_interfaces', 'network_objects', 
+            gather_subset = ['domains', 'devices', 'access_policies', 'file_policies',
+                           'intrusion_policies', 'physical_interfaces', 'network_objects',
                            'port_objects', 'security_zones', 'device_groups']
         elif 'min' in gather_subset:
             # Essential facts only - much faster for large FMCs
@@ -47,14 +47,14 @@ class FmcFactsBase(object):
             domains = self._gather_domains()
             if not isinstance(domains, list):
                 raise ValueError(f"Expected domains to be a list, got {type(domains)}: {domains}")
-            
+
             # Debug each domain structure
             for i, domain in enumerate(domains):
                 if not isinstance(domain, dict):
                     raise ValueError(f"Domain {i} is not a dict. Type: {type(domain)}, Value: {domain}")
                 if 'uuid' not in domain and 'id' not in domain:
                     raise ValueError(f"Domain {i} missing uuid/id. Keys: {list(domain.keys()) if isinstance(domain, dict) else 'Not a dict'}")
-                    
+
             facts['fmc']['domains'] = domains
 
         # Determine which domains to process
@@ -65,26 +65,26 @@ class FmcFactsBase(object):
         elif domains:
             # Use all discovered domains
             target_domains = domains
-        
+
         # Debug target domains
         for i, domain in enumerate(target_domains):
             if not isinstance(domain, dict):
                 raise ValueError(f"target_domains[{i}] is not a dict. Type: {type(domain)}, Value: {domain}")
-        
+
         # Gather facts for each domain
         if target_domains:
             for subset in gather_subset:
                 if subset == 'domains':
                     continue  # Already handled above
-                
+
                 # Initialize the subset dictionary
                 if subset not in facts['fmc']:
                     facts['fmc'][subset] = {}
-                
+
                 for domain in target_domains:
                     # Extremely defensive domain handling
                     domain_id = None
-                    
+
                     try:
                         if isinstance(domain, dict):
                             domain_id = domain.get('uuid') or domain.get('id')
@@ -93,13 +93,13 @@ class FmcFactsBase(object):
                             domain_id = domain
                         else:
                             raise ValueError(f"Unexpected domain type: {type(domain)}")
-                        
+
                         if not domain_id:
                             raise ValueError(f"No domain_id found in domain: {domain}")
-                        
+
                     except Exception as e:
                         raise ValueError(f"Error processing domain {domain}: {e}")
-                    
+
                     if subset == 'devices':
                         facts['fmc'][subset][domain_id] = self._gather_devices(domain_id)
                     elif subset == 'access_policies':
