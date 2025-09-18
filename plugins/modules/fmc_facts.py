@@ -43,7 +43,9 @@ options:
         default: ['min']
         type: list
         elements: str
-        choices: ['all', 'min', 'domains', 'devices', 'access_policies', 'file_policies', 'intrusion_policies', 'physical_interfaces', 'network_objects', 'port_objects', 'security_zones', 'device_groups']
+        choices: ['all', 'min', 'domains', 'devices', 'access_policies',
+                  'file_policies', 'intrusion_policies', 'physical_interfaces',
+                  'network_objects', 'port_objects', 'security_zones', 'device_groups']
     domain_uuid:
         description:
             - UUID of the domain to gather facts for.
@@ -142,9 +144,10 @@ def main():
             'type': 'list',
             'elements': 'str',
             'default': ['min'],  # Changed default to 'min' for performance
-            'choices': ['all', 'min', 'domains', 'devices', 'access_policies', 'file_policies',
-                       'intrusion_policies', 'physical_interfaces', 'network_objects',
-                       'port_objects', 'security_zones', 'device_groups']
+            'choices': ['all', 'min', 'domains', 'devices', 'access_policies',
+                        'file_policies', 'intrusion_policies', 'physical_interfaces',
+                        'network_objects', 'port_objects', 'security_zones',
+                        'device_groups']
         },
         'domain_uuid': {
             'type': 'str',
@@ -153,7 +156,7 @@ def main():
     }
 
     module = AnsibleModule(argument_spec=argument_spec,
-                          supports_check_mode=True)
+                           supports_check_mode=True)
 
     connection = Connection(module._socket_path)
     resource = BaseConfigurationResource(connection, module.check_mode)

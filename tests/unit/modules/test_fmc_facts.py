@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 """
 Simple test script to verify the FmcFactsBase class works correctly
 """
@@ -44,6 +42,7 @@ class MockResource:
         else:
             return []
 
+
 def test_facts_gathering():
     """Test that facts gathering works correctly"""
 
@@ -80,8 +79,8 @@ def test_facts_gathering():
     facts = facts_gatherer.gather_facts(['all'])
 
     expected_keys = ['domains', 'devices', 'access_policies', 'file_policies',
-                    'intrusion_policies', 'physical_interfaces', 'network_objects',
-                    'port_objects', 'security_zones', 'device_groups']
+                     'intrusion_policies', 'physical_interfaces', 'network_objects',
+                     'port_objects', 'security_zones', 'device_groups']
 
     for key in expected_keys:
         assert key in facts['fmc'], f"Missing key: {key}"
@@ -89,6 +88,7 @@ def test_facts_gathering():
     print("✓ All facts gathering works")
 
     print("All tests passed! ✅")
+
 
 if __name__ == '__main__':
     test_facts_gathering()
