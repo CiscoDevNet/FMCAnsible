@@ -33,8 +33,8 @@ class FmcFactsBase(object):
         # Normalize gather_subset for performance optimization
         if 'all' in gather_subset:
             gather_subset = ['domains', 'devices', 'access_policies', 'file_policies',
-                           'intrusion_policies', 'physical_interfaces', 'network_objects',
-                           'port_objects', 'security_zones', 'device_groups']
+                            'intrusion_policies', 'physical_interfaces', 'network_objects',
+                            'port_objects', 'security_zones', 'device_groups']
         elif 'min' in gather_subset:
             # Essential facts only - much faster for large FMCs
             gather_subset = ['domains', 'devices', 'access_policies', 'file_policies', 'intrusion_policies']
