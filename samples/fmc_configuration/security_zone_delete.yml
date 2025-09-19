@@ -12,7 +12,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: "getAllSecurityZoneObject"
         path_params:
-            domainUUID: "{{ domain[0].uuid }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         filters:
           name: "{{ delete_securityzone_name }}"
         register_as: seczone
@@ -21,5 +21,5 @@
       cisco.fmcansible.fmc_configuration:
         operation: deleteSecurityZoneObject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          objectId: '{{ seczone[0].id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          objectId: "{{ seczone[0].id }}"

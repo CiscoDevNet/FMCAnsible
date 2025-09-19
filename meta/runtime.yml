@@ -1,1 +1,6 @@
-requires_ansible: '>=2.10.0'
+requires_ansible: ">=2.10.0"
+action_groups:
+  fmc:
+    - fmc_configuration
+    - fmc_access_policies
+    - fmc_facts

@@ -1,7 +1,7 @@
 ---
 - name: FTD HA Upgrade via FMC
   hosts: fmc
-  gather_facts: false
+
   connection: httpapi
   collections:
     - cisco.fmcansible
@@ -84,8 +84,9 @@
 
     - name: About the Readiness Check
       debug:
-        msg: "Starting readiness check for upgrade package '{{ upgrade_pkg.name }}' on HA devices: {{ ha_pair_names | join(', ') }}.
-               The readiness check identifies issues including database integrity, version inconsistencies, and device registration. Do not reboot or shut down an appliance during the readiness check."
+        msg:
+          "Starting readiness check for upgrade package '{{ upgrade_pkg.name }}' on HA devices: {{ ha_pair_names | join(', ') }}.
+          The readiness check identifies issues including database integrity, version inconsistencies, and device registration. Do not reboot or shut down an appliance during the readiness check."
 
     - name: Start readiness check
       cisco.fmcansible.fmc_configuration:

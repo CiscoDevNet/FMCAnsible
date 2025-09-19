@@ -1,7 +1,7 @@
 ---
 - name: FTD HA Upgrade via FMC - Role-based Implementation
   hosts: fmc
-  gather_facts: false
+
   connection: httpapi
   collections:
     - cisco.fmcansible

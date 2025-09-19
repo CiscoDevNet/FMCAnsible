@@ -12,8 +12,8 @@
       cisco.fmcansible.fmc_configuration:
         operation: "createAccessPolicy"
         data:
-            type: "AccessPolicy"
-            name: "{{accesspolicy_name | default('AccessPolicy1') }}"
-            defaultAction: {'action': 'TRUST'}
+          type: "AccessPolicy"
+          name: "{{accesspolicy_name | default('AccessPolicy1') }}"
+          defaultAction: { "action": "TRUST" }
         path_params:
-            domainUUID: "{{ domain[0].uuid }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
