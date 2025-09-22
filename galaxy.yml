@@ -1,6 +1,6 @@
 namespace: cisco
 name: fmcansible
-version: 1.0.0
+version: 1.0.10
 readme: README.md
 
 authors:
@@ -8,6 +8,8 @@ authors:
   - Iurii Tymoshevskyi <itymo>
   - Sameer Singh <sameesin>
   - Jeroen Wittock <jwittock>
+  - Charan Teja <teande>
+  - Suraj Netla Mundaje <snetlamu>
 
 description: An Ansible collection for managing Cisco Secure Firewall Management Center
 
@@ -19,12 +21,13 @@ tags:
   - "firewall"
   - "fmc"
   - "ftd"
+  - "automation"
 
 dependencies:
-  community.general: '>=7.5.9'
-  community.network: '5.0.3'
-  ansible.netcommon: '5.3.0'
-  ansible.utils: '5.1.2'
+  community.general: ">=7.5.9"
+  community.network: "5.0.3"
+  ansible.netcommon: "5.3.0"
+  ansible.utils: "5.1.2"
 
 repository: https://github.com/CiscoDevNet/FMCAnsible
 homepage: https://github.com/CiscoDevNet/FMCAnsible

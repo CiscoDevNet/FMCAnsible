@@ -1,8 +1,11 @@
 [all:vars]
 ansible_network_os=cisco.fmcansible.fmc
+network_type=HOST
+ansible_facts_modules=cisco.fmcansible.fmc_facts
 
 [vfmc]
 127.0.0.1 ansible_user=admin ansible_password=Cisco@123 ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=False
+cisco-example-cdfmc.app.us.cdo.cisco.com ansible_httpapi_cdfmc=True ansible_httpapi_token=<API_TOKEN> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
 
 [vfmc:vars]
 network_type=HOST

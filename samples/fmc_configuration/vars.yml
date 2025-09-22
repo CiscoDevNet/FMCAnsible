@@ -1,3 +1,4 @@
+---
 #------------------------------------------------------
 ## Access_policy create
 #------------------------------------------------------
@@ -16,8 +17,8 @@ accessrule_name: "rule1"
 #------------------------------------------------------
 ## Access_rule_with_networks
 #------------------------------------------------------
-networkobject_name: "value"
-networkobject_ip: "value"
+# networkobject_name: "value"
+# networkobject_ip: "value"
 
 #------------------------------------------------------
 ## Access_rule_delete
@@ -43,7 +44,7 @@ dnsserver2_ip_primary: "value"
 #------------------------------------------------------
 ## Dnsserevergroup_delete
 #------------------------------------------------------
-delete_dnservergroupobject_name: "dns"
+delete_dnservergroupobject_name: "DNSGroup2"
 
 #------------------------------------------------------
 ## Device_registration
@@ -56,7 +57,7 @@ delete_dnservergroupobject_name: "dns"
 #------------------------------------------------------
 ## Nat_create
 #------------------------------------------------------
-nat_polycy_name: "value"
+nat_polycy_name: "natpol1"
 
 #------------------------------------------------------
 ## Natpolicy_delete
@@ -87,25 +88,25 @@ networkgroup_name: "value"
 
 #------------------------------------------------------
 ## Prefilter_policy_create
-prefilterpolicy_name: "value"
+prefilterpolicy_name: "prefpol1"
 
 #------------------------------------------------------
 ## Prefilter_policy_delete
 #------------------------------------------------------
-delete_prefilterpolicy_name: "pol1"
+delete_prefilterpolicy_name: "prefpol1"
 
 #------------------------------------------------------
 ## Prefilter_rule_delete
 #------------------------------------------------------
 # Using delete_prefilterpolicy_name from Prefilter_policy_delete section
-delete_prefilterrule_name: "rule1"
+# delete_prefilterrule_name: "value"
 
 #------------------------------------------------------
 ## Static_route
 #------------------------------------------------------
-firstdestinationnetwork: "value"
-seconddestinationnetwork: "value"
-gatewaynetwork: "value"
+# firstdestinationnetwork: "value"
+# seconddestinationnetwork: "value"
+# gatewaynetwork: "value"
 
 #------------------------------------------------------
 ## Sub_interface
@@ -121,4 +122,4 @@ securityzone_name: "secz1"
 #------------------------------------------------------
 ## Security_zone_delete
 #------------------------------------------------------
-delete_securityzone_name: "zone1"
+delete_securityzone_name: "secz1"

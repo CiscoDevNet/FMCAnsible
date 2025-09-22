@@ -3,11 +3,6 @@
   vars_files:
     - vars.yml
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Setup the first destination network for static route
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
@@ -16,7 +11,7 @@
           value: "{{ firstdestinationnetwork | default('192.168.4.0/24') }}"
           type: networkobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Setup the second destination network for static route
       cisco.fmcansible.fmc_configuration:
@@ -26,7 +21,7 @@
           value: "{{ seconddestinationnetwork | default('192.168.6.0/24') }}"
           type: networkobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Setup gateway network for static route
       cisco.fmcansible.fmc_configuration:
@@ -36,21 +31,21 @@
           value: "{{ gatewaynetwork | default('192.168.2.2') }}"
           type: host
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Get Devices
       cisco.fmcansible.fmc_configuration:
         operation: getAllDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: device_list
 
     - name: Get Device Interfaces
       cisco.fmcansible.fmc_configuration:
         operation: getAllFTDPhysicalInterface
         path_params:
-          containerUUID: '{{ device_list[0].id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ device_list[0].id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         query_params:
           expanded: true
         register_as: interface_list
@@ -70,5 +65,5 @@
           metricValue: 1
           type: IPv4StaticRoute
         path_params:
-          containerUUID: '{{ device_list[0].id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ device_list[0].id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

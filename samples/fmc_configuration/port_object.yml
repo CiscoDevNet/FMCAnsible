@@ -1,11 +1,6 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Create a TCP port for PostgreSQL
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleProtocolPortObject
@@ -15,7 +10,7 @@
           protocol: "TCP"
           type: protocolportobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: postgr
 
     - name: Update TCP port for PostgreSQL
@@ -27,8 +22,8 @@
           protocol: "TCP"
           type: protocolportobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
-          objectId: '{{ postgr.id }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
+          objectId: "{{ postgr.id }}"
         register_as: postgre
 
     - name: Create a TCP port for MySQL
@@ -40,7 +35,7 @@
           protocol: "TCP"
           type: protocolportobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: mysql
 
     - name: Create a database port group
@@ -55,7 +50,7 @@
               type: "{{ postgre.type }}"
           type: portobjectgroup
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create a UDP port for NTP protocol
       cisco.fmcansible.fmc_configuration:
@@ -66,7 +61,7 @@
           protocol: "UDP"
           type: protocolportobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create a UDP port for NTP protocol 2
       cisco.fmcansible.fmc_configuration:
@@ -77,4 +72,4 @@
           protocol: "UDP"
           type: protocolportobject
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

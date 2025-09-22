@@ -1,16 +1,11 @@
 - hosts: all
   connection: httpapi
   tasks:
-    - name: Get Domain
-      cisco.fmcansible.fmc_configuration:
-        operation: getAllDomain
-        register_as: domain
-
     - name: Get Deployable Devices
       cisco.fmcansible.fmc_configuration:
         operation: getDeployableDevice
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         query_params:
           expanded: true
         register_as: devices
@@ -23,28 +18,28 @@
       cisco.fmcansible.fmc_configuration:
         operation: getPendingChanges
         path_params:
-          containerUUID: '{{ devices[0].device.id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ devices[0].device.id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: pending_changes
 
     - name: Start deployment
       cisco.fmcansible.fmc_configuration:
         operation: createDeploymentRequest
         data:
-          version: '{{ devices[0].version }}'
+          version: "{{ devices[0].version }}"
           deviceList:
-            - '{{ devices[0].device.id }}'
+            - "{{ devices[0].device.id }}"
           forceDeploy: True
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: deployment_job
 
     - name: Poll deployment status until the job is finished
       cisco.fmcansible.fmc_configuration:
         operation: getDeploymentDetail
         path_params:
-          containerUUID: '{{ devices[0].device.id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ devices[0].device.id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
         register_as: deployment_status
       until: deployment_status[0].status is match("SUCCEEDED")
       retries: 100
@@ -52,5 +47,5 @@
 
     - name: Stop the playbook if the deployment failed
       fail:
-        msg: 'Deployment failed. Status: {{ deployment_status[0].status }}'
+        msg: "Deployment failed. Status: {{ deployment_status[0].status }}"
       when: deployment_status[0].status is not match("SUCCEEDED")

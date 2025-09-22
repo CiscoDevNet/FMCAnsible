@@ -15,14 +15,14 @@
         filters:
           name: "{{ accesspolicy_name | default('NGFW-Access-Policy25') }}"
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Find a file policy
       cisco.fmcansible.fmc_configuration:
         operation: getAllFilePolicy
         register_as: file_policies
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create an access rule logging malware files
       cisco.fmcansible.fmc_configuration:
@@ -36,5 +36,5 @@
           filePolicy: "{{ file_policies[0] }}"
           type: AccessRule
         path_params:
-          containerUUID: '{{ accesspolicy[0].id }}'
-          domainUUID: '{{ domain[0].uuid }}'
+          containerUUID: "{{ accesspolicy[0].id }}"
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

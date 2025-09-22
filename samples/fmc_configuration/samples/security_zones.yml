@@ -16,7 +16,7 @@
           interfaceMode: ROUTED
           type: SecurityZone
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
 
     - name: Create security zone - Outside
       cisco.fmcansible.fmc_configuration:
@@ -26,4 +26,4 @@
           interfaceMode: ROUTED
           type: SecurityZone
         path_params:
-          domainUUID: '{{ domain[0].uuid }}'
+          domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

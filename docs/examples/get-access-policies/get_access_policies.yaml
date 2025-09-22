@@ -1,7 +1,7 @@
 ---
 - name: Collect FMC Access Policies and Rules
   hosts: vfmc
-  gather_facts: no
+
   connection: httpapi
   collections:
     - cisco.fmcansible

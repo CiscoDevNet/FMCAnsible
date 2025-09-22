@@ -59,6 +59,7 @@
     path_params:
       domainUUID: "{{ domain_uuid }}"
       objectId: "{{ ansible_facts[register_as].metadata.task.id }}"
+      showDetailedDeviceStatus: true
     register_as: upgrade_status_check
   register: upgrade_status
   until: upgrade_status_check.status == "COMPLETED" or upgrade_status_check.status == "FAILED"

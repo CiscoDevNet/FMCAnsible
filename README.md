@@ -10,9 +10,11 @@ This module has been tested against the following cisco Secure Firewall Manageme
 
 ## Included Content
 
-The collection contains one Ansible module:
+The collection contains the following Ansible modules:
 
 * [`fmc_configuration.py`](https://github.com/CiscoDevNet/FMCAnsible/blob/main/plugins/modules/fmc_configuration.py) - manages device configuration via REST API. The module configures virtual and physical devices by sending HTTPS calls formatted according to the REST API specification.
+
+* [`fmc_facts.py`](https://github.com/CiscoDevNet/FMCAnsible/blob/main/plugins/modules/fmc_facts.py) - gathers facts from FMC devices and enables `gather_facts: true` functionality. Collects domains, devices, access policies, and other configuration elements via REST API.
 
 ## Installing this collection
 
@@ -54,9 +56,45 @@ ansible_network_os=cisco.fmcansible.fmc
 
 Then create a playbook referencing the module and the desired operation. This example `network.yml` demonstrates how to create a simple network object. The task creates a new object representing the subnet.
 
-After creation, the network object is stored as an Ansible fact and can be accessed  
-using `Network_net15` variable.
+**Option 1: Using automatic fact gathering (recommended for basic facts)**
+```ansible
+- hosts: all
+  connection: httpapi
+  gather_facts: true  # Automatically gathers minimal FMC facts (domains, devices, access_policies)
+  tasks:
+    - name: Create a network object for Cisco FTD 1
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        data:
+          name: net15
+          value: 10.10.30.0/24
+          type: Network
+        path_params:
+          domainUUID: '{{ ansible_facts.fmc.domains[0].uuid }}'
+```
 
+**Option 2: Using manual fact gathering (for custom fact subsets)**
+```ansible
+- hosts: all
+  connection: httpapi
+  gather_facts: false
+  tasks:
+    - name: Gather comprehensive FMC facts
+      cisco.fmcansible.fmc_facts:
+        gather_subset: ['all']  # or ['domains', 'devices', 'network_objects']
+        
+    - name: Create a network object for Cisco FTD 1
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        data:
+          name: net15
+          value: 10.10.30.0/24
+          type: Network
+        path_params:
+          domainUUID: '{{ ansible_facts.fmc.domains[0].uuid }}'
+```
+
+**Option 3: Traditional domain lookup**
 ```ansible
 - hosts: all
   connection: httpapi
@@ -106,6 +144,24 @@ ansible_network_os=cisco.fmcansible.fmc
 
 ### Example cdFMC Playbook
 
+**With automatic fact gathering:**
+```ansible
+- hosts: cdfmc
+  connection: httpapi
+  gather_facts: true  # Automatically gathers FMC facts including domains
+  tasks:
+    - name: Create a network object on cdFMC
+      cisco.fmcansible.fmc_configuration:
+        operation: createMultipleNetworkObject
+        data:
+          name: cdnet01
+          value: 192.168.100.0/24
+          type: Network
+        path_params:
+          domainUUID: '{{ ansible_facts.fmc.domains[0].uuid }}'
+```
+
+**Traditional approach:**
 ```ansible
 - hosts: cdfmc
   connection: httpapi
