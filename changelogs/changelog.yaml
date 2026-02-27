@@ -1,5 +1,92 @@
 ancestor: null
 releases:
+  1.1.0:
+    changes:
+      release_summary: 'First stable release of the 1.x line, promoting the v1.0.10
+        pre-release changes and adding full documentation for facts gathering.
+
+        '
+      minor_changes:
+        - Promoted ``fmc_facts`` module to stable; supports facts gathering for domains,
+          devices, access policies, intrusion policies, and file policies.
+        - Added documentation and usage guide for the ``fmc_facts`` module.
+        - Improved sample playbooks and inventory examples for both traditional FMC
+          and cdFMC workflows.
+        - Validated compatibility with Cisco Secure FMC versions 7.2, 7.3, 7.4, 7.6, and 10.0.
+      bugfixes:
+        - Fixed ``common.py`` equal-objects comparison to correctly handle nested object
+          structures (multiple iterative fixes).
+        - Applied PEP 8 and Ansible sanity-check fixes across module utils and plugins.
+        - Corrected ``ansible.cfg`` base configuration to avoid installing into a root folder.
+        - Improved ``device_upgrade`` role task polling and removed unused variables.
+    release_date: '2026-02-27'
+  1.0.10:
+    changes:
+      release_summary: 'Pre-release adding the ``fmc_facts`` facts-gathering module
+        and iterative fixes to ``common.py`` and sanity checks.
+
+        '
+      minor_changes:
+        - Added new ``fmc_facts`` module for structured facts gathering.
+        - Extended facts gathering to cover intrusion policies and file policies.
+        - Modified sample playbooks to demonstrate the new facts module.
+        - Added unit tests for the facts gathering module.
+        - Added documentation for cdFMC (``ansible.cfg``) and updated base configuration.
+        - Added ``fmc_facts`` usage documentation.
+      bugfixes:
+        - Multiple iterative fixes to ``common.py`` equal-objects comparison logic.
+        - PEP 8 and sanity-check fixes across the collection (plugins and module utils).
+        - Fixed ``device_upgrade`` role task polling; removed unused variables.
+    release_date: '2025-09-22'
+  1.0.8:
+    changes:
+      release_summary: 'Major feature release adding Cisco Defense FMC (cdFMC) support
+        with Bearer token authentication, FTD HA Upgrade automation, and access policy
+        enhancements.
+
+        '
+      major_changes:
+        - Added Cisco Defense FMC (cdFMC) support with Bearer token authentication
+          (PR #83).
+        - Added roles for FTD HA Upgrade user experience automation (PR #82).
+      minor_changes:
+        - Added FTD HA Upgrade sample playbook (PR #78).
+        - Added ``fmc_access_policies`` module and feature access policy support (PR #79).
+        - Removed caching test cache (PR #73).
+      bugfixes:
+        - Fixed CI pipeline issues (PR #75, PR #76).
+    release_date: '2025-08-22'
+  1.0.6:
+    changes:
+      release_summary: 'Pre-release with PEP 8 compliance fixes to ``fmc_configuration.py``.
+
+        '
+      bugfixes:
+        - Applied PEP 8 updates to ``fmc_configuration.py``.
+    release_date: '2025-03-04'
+  1.0.4:
+    changes:
+      release_summary: 'Documentation update release.
+
+        '
+      minor_changes:
+        - Updated README with latest usage instructions.
+    release_date: '2025-02-26'
+  1.0.2:
+    changes:
+      release_summary: 'Merged development branch into main (PR #72).
+
+        '
+    release_date: '2025-01-21'
+  1.0.0:
+    changes:
+      release_summary: 'Initial 1.0 stable release introducing Cisco Defense FMC
+        (cdFMC) support (PR #71).
+
+        '
+      major_changes:
+        - Added cdFMC support as the foundation for the 1.x release line.
+    release_date: '2025-01-21'
   0.1.0:
     changes:
       release_summary: 'This is the first release of the ``cisco.fmcansible`` collection.
