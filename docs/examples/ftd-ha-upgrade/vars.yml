@@ -1,6 +1,6 @@
 ---
 # Variables for FTD HA Upgrade
-version: "7.7.0-89"  # Version string to filter upgrade packages
+version: "7.7.0-89"  # Version string to filter upgrade packages, supports upto 10.0
 ha_pair_names: 
   - "HA-Pair-1"
   # - "HA-Pair-2"  # Uncomment and add more HA pairs as needed
