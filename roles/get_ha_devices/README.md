@@ -4,7 +4,7 @@ This Ansible role retrieves FTD HA device containers from Cisco Firepower Manage
 
 ## Requirements
 
-- Ansible 2.10 or higher
+- Ansible 2.17 or higher
 - cisco.fmcansible collection
 
 ## Role Variables

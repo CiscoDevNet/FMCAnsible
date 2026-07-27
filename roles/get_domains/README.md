@@ -4,7 +4,7 @@ This Ansible role retrieves all FMC domains from Cisco Firepower Management Cent
 
 ## Requirements
 
-- Ansible 2.10 or higher
+- Ansible 2.17 or higher
 - cisco.fmcansible collection
 
 ## Role Variables

@@ -4,7 +4,7 @@ This Ansible role collects and processes access policies from Cisco Firepower Ma
 
 ## Requirements
 
-- Ansible 2.10 or higher
+- Ansible 2.17 or higher
 - cisco.fmcansible collection
 
 ## Role Variables

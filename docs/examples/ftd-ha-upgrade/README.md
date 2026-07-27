@@ -14,7 +14,7 @@ The FTD HA upgrade process has been decomposed into the following roles:
 
 ## Prerequisites
 
-1. Ansible 2.10 or higher
+1. Ansible 2.17 or higher
 2. cisco.fmcansible collection installed:
    ```bash
    ansible-galaxy collection install cisco.fmcansible

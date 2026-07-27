@@ -4,7 +4,7 @@ This Ansible role creates and monitors device backups in Cisco Firepower Managem
 
 ## Requirements
 
-- Ansible 2.10 or higher
+- Ansible 2.17 or higher
 - cisco.fmcansible collection
 
 ## Role Variables

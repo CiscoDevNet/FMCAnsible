@@ -437,7 +437,7 @@ ansible-test units --docker -v tests/unit/httpapi_plugins/test_ftd.py --color
 
 Integration tests are written in a form of playbooks. Thus, integration tests are written as sample playbooks with assertion and can be found in the `samples` folder. They can be run as usual playbooks.  The integration tests use a local Docker container which copies the necessary code and folders from your local path into a docker container for testing.
 
-1. Build the default Python 3.9, Ansible 2.10 Docker image:
+1. Build the default Python 3.9, Ansible 2.17+ Docker image:
     ```
     docker build -t fmc-ansible:integration -f Dockerfile_integration .
     ```

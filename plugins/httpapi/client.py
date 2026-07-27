@@ -28,13 +28,13 @@ import json
 import http.client
 import ssl
 import base64
-from urllib import response
-# from urllib.parse import urlencode
 import time
 
 # provided for convenience, should be
 LOGIN_PATH = "/api/fmc_platform/v1/auth/generatetoken"
 REFRESH_PATH = "/api/fmc_platform/v1/auth/refreshtoken"
+AUTH_ERROR_STATUS_CODES = (401, 408)
+DEFAULT_MAX_RETRIES = 3
 
 
 class InternalHttpClientError(Exception):
@@ -47,10 +47,11 @@ class InternalHttpClient(object):
     """
     Encapsulates a HTTP client with login flow used to communicate with a REST service over SSL.
     """
-    def __init__(self, host, login_url_path=None):
+    def __init__(self, host, login_url_path=None, max_retries=DEFAULT_MAX_RETRIES):
         # maintained on login/logout
         self._host = host
         self._login_url_path = login_url_path or LOGIN_PATH
+        self._max_retries = max_retries
         self.username = None
         self.password = None
         self.access_token = None
@@ -60,16 +61,30 @@ class InternalHttpClient(object):
         """
         Sends a request to the endpoint and returns the response body.
         """
-        if headers is not None and self.access_token is not None:
-            headers['X-auth-access-token'] = self.access_token
+        request_headers = dict(headers or {})
 
-        response = self._send_request(url_path, data, method, headers)
-        response_body = self._parse_response_body(response)
-        if self._handle_error(response_body, response.status) == 2:
-            # Retry send
-            self.send(url_path, data, method, headers)
-        # return the tuple just like connection.send
-        return response, response_body
+        for attempt in range(self._max_retries + 1):
+            if self.access_token is not None:
+                request_headers['X-auth-access-token'] = self.access_token
+            else:
+                request_headers.pop('X-auth-access-token', None)
+
+            response = self._send_request(url_path, data, method, request_headers)
+            response_body = self._parse_response_body(response)
+            should_retry = self._handle_error(
+                response_body,
+                response.status,
+                response,
+                retry_allowed=attempt < self._max_retries
+            )
+            if should_retry != 2:
+                # return the tuple just like connection.send
+                return response, response_body
+
+        raise InternalHttpClientError(
+            'Maximum request retries exceeded',
+            response.status
+        )
 
     def send_login(self, username, password):
         """
@@ -83,11 +98,25 @@ class InternalHttpClient(object):
             'Authorization': 'Basic ' + encoded_creds_str
         }
         res = self._send_request(self._login_url_path, None, "POST", headers)
+        response_body = self._parse_response_body(res)
+        if self._is_error_response(response_body, res.status):
+            raise InternalHttpClientError(
+                self._get_error_message(response_body, res.status),
+                res.status
+            )
+
+        access_token = res.getheader("X-auth-access-token")
+        refresh_token = res.getheader("X-auth-refresh-token")
+        if not access_token or not refresh_token:
+            raise InternalHttpClientError(
+                'FMC login response did not contain authentication tokens',
+                res.status
+            )
 
         self.username = username
         self.password = password
-        self.access_token = res.getheader("X-auth-access-token")
-        self.refresh_token = res.getheader("X-auth-refresh-token")
+        self.access_token = access_token
+        self.refresh_token = refresh_token
         return {
             'access_token': self.access_token,
             'refresh_token': self.refresh_token
@@ -99,11 +128,35 @@ class InternalHttpClient(object):
             'X-auth-access-token': self.access_token,
             'X-auth-refresh-token': self.refresh_token
         }
-        response_body = self._send_request(REFRESH_PATH, None, "POST", headers)
-        self._handle_error(response_body, response.status)
+        res = self._send_request(REFRESH_PATH, None, "POST", headers)
+        response_body = self._parse_response_body(res)
 
-        self.access_token = response_body.getheader("X-auth-access-token")
-        self.refresh_token = response_body.getheader("X-auth-refresh-token")
+        error_message = self._get_error_message(response_body, res.status)
+        if self._is_error_response(response_body, res.status):
+            if (int(res.status) in AUTH_ERROR_STATUS_CODES or
+                    'Invalid refresh token' in error_message):
+                return self._send_stored_login()
+            raise InternalHttpClientError(error_message, res.status)
+
+        self.access_token = res.getheader("X-auth-access-token")
+        self.refresh_token = res.getheader("X-auth-refresh-token")
+        if not self.access_token or not self.refresh_token:
+            raise InternalHttpClientError(
+                'FMC refresh response did not contain authentication tokens',
+                res.status
+            )
+        return {
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token
+        }
+
+    def _send_stored_login(self):
+        if self.username is None or self.password is None:
+            raise InternalHttpClientError(
+                'FMC authentication expired and no stored credentials are available',
+                401
+            )
+        return self.send_login(self.username, self.password)
 
     def _send_request(self, url_path, data=None, method="GET", headers=None):
         """
@@ -127,39 +180,77 @@ class InternalHttpClient(object):
         Parses the raw response and returns the response body
         """
         resdata = res.read()
+        if not resdata:
+            return {}
         response = resdata.decode("utf-8")
         respobject = json.loads(response)
         return respobject
 
-    def _handle_error(self, response, status_code):
+    def _handle_error(self, response, status_code, raw_response=None, retry_allowed=True):
         """
         Handles an error by parsing the response, and raising an error if found in response body.
         """
-        if 'error' not in response:
+        if not self._is_error_response(response, status_code):
             return 0
 
-        err = response.get('error')
-        msg = err.get('data') or err.get('message') or iter_messages(err.get('messages'))
+        msg = self._get_error_message(response, status_code)
+        status_code = int(status_code)
 
-        if 'Access token invalid' in msg:
-            self.send_refresh_token()
+        is_auth_error = (
+            status_code in AUTH_ERROR_STATUS_CODES or
+            'Access token invalid' in msg or
+            'Invalid refresh token' in msg
+        )
+        if is_auth_error:
+            if not retry_allowed:
+                raise InternalHttpClientError(
+                    'Maximum request retries exceeded: {0}'.format(msg),
+                    status_code
+                )
+
+            if 'Invalid refresh token' in msg:
+                self._send_stored_login()
+            elif self.refresh_token:
+                self.send_refresh_token()
+            else:
+                self._send_stored_login()
             return 2
 
-        if 'Invalid refresh token' in msg:
-            self.send_login(self.username, self.password)
-            return 2
-
-        if int(status_code) == 429:
-            retry_after = response.getheader("Retry-After")
+        if status_code == 429:
+            if not retry_allowed:
+                raise InternalHttpClientError(
+                    'Maximum request retries exceeded: {0}'.format(msg),
+                    status_code
+                )
+            retry_after = raw_response.getheader("Retry-After") if raw_response is not None else None
             try:
                 time.sleep(int(retry_after))
             except (TypeError, ValueError):
                 time.sleep(30)
             return 2
 
-        # raise ConnectionError(to_text(msg, errors='surrogate_then_replace'), code=code)
-        # raise InternalHttpClientError('FMC Error: {0}'.format(msg), status_code)
         raise InternalHttpClientError(msg, status_code)
+
+    @staticmethod
+    def _is_error_response(response, status_code):
+        has_error_body = isinstance(response, dict) and 'error' in response
+        return has_error_body or int(status_code) >= 400
+
+    @staticmethod
+    def _get_error_message(response, status_code):
+        if isinstance(response, dict):
+            err = response.get('error')
+            if isinstance(err, dict):
+                msg = (
+                    err.get('data') or
+                    err.get('message') or
+                    iter_messages(err.get('messages'))
+                )
+                if msg:
+                    return str(msg)
+            elif err:
+                return str(err)
+        return 'HTTP {0} returned without an error message'.format(status_code)
 
 
 def iter_messages(messages):

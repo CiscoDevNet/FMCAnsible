@@ -4,7 +4,7 @@ This Ansible role retrieves upgrade packages from Cisco Firepower Management Cen
 
 ## Requirements
 
-- Ansible 2.10 or higher
+- Ansible 2.17 or higher
 - cisco.fmcansible collection
 
 ## Role Variables
