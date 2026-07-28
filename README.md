@@ -5,7 +5,7 @@ and execution of operational tasks on Cisco Secure Firewall Management Centre (F
 
 **Supports both traditional FMC and Cisco Defense FMC (cdFMC) deployments with Bearer token authentication.**
 
-This module requires Ansible **2.17.0 or later**.
+This module requires Ansible Core **2.16.0 or later**.
 This module has been tested against the following cisco Secure Firewall Management Center versions up to **7.6** and **10.0**
 
 ## Included Content

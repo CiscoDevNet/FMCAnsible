@@ -149,7 +149,11 @@ class HttpApi(HttpApiBase):
         if InternalHttpClient and self._use_internal_client:
             try:
                 host = self.connection.get_option('host')
-                self._http_client = InternalHttpClient(host, TOKEN_PATH_TEMPLATE)
+                self._http_client = InternalHttpClient(
+                    host,
+                    TOKEN_PATH_TEMPLATE,
+                    enable_auth_recovery=not self.get_option('cdfmc')
+                )
             except Exception:
                 self._use_internal_client = False
                 self._http_client = None

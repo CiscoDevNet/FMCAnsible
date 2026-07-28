@@ -4,7 +4,7 @@ This Ansible role performs device upgrades and readiness checks in Cisco Firepow
 
 ## Requirements
 
-- Ansible 2.17 or higher
+- Ansible Core 2.16 or higher
 - cisco.fmcansible collection
 
 ## Role Variables

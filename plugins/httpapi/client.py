@@ -47,11 +47,17 @@ class InternalHttpClient(object):
     """
     Encapsulates a HTTP client with login flow used to communicate with a REST service over SSL.
     """
-    def __init__(self, host, login_url_path=None, max_retries=DEFAULT_MAX_RETRIES):
+    def __init__(
+            self,
+            host,
+            login_url_path=None,
+            max_retries=DEFAULT_MAX_RETRIES,
+            enable_auth_recovery=True):
         # maintained on login/logout
         self._host = host
         self._login_url_path = login_url_path or LOGIN_PATH
         self._max_retries = max_retries
+        self._enable_auth_recovery = enable_auth_recovery
         self.username = None
         self.password = None
         self.access_token = None
@@ -90,6 +96,12 @@ class InternalHttpClient(object):
         """
         Sends a login request to the endpoint using basic auth.
         """
+        if not self._enable_auth_recovery:
+            raise InternalHttpClientError(
+                'Username/password login is not supported for bearer-token authentication',
+                401
+            )
+
         creds = username + ':' + password
         encoded_creds = base64.b64encode(creds.encode())
         encoded_creds_str = encoded_creds.decode("utf-8")
@@ -123,6 +135,12 @@ class InternalHttpClient(object):
         }
 
     def send_refresh_token(self):
+        if not self._enable_auth_recovery:
+            raise InternalHttpClientError(
+                'Token refresh is not supported for bearer-token authentication',
+                401
+            )
+
         headers = {
             'Content-Type': 'application/json',
             'X-auth-access-token': self.access_token,
@@ -202,6 +220,9 @@ class InternalHttpClient(object):
             'Invalid refresh token' in msg
         )
         if is_auth_error:
+            if not self._enable_auth_recovery:
+                raise InternalHttpClientError(msg, status_code)
+
             if not retry_allowed:
                 raise InternalHttpClientError(
                     'Maximum request retries exceeded: {0}'.format(msg),
@@ -249,7 +270,17 @@ class InternalHttpClient(object):
                 if msg:
                     return str(msg)
             elif err:
+                description = (
+                    response.get('errorDescription') or
+                    response.get('error_description')
+                )
+                if description:
+                    return '{0}: {1}'.format(err, description)
                 return str(err)
+
+            msg = response.get('errorMsg') or response.get('message')
+            if msg:
+                return str(msg)
         return 'HTTP {0} returned without an error message'.format(status_code)
 
 

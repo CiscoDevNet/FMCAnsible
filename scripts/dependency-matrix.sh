@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
-MATRIX="${ANSIBLE_CORE_MATRIX:-2.17.14 2.18.18 2.19.11 2.20.7 2.21.2}"
+MATRIX="${ANSIBLE_CORE_MATRIX:-2.16.19 2.17.14 2.18.18 2.19.11 2.20.7 2.21.2}"
 WORK_ROOT="${DEPENDENCY_MATRIX_WORK_ROOT:-$(mktemp -d /tmp/fmcansible-deps.XXXXXX)}"
 DIST_DIR="${WORK_ROOT}/dist"
 COLLECTIONS_PATH="${WORK_ROOT}/collections"

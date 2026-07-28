@@ -299,6 +299,87 @@ class TestInternalHttpClient(unittest.TestCase):
             str(raised.exception)
         )
 
+    def test_bearer_authentication_error_does_not_use_onprem_recovery(self):
+        client = InternalHttpClient(
+            'cdfmc.example.com',
+            enable_auth_recovery=False
+        )
+        unauthorized_response = FakeHttpResponse(
+            401,
+            {
+                'error': 'invalid_token',
+                'errorDescription': 'The bearer token is invalid or revoked'
+            }
+        )
+        headers = {'Authorization': 'Bearer CDFMC_TOKEN'}
+
+        with mock.patch.object(
+                client,
+                '_send_request',
+                return_value=unauthorized_response) as send_request:
+            with mock.patch.object(client, 'send_refresh_token') as refresh:
+                with mock.patch.object(client, '_send_stored_login') as login:
+                    with self.assertRaises(InternalHttpClientError) as raised:
+                        client.send('/api/test', headers=headers)
+
+        self.assertEqual(401, raised.exception.status_code)
+        self.assertEqual(
+            'invalid_token: The bearer token is invalid or revoked',
+            str(raised.exception)
+        )
+        self.assertEqual(1, send_request.call_count)
+        self.assertEqual(
+            'Bearer CDFMC_TOKEN',
+            send_request.call_args[0][3]['Authorization']
+        )
+        refresh.assert_not_called()
+        login.assert_not_called()
+
+    def test_bearer_authentication_rejects_onprem_login_and_refresh(self):
+        client = InternalHttpClient(
+            'cdfmc.example.com',
+            enable_auth_recovery=False
+        )
+
+        with self.assertRaises(InternalHttpClientError) as login_error:
+            client.send_login('user', 'password')
+        with self.assertRaises(InternalHttpClientError) as refresh_error:
+            client.send_refresh_token()
+
+        self.assertIn('not supported', str(login_error.exception))
+        self.assertIn('not supported', str(refresh_error.exception))
+
+    def test_bearer_rate_limit_retries_without_authentication_recovery(self):
+        client = InternalHttpClient(
+            'cdfmc.example.com',
+            max_retries=1,
+            enable_auth_recovery=False
+        )
+        rate_limited_response = FakeHttpResponse(
+            429,
+            {'error': {'message': 'Rate limit exceeded'}},
+            headers={'Retry-After': '0'}
+        )
+        success_response = FakeHttpResponse(200, {'items': []})
+        headers = {'Authorization': 'Bearer CDFMC_TOKEN'}
+
+        with mock.patch.object(
+                client,
+                '_send_request',
+                side_effect=[rate_limited_response, success_response]) as send_request:
+            with mock.patch(
+                    'ansible_collections.cisco.fmcansible.plugins.httpapi.client.time.sleep') as sleep:
+                response, response_body = client.send('/api/test', headers=headers)
+
+        self.assertEqual(success_response, response)
+        self.assertEqual({'items': []}, response_body)
+        self.assertEqual(2, send_request.call_count)
+        self.assertEqual(
+            'Bearer CDFMC_TOKEN',
+            send_request.call_args_list[-1][0][3]['Authorization']
+        )
+        sleep.assert_called_once_with(0)
+
     def test_send_stops_after_maximum_rate_limit_retries(self):
         client = InternalHttpClient('fmc.example.com', max_retries=1)
         rate_limited_response = FakeHttpResponse(
