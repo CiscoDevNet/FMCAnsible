@@ -54,6 +54,7 @@ class SpecProp:
 
 
 class PropName:
+    ADDITIONAL_PROPERTIES = 'additionalProperties'
     ENUM = 'enum'
     TYPE = 'type'
     REQUIRED = 'required'
@@ -643,7 +644,7 @@ class FmcSwaggerValidator:
         if PropName.REQUIRED in model:
             self._check_required_fields(status, model[PropName.REQUIRED], data, path)
 
-        model_properties = model[PropName.PROPERTIES]
+        model_properties = model.get(PropName.PROPERTIES) or {}
         for prop in model_properties.keys():
             if prop in data:
                 model_prop_val = model_properties[prop]
@@ -654,6 +655,19 @@ class FmcSwaggerValidator:
                     expected_type = PropType.OBJECT
                 actually_value = data[prop]
                 self._check_types(status, actually_value, expected_type, model_prop_val, path, prop)
+
+        additional_properties = model.get(PropName.ADDITIONAL_PROPERTIES)
+        if isinstance(additional_properties, dict):
+            if PropName.TYPE in additional_properties:
+                expected_type = additional_properties[PropName.TYPE]
+            elif PropName.REF in additional_properties:
+                expected_type = PropType.OBJECT
+            else:
+                return
+
+            for prop in data.keys():
+                if prop not in model_properties:
+                    self._check_types(status, data[prop], expected_type, additional_properties, path, prop)
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:

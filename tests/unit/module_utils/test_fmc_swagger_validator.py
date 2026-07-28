@@ -708,6 +708,191 @@ class TestFmcSwaggerValidator(unittest.TestCase):
             ]
         }) == sort_validator_rez(rez)
 
+    def test_array_with_free_form_objects(self):
+        spec = {
+            'models': {
+                'FreeFormObjectContainer': {
+                    'type': 'object',
+                    'properties': {
+                        'metadata': {
+                            'type': 'array',
+                            'items': {'type': 'object'}
+                        }
+                    }
+                }
+            },
+            'operations': {
+                'createFreeFormObjectContainer': {
+                    'modelName': 'FreeFormObjectContainer'
+                }
+            }
+        }
+        data = {
+            'metadata': [{
+                'id': 'example-id',
+                'type': 'ExampleType',
+                'name': 'Example name'
+            }]
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createFreeFormObjectContainer', data)
+
+        assert valid
+        assert rez is None
+
+    def test_array_with_free_form_objects_rejects_non_object(self):
+        spec = {
+            'models': {
+                'FreeFormObjectContainer': {
+                    'type': 'object',
+                    'properties': {
+                        'metadata': {
+                            'type': 'array',
+                            'items': {'type': 'object'}
+                        }
+                    }
+                }
+            },
+            'operations': {
+                'createFreeFormObjectContainer': {
+                    'modelName': 'FreeFormObjectContainer'
+                }
+            }
+        }
+        data = {'metadata': ['not-an-object']}
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createFreeFormObjectContainer', data)
+
+        assert not valid
+        assert {
+            'invalid_type': [{
+                'path': 'metadata[0]',
+                'expected_type': 'object',
+                'actually_value': 'not-an-object'
+            }]
+        } == rez
+
+    def test_array_with_typed_additional_properties(self):
+        spec = {
+            'models': {
+                'StringMapContainer': {
+                    'type': 'object',
+                    'properties': {
+                        'metadata': {
+                            'type': 'array',
+                            'items': {
+                                'type': 'object',
+                                'additionalProperties': {'type': 'string'}
+                            }
+                        }
+                    }
+                }
+            },
+            'operations': {
+                'createStringMapContainer': {
+                    'modelName': 'StringMapContainer'
+                }
+            }
+        }
+        data = {
+            'metadata': [{
+                'id': 'example-id',
+                'name': 'Example name'
+            }]
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createStringMapContainer', data)
+
+        assert valid
+        assert rez is None
+
+    def test_array_with_typed_additional_properties_rejects_invalid_value(self):
+        spec = {
+            'models': {
+                'StringMapContainer': {
+                    'type': 'object',
+                    'properties': {
+                        'metadata': {
+                            'type': 'array',
+                            'items': {
+                                'type': 'object',
+                                'additionalProperties': {'type': 'string'}
+                            }
+                        }
+                    }
+                }
+            },
+            'operations': {
+                'createStringMapContainer': {
+                    'modelName': 'StringMapContainer'
+                }
+            }
+        }
+        data = {
+            'metadata': [{
+                'id': 'example-id',
+                'retryCount': 3
+            }]
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createStringMapContainer', data)
+
+        assert not valid
+        assert {
+            'invalid_type': [{
+                'path': 'metadata[0].retryCount',
+                'expected_type': 'string',
+                'actually_value': 3
+            }]
+        } == rez
+
+    def test_referenced_additional_properties_validate_nested_object(self):
+        spec = {
+            'models': {
+                'ReferenceMapContainer': {
+                    'type': 'object',
+                    'properties': {
+                        'metadata': {
+                            'type': 'object',
+                            'additionalProperties': {
+                                '$ref': '#/definitions/ReferenceModel'
+                            }
+                        }
+                    }
+                },
+                'ReferenceModel': {
+                    'type': 'object',
+                    'required': ['id'],
+                    'properties': {
+                        'id': {'type': 'string'}
+                    }
+                }
+            },
+            'operations': {
+                'createReferenceMapContainer': {
+                    'modelName': 'ReferenceMapContainer'
+                }
+            }
+        }
+        data = {
+            'metadata': {
+                'first': {
+                    'id': 3
+                }
+            }
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createReferenceMapContainer', data)
+
+        assert not valid
+        assert {
+            'invalid_type': [{
+                'path': 'metadata.first.id',
+                'expected_type': 'string',
+                'actually_value': 3
+            }]
+        } == rez
+
     def test_simple_types(self):
         local_mock_data = {
             'models': {
