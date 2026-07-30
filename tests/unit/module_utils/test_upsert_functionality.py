@@ -314,11 +314,21 @@ class TestUpsertOperationFunctionalTests(object):
                 'method': HTTPMethod.GET,
                 'url': url,
                 'modelName': 'Object',
-                'returnMultipleItems': True},
+                'returnMultipleItems': True,
+                'parameters': {
+                    'path': {},
+                    'query': {}
+                }},
             'addObject': {
                 'method': HTTPMethod.POST,
                 'modelName': 'Object',
-                'url': url},
+                'url': url,
+                'parameters': {
+                    'path': {},
+                    'query': {
+                        'placement': {'type': 'string'}
+                    }
+                }},
             'editObject': {
                 'method': HTTPMethod.PUT,
                 'modelName': 'Object',
@@ -337,7 +347,7 @@ class TestUpsertOperationFunctionalTests(object):
             if http_method == HTTPMethod.POST:
                 assert url_path == url
                 assert body_params == params['data']
-                assert query_params == {}
+                assert query_params == {'placement': 'before'}
                 assert path_params == params['path_params']
                 return {
                     ResponseParams.SUCCESS: True,
@@ -345,6 +355,7 @@ class TestUpsertOperationFunctionalTests(object):
                     ResponseParams.STATUS_CODE: 200,
                 }
             elif http_method == HTTPMethod.GET:
+                assert query_params == {'limit': 10, 'offset': 0}
                 return {
                     ResponseParams.SUCCESS: True,
                     ResponseParams.RESPONSE: {'items': []},
@@ -361,6 +372,7 @@ class TestUpsertOperationFunctionalTests(object):
             'operation': 'upsertObject',
             'data': {'id': '123', 'name': 'testObject', 'type': 'object'},
             'path_params': {'objectId': '123'},
+            'query_params': {'placement': 'before'},
             'register_as': 'test_var'
         }
 
