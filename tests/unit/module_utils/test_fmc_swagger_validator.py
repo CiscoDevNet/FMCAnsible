@@ -893,6 +893,96 @@ class TestFmcSwaggerValidator(unittest.TestCase):
             }]
         } == rez
 
+    def test_operation_request_requirements_override_shared_model_requirements(self):
+        spec = {
+            'models': {
+                'SharedModel': {
+                    'type': 'object',
+                    'required': ['requestField', 'serverGeneratedField'],
+                    'properties': {
+                        'requestField': {'type': 'string'},
+                        'serverGeneratedField': {'type': 'object'},
+                    },
+                },
+            },
+            'operations': {
+                'createSharedModel': {
+                    'modelName': 'SharedModel',
+                    'requestRequiredFields': ['requestField'],
+                },
+            },
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data(
+            'createSharedModel',
+            {'requestField': 'input'},
+        )
+
+        assert valid
+        assert rez is None
+
+    def test_operation_request_requirements_remain_required(self):
+        spec = {
+            'models': {
+                'SharedModel': {
+                    'type': 'object',
+                    'required': ['requestField', 'serverGeneratedField'],
+                    'properties': {
+                        'requestField': {'type': 'string'},
+                        'serverGeneratedField': {'type': 'object'},
+                    },
+                },
+            },
+            'operations': {
+                'createSharedModel': {
+                    'modelName': 'SharedModel',
+                    'requestRequiredFields': ['requestField'],
+                },
+            },
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data('createSharedModel', {})
+
+        assert not valid
+        assert {'required': ['requestField']} == rez
+
+    def test_operation_request_requirements_still_validate_supplied_fields(self):
+        spec = {
+            'models': {
+                'SharedModel': {
+                    'type': 'object',
+                    'required': ['requestField', 'serverGeneratedField'],
+                    'properties': {
+                        'requestField': {'type': 'string'},
+                        'serverGeneratedField': {'type': 'object'},
+                    },
+                },
+            },
+            'operations': {
+                'createSharedModel': {
+                    'modelName': 'SharedModel',
+                    'requestRequiredFields': ['requestField'],
+                },
+            },
+        }
+
+        valid, rez = FmcSwaggerValidator(spec).validate_data(
+            'createSharedModel',
+            {
+                'requestField': 'input',
+                'serverGeneratedField': 'not-an-object',
+            },
+        )
+
+        assert not valid
+        assert {
+            'invalid_type': [{
+                'path': 'serverGeneratedField',
+                'expected_type': 'object',
+                'actually_value': 'not-an-object',
+            }],
+        } == rez
+
     def test_simple_types(self):
         local_mock_data = {
             'models': {
