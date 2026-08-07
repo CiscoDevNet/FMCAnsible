@@ -158,4 +158,4 @@ When `save_to_file` is enabled, each role generates JSON output files:
   when: ansible_facts['device_upgrade_status'].status == "FAILED"
 ```
 
-This role-based approach provides a more maintainable and flexible solution for FTD HA upgrades while preserving all the functionality of the original monolithic playbook.
+This role-based approach provides a more maintainable and flexible solution for FTD HA upgrades while preserving all the functionality of the original monolithic playbook

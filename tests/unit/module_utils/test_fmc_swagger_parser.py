@@ -244,6 +244,67 @@ class TestFmcSwaggerParser(unittest.TestCase):
         assert 'Description for offset field' == get_op_params['query']['offset']['description']
         assert '' == get_op_params['query']['limit']['description']
 
+    def test_request_examples_narrow_shared_model_required_fields(self):
+        api_spec = {
+            'definitions': {
+                'SharedModel': {
+                    'type': 'object',
+                    'required': ['requestField', 'serverGeneratedField'],
+                    'properties': {
+                        'requestField': {'type': 'string'},
+                        'serverGeneratedField': {'type': 'object'},
+                    },
+                },
+            },
+            'parameters': {},
+            'paths': {
+                '/objects': {
+                    'post': {
+                        'operationId': 'createSharedModel',
+                        'parameters': [{
+                            'in': 'body',
+                            'name': 'body',
+                            'schema': {'$ref': '#/definitions/SharedModel'},
+                        }],
+                        'responses': {
+                            '201': {
+                                'schema': {'$ref': '#/definitions/SharedModel'},
+                                'examples': {
+                                    'application/json': {
+                                        'Request example 1': {
+                                            'requestField': 'input',
+                                        },
+                                        'Response Example 1': {
+                                            'requestField': 'input',
+                                            'serverGeneratedField': {},
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+            },
+        }
+
+        parsed_spec = FmcSwaggerParser().parse_spec(api_spec)
+
+        assert ['requestField'] == parsed_spec['operations']['createSharedModel']['requestRequiredFields']
+
+    def test_response_examples_do_not_override_model_required_fields(self):
+        api_spec = copy.deepcopy(base)
+        api_spec['paths']['/object/networks']['post']['responses']['200']['examples'] = {
+            'application/json': {
+                'Response Example 1': {
+                    'type': 'Network',
+                },
+            },
+        }
+
+        parsed_spec = FmcSwaggerParser().parse_spec(api_spec)
+
+        assert 'requestRequiredFields' not in parsed_spec['operations']['addNetworkObject']
+
     def test_model_operations_should_contain_all_operations(self):
         data = {
             'basePath': '/v2/',

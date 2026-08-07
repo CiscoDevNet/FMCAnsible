@@ -6,7 +6,7 @@ and execution of operational tasks on Cisco Secure Firewall Management Centre (F
 **Supports both traditional FMC and Cisco Defense FMC (cdFMC) deployments with Bearer token authentication.**
 
 This module has been tested against the following ansible versions: **2.9.17, 2.10.5**
-This module has been tested against the following cisco Secure Firewall Management Center versions up to **7.6**
+This module has been tested against the following cisco Secure Firewall Management Center versions up to **7.6** and **10.0**
 
 ## Included Content
 
@@ -47,6 +47,8 @@ For traditional FMC deployments, the inventory file requires:
 ```
 [all:vars]
 ansible_network_os=cisco.fmcansible.fmc
+network_type=HOST
+ansible_facts_modules=cisco.fmcansible.fmc_facts
 
 [vfmc]
 <FMC IP> ansible_user=<username> ansible_password=<password> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
@@ -131,6 +133,8 @@ For cdFMC connections, your inventory file should be configured as follows:
 ```
 [all:vars]
 ansible_network_os=cisco.fmcansible.fmc
+network_type=HOST
+ansible_facts_modules=cisco.fmcansible.fmc_facts
 
 [cdfmc]
 <cdFMC_HOST> ansible_httpapi_cdfmc=True ansible_httpapi_token=<your_bearer_token> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
