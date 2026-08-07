@@ -74,6 +74,34 @@ class TestFmcHttpApi(unittest.TestCase):
         self.fmc_plugin.access_token = 'ACCESS_TOKEN'
         self.fmc_plugin._load_name = 'httpapi'
 
+    @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.InternalHttpClient')
+    def test_internal_client_enables_onprem_authentication_recovery(self, client_mock):
+        plugin = HttpApi(self.connection_mock)
+        plugin.get_option = mock.Mock(return_value=False)
+        self.connection_mock.get_option.return_value = 'fmc.example.com'
+
+        assert client_mock.return_value == plugin.http_client
+
+        client_mock.assert_called_once_with(
+            'fmc.example.com',
+            TOKEN_PATH_TEMPLATE,
+            enable_auth_recovery=True
+        )
+
+    @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.InternalHttpClient')
+    def test_internal_client_disables_cdfmc_authentication_recovery(self, client_mock):
+        plugin = HttpApi(self.connection_mock)
+        plugin.get_option = mock.Mock(return_value=True)
+        self.connection_mock.get_option.return_value = 'cdfmc.example.com'
+
+        assert client_mock.return_value == plugin.http_client
+
+        client_mock.assert_called_once_with(
+            'cdfmc.example.com',
+            TOKEN_PATH_TEMPLATE,
+            enable_auth_recovery=False
+        )
+
     def test_login_should_request_tokens_when_no_refresh_token(self):
         self.connection_mock.send.return_value = self._login_response(
             {'access_token': 'ACCESS_TOKEN', 'refresh_token': 'REFRESH_TOKEN'}
