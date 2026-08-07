@@ -31,7 +31,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
     ResponseParams, add_missing_properties_left_to_right,
     copy_identity_properties, delete_props_not_in_model, equal_objects)
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
-    OperationField, ValidationError)
+    OperationField, OperationParams, ValidationError)
 
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
 #   copy_identity_properties, FmcUnexpectedResponse
@@ -335,6 +335,23 @@ class BaseConfigurationResource(object):
         )
         return (i for i in item_generator if filter_func(i))
 
+    def _params_for_operation(self, operation_name, params):
+        """
+        Copies request parameters and removes query parameters unsupported by
+        the operation that will actually execute them.
+        """
+        operation_spec = self.get_operation_spec(operation_name)
+        operation_params = operation_spec.get(OperationField.PARAMETERS) or {}
+        supported_query_params = operation_params.get(OperationParams.QUERY) or {}
+        query_params = params.get(ParamName.QUERY_PARAMS) or {}
+
+        operation_request = dict(params)
+        operation_request[ParamName.QUERY_PARAMS] = {
+            name: value for name, value in iteritems(query_params)
+            if name in supported_query_params
+        }
+        return operation_request
+
     def _find_existing_object(self, model_name, path_params, object_id):
         get_operation = self._find_get_operation(model_name)
         delete_operation = self._find_delete_operation(model_name)
@@ -476,7 +493,10 @@ class BaseConfigurationResource(object):
         use_if_name = model_has_property(model, IF_NAME)
 
         obj = None
-        filtered_objs = self.get_objects_by_filter_func(get_list_operation, params, filter_on_name_or_whole_object)
+        lookup_params = self._params_for_operation(get_list_operation, params)
+        filtered_objs = self.get_objects_by_filter_func(
+            get_list_operation, lookup_params, filter_on_name_or_whole_object
+        )
 
         for i, o in enumerate(filtered_objs):
             if i > 0:

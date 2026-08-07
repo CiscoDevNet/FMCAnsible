@@ -50,6 +50,41 @@ class TestBaseConfigurationResource(object):
 
         return connection_instance
 
+    def test_params_for_operation_filters_unsupported_query_params(self, connection_mock):
+        connection_mock.get_operation_spec.return_value = {
+            'method': HTTPMethod.GET,
+            'url': '/objects',
+            'parameters': {
+                'path': {'containerId': {'type': 'string'}},
+                'query': {
+                    'filter': {'type': 'string'},
+                    'expanded': {'type': 'boolean'}
+                }
+            }
+        }
+        resource = BaseConfigurationResource(connection_mock, False)
+        params = {
+            ParamName.DATA: {'name': 'example'},
+            ParamName.PATH_PARAMS: {'containerId': '123'},
+            ParamName.QUERY_PARAMS: {
+                'filter': 'name:example',
+                'expanded': True,
+                'placement': 'before'
+            },
+            ParamName.FILTERS: {'name': 'example'}
+        }
+
+        result = resource._params_for_operation('getObjectList', params)
+
+        assert result[ParamName.DATA] == params[ParamName.DATA]
+        assert result[ParamName.PATH_PARAMS] == params[ParamName.PATH_PARAMS]
+        assert result[ParamName.FILTERS] == params[ParamName.FILTERS]
+        assert result[ParamName.QUERY_PARAMS] == {
+            'filter': 'name:example',
+            'expanded': True
+        }
+        assert params[ParamName.QUERY_PARAMS]['placement'] == 'before'
+
     @patch.object(BaseConfigurationResource, '_fetch_system_info')
     @patch.object(BaseConfigurationResource, '_send_request')
     def test_get_objects_by_filter_with_multiple_filters(self, send_request_mock, fetch_system_info_mock,
