@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Register a device
+  hosts: all
 
   any_errors_fatal: true
   connection: httpapi
@@ -14,7 +16,7 @@
         #   name: NGFW-Access-Policy27
         register_as: accesspolicy
 
-    - name: device onboarding
+    - name: Device onboarding
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleDevice
         data:

@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Delete a NAT rule
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -29,8 +31,8 @@
         #   name: "{{ delete_natrule_name }}"
         register_as: natrule
 
-    - name: debug
-      debug:
+    - name: Debug
+      ansible.builtin.debug:
         var: natrule
 
     - name: Delete an inside-outsite NAT rule

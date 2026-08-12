@@ -4,6 +4,48 @@ Cisco FMCAnsible Collection Release Notes
 
 .. contents:: Topics
 
+v1.1.1
+======
+
+Release Summary
+---------------
+
+Maintenance release fixing long-running on-prem FMC authentication, upsert
+query-parameter handling, and Swagger request validation.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- The minimum supported version is now ``ansible-core 2.16``. Environments
+  using older Ansible releases must upgrade Ansible before installing this
+  collection version.
+
+Minor Changes
+-------------
+
+- Removed unused ``community.general`` and ``community.network`` collection
+  dependencies. ``ansible.netcommon`` now requires version 8.5.2 or later, and
+  ``ansible.utils`` requires version 5.1.2 or later.
+- Replaced deprecated ``ansible.module_utils.six`` compatibility imports with
+  native Python 3 equivalents for current Ansible sanity compatibility.
+- Updated Python and Ansible content to pass the Galaxy importer flake8 and
+  ansible-lint checks.
+
+Bugfixes
+--------
+
+- Automatically refresh expired on-prem FMC access tokens and retry the
+  interrupted API request. If the refresh token is invalid or exhausted,
+  authenticate again using the configured FMC credentials.
+- Keep cdFMC/SCC bearer-token authentication separate from the on-prem FMC
+  username/password refresh and reauthentication workflow.
+- Preserve operation-specific query parameters when an upsert performs its
+  GETALL lookup, including parameters such as access-policy category
+  ``section``.
+- Correct Swagger validation for free-form objects while continuing to validate
+  explicitly defined fields and fields required by request examples.
+
+
 v1.1.0
 ======
 
@@ -143,4 +185,3 @@ Release Summary
 ---------------
 
 This is the first release of the ``cisco.fmcansible`` collection.
-

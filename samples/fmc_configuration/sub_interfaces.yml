@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Configure subinterfaces
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -27,9 +29,9 @@
           subIntfId: 1
           ipv4:
             dhcp:
-              enableDefaultRouteDHCP: True
+              enableDefaultRouteDHCP: true
               dhcpRouteMetric: 100
-          enabled: True
+          enabled: true
           vlanId: 101
           MTU: 1500
           mode: NONE
@@ -49,7 +51,7 @@
             static:
               address: "{{ subinterface_ip | default('192.168.5.15') }}"
               netmask: "{{ subinterface_netmask | default('255.255.255.0') }}"
-          enabled: True
+          enabled: true
           vlanId: 102
           MTU: 1500
           mode: NONE

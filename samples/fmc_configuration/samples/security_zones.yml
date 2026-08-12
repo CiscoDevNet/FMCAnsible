@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create security zones
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -12,7 +14,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleSecurityZoneObject
         data:
-          name: "{{securityzone1_name | default('secz1') }}"
+          name: "{{ securityzone1_name | default('secz1') }}"
           interfaceMode: ROUTED
           type: SecurityZone
         path_params:
@@ -22,7 +24,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleSecurityZoneObject
         data:
-          name: "{{securityzone2_name | default('secz2') }}"
+          name: "{{ securityzone2_name | default('secz2') }}"
           interfaceMode: ROUTED
           type: SecurityZone
         path_params:

@@ -25,7 +25,6 @@ __metaclass__ = type
 import copy
 from functools import partial
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
     FmcConfigurationError, FmcServerError, FmcUnexpectedResponse, HTTPMethod,
     ResponseParams, add_missing_properties_left_to_right,
@@ -228,8 +227,8 @@ class OperationChecker(object):
         :return: True if all criteria required to provide requested called operation are satisfied, otherwise False
         :rtype: bool
         """
-        has_edit_op = next((name for name, spec in iteritems(operations) if cls.is_edit_operation(name, spec)), None)
-        has_get_list_op = next((name for name, spec in iteritems(operations)
+        has_edit_op = next((name for name, spec in operations.items() if cls.is_edit_operation(name, spec)), None)
+        has_get_list_op = next((name for name, spec in operations.items()
                                 if cls.is_get_list_operation(name, spec)), None)
         return has_edit_op and has_get_list_op
 
@@ -299,7 +298,7 @@ class BaseConfigurationResource(object):
         if model_name not in self._models_operations_specs_cache:
             model_op_specs = self._conn.get_operation_specs_by_model_name(model_name)
             self._models_operations_specs_cache[model_name] = model_op_specs
-            for op_name, op_spec in iteritems(model_op_specs):
+            for op_name, op_spec in model_op_specs.items():
                 self._operation_spec_cache.setdefault(op_name, op_spec)
         return self._models_operations_specs_cache[model_name]
 
@@ -309,7 +308,7 @@ class BaseConfigurationResource(object):
         """
         # filter func that filters by params, usually name
         def match_filters(obj):
-            for k, v in iteritems(filter_params):
+            for k, v in filter_params.items():
                 if k not in obj or obj[k] != v:
                     return False
             return True
@@ -347,7 +346,7 @@ class BaseConfigurationResource(object):
 
         operation_request = dict(params)
         operation_request[ParamName.QUERY_PARAMS] = {
-            name: value for name, value in iteritems(query_params)
+            name: value for name, value in query_params.items()
             if name in supported_query_params
         }
         return operation_request
@@ -627,7 +626,7 @@ class BaseConfigurationResource(object):
 
     @staticmethod
     def _get_operation_name(checker, operations):
-        return next((op_name for op_name, op_spec in iteritems(operations) if checker(op_name, op_spec)), None)
+        return next((op_name for op_name, op_spec in operations.items() if checker(op_name, op_spec)), None)
 
     def _add_upserted_object(self, model_operations, params):
         add_op_name = self._get_operation_name(self._operation_checker.is_add_operation, model_operations)
@@ -651,9 +650,12 @@ class BaseConfigurationResource(object):
         Determines if the edit operation begins with 'edit' or 'update', and contains
         the identity param (i.e. objectId) in its url path
         """
-        return self._operation_checker.is_edit_operation(operation_name, operation_spec) and \
-            (operation_spec.get(OperationField.PARAMETERS) is None or
-             operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None)
+        is_edit = self._operation_checker.is_edit_operation(operation_name, operation_spec)
+        parameters = operation_spec.get(OperationField.PARAMETERS)
+        has_identity_param = parameters is None
+        if parameters is not None:
+            has_identity_param = parameters['path'].get(PATH_IDENTITY_PARAM) is not None
+        return is_edit and has_identity_param
 
     def upsert_object(self, op_name, params):
         """

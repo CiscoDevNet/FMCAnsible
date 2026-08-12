@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Test network object upsert
+  hosts: all
   connection: httpapi
 
   tasks:
@@ -8,25 +10,26 @@
         register_as: cra1
 
     # sanity: ensure network object doesn't exist
-    - name: get network object
+    - name: Get network object
       cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
           filter: "nameOrValue:ansible-test-upsert-no5"
         register_as: "getObjs"
       register: result
-    - assert:
+    - name: Verify the network object does not exist
+      ansible.builtin.assert:
         that:
           - getObjs | length == 0
 
     # create NetworkObject via upsert
-    - name: upsertNetworkObject should create a new network
+    - name: UpsertNetworkObject should create a new network
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'        
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-upsert-no5"
           description: "Upserted network object"
@@ -34,17 +37,18 @@
           type: "networkobject"
         register_as: "upsertedObj"
       register: result
-    - assert:
+    - name: Verify upsert created the network object
+      ansible.builtin.assert:
         that:
           - result.changed == true
           - upsertedObj['name'] == "ansible-test-upsert-no5"
 
     # update NetworkObject via upsert
-    - name: upsertNetworkObject should update the existing network object
+    - name: UpsertNetworkObject should update the existing network object
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-upsert-no5"
           description: "Ansible Integration tests in action"
@@ -52,20 +56,22 @@
           type: "networkobject"
         register_as: "upsertedObj2"
       register: result
-    - assert:
+    - name: Verify upsert updated the network object
+      ansible.builtin.assert:
         that:
           - result.changed == true
           - upsertedObj2['id'] == upsertedObj['id']
           - upsertedObj2['value'] == "4.4.4.0/24"
 
     # clean up NetworkObject
-    - name: deleteNetworkObject should delete the network object
+    - name: DeleteNetworkObject should delete the network object
       cisco.fmcansible.fmc_configuration:
         operation: deleteNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
-          objectId: '{{ upsertedObj.id }}'            
+          domainUUID: "{{ cra1[0].uuid }}"
+          objectId: "{{ upsertedObj.id }}"
       register: result
-    - assert:
+    - name: Verify the upserted network object was deleted
+      ansible.builtin.assert:
         that:
           - result.changed == true

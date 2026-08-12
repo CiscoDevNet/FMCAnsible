@@ -76,8 +76,9 @@ class ResponseCache:
             existing_response = self._cache[host][name]
 
             # If both are dictionaries, check if they are the same
-            if (isinstance(existing_response, dict) and
-                    isinstance(response_body, dict)):
+            existing_is_dict = isinstance(existing_response, dict)
+            response_is_dict = isinstance(response_body, dict)
+            if existing_is_dict and response_is_dict:
 
                 # If dictionaries are different, combine them into a list
                 if existing_response != response_body:
