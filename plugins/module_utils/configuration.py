@@ -759,9 +759,14 @@ def iterate_over_pageable_resource(resource_func, params):
             break
 
         # ansible-core 2.16 validates module_utils against Python 2.7, where
-        # ``yield from`` is not valid syntax.
-        for item in items:  # pylint: disable=use-yield-from
+        # ``yield from`` is not valid syntax. Using an iterator also avoids a
+        # version-specific pylint suppression.
+        item_iterator = iter(items)
+        sentinel = object()
+        item = next(item_iterator, sentinel)
+        while item is not sentinel:
             yield item
+            item = next(item_iterator, sentinel)
 
         if received_less_items_than_requested(len(items), limit):
             break

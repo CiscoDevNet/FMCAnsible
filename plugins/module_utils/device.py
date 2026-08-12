@@ -4,62 +4,57 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from abc import ABC
-from enum import Enum
-from urllib.parse import urlparse
-
-# The test mocks these, so we need placeholder imports.
-# In a real scenario, these would be actual library imports.
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 try:
     from kick.device.fp2k.fmc import Kp
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
-    from unittest.mock import MagicMock
-
-    # Create dummy classes if 'kick' is not installed,
-    # allowing module to be imported.
-
-    class Kp(object):
+    class _UnavailableKickDevice(object):
         def __init__(self, *args, **kwargs):
-            pass
+            raise ImportError("The 'kick' package is required to install FMC images.")
 
-        def ssh_console(self):
-            mock_console = MagicMock()
-            mock_console.__enter__.return_value = mock_console
-            mock_console.__exit__.return_value = False  # Propagate exceptions
-            return mock_console
-
-    class Fmc5500x(object):
-        def __init__(self, *args, **kwargs):
-            pass
-
-        def ssh_console(self):
-            mock_console = MagicMock()
-            mock_console.__enter__.return_value = mock_console
-            mock_console.__exit__.return_value = False  # Propagate exceptions
-            return mock_console
+    Kp = _UnavailableKickDevice
+    Fmc5500x = _UnavailableKickDevice
 
 
 class FmcConfigurationError(Exception):
     pass
 
 
-class FmcModel(Enum):
-    FMC_1600 = 'FMC-1600'
-    FMC_2110 = 'FMC-2110'
-    FMC_2120 = 'FMC-2120'
-    FMC_2130 = 'FMC-2130'
-    FMC_2600 = 'FMC-2600'
-    FMC_4600 = 'FMC-4600'
-    FMC_VIRTUAL = 'FMC-VIRTUAL'
+class _FmcModelValue(object):
+    def __init__(self, value):
+        self.value = value
+
+
+class FmcModel(object):
+    FMC_1600 = _FmcModelValue('FMC-1600')
+    FMC_2110 = _FmcModelValue('FMC-2110')
+    FMC_2120 = _FmcModelValue('FMC-2120')
+    FMC_2130 = _FmcModelValue('FMC-2130')
+    FMC_2600 = _FmcModelValue('FMC-2600')
+    FMC_4600 = _FmcModelValue('FMC-4600')
+    FMC_VIRTUAL = _FmcModelValue('FMC-VIRTUAL')
+
+    VALUES = (
+        FMC_1600.value,
+        FMC_2110.value,
+        FMC_2120.value,
+        FMC_2130.value,
+        FMC_2600.value,
+        FMC_4600.value,
+        FMC_VIRTUAL.value,
+    )
 
     @classmethod
     def has_value(cls, value):
-        return value in cls._value2member_map_
+        return value in cls.VALUES
 
 
-class AbstractFmcPlatform(ABC):
+class AbstractFmcPlatform(object):
     def __init__(self, module_params=None):
         self.module_params = module_params
 
