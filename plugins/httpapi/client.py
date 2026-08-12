@@ -151,8 +151,9 @@ class InternalHttpClient(object):
 
         error_message = self._get_error_message(response_body, res.status)
         if self._is_error_response(response_body, res.status):
-            if (int(res.status) in AUTH_ERROR_STATUS_CODES or
-                    'Invalid refresh token' in error_message):
+            auth_error = int(res.status) in AUTH_ERROR_STATUS_CODES
+            invalid_refresh = 'Invalid refresh token' in error_message
+            if auth_error or invalid_refresh:
                 return self._send_stored_login()
             raise InternalHttpClientError(error_message, res.status)
 
@@ -214,11 +215,10 @@ class InternalHttpClient(object):
         msg = self._get_error_message(response, status_code)
         status_code = int(status_code)
 
-        is_auth_error = (
-            status_code in AUTH_ERROR_STATUS_CODES or
-            'Access token invalid' in msg or
-            'Invalid refresh token' in msg
-        )
+        is_auth_status = status_code in AUTH_ERROR_STATUS_CODES
+        access_token_invalid = 'Access token invalid' in msg
+        refresh_token_invalid = 'Invalid refresh token' in msg
+        is_auth_error = is_auth_status or access_token_invalid or refresh_token_invalid
         if is_auth_error:
             if not self._enable_auth_recovery:
                 raise InternalHttpClientError(msg, status_code)
@@ -262,18 +262,17 @@ class InternalHttpClient(object):
         if isinstance(response, dict):
             err = response.get('error')
             if isinstance(err, dict):
-                msg = (
-                    err.get('data') or
-                    err.get('message') or
-                    iter_messages(err.get('messages'))
-                )
+                msg = err.get('data')
+                if not msg:
+                    msg = err.get('message')
+                if not msg:
+                    msg = iter_messages(err.get('messages'))
                 if msg:
                     return str(msg)
             elif err:
-                description = (
-                    response.get('errorDescription') or
-                    response.get('error_description')
-                )
+                description = response.get('errorDescription')
+                if not description:
+                    description = response.get('error_description')
                 if description:
                     return '{0}: {1}'.format(err, description)
                 return str(err)

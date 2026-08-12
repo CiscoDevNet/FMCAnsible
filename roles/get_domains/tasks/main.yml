@@ -6,12 +6,13 @@
     register_as: "{{ register_as }}"
 
 - name: Save domains to JSON file
-  copy:
+  ansible.builtin.copy:
     content: "{{ ansible_facts[register_as] | to_nice_json }}"
     dest: "{{ output_dir }}/fmc_domains.json"
+    mode: "0600"
   delegate_to: localhost
   when: save_to_file | bool
 
 - name: Display found domains
-  debug:
+  ansible.builtin.debug:
     msg: "Found {{ ansible_facts[register_as] | length }} domain(s): {{ ansible_facts[register_as] | map(attribute='name') | list | join(', ') }}"

@@ -183,7 +183,7 @@ class TestUpsertOperationUnitTests(unittest.TestCase):
         find_object.return_value = existing_obj
         equal_objects_mock.return_value = True
 
-        result = self._resource.upsert_object('upsertFoo', params)
+        self._resource.upsert_object('upsertFoo', params)
 
         # assert result == existing_obj
         self._conn.get_model_spec.assert_called_once_with('Foo')

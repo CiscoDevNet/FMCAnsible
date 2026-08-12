@@ -28,7 +28,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod
-from ansible.module_utils.six import integer_types, string_types, iteritems
 
 FILE_MODEL_NAME = '_File'
 SUCCESS_RESPONSE_CODE = '200'
@@ -201,7 +200,7 @@ class FmcSwaggerParser:
 
     def _get_model_operations(self, operations):
         model_operations = {}
-        for operations_name, params in iteritems(operations):
+        for operations_name, params in operations.items():
             model_name = params[OperationField.MODEL_NAME]
             # FMC uses separate model names for list operations, so strip out "ListContainer" and merge into main model ops object
             model_name = self._resolve_model_name(model_name)
@@ -211,8 +210,8 @@ class FmcSwaggerParser:
     def _get_operations(self, spec):
         paths_dict = spec[PropName.PATHS]
         operations_dict = {}
-        for url, operation_params in iteritems(paths_dict):
-            for method, params in iteritems(operation_params):
+        for url, operation_params in paths_dict.items():
+            for method, params in operation_params.items():
                 operation = {
                     OperationField.METHOD: method,
                     OperationField.URL: self._base_path + url,
@@ -261,7 +260,7 @@ class FmcSwaggerParser:
                 continue
 
             for title, example in examples.items():
-                if not isinstance(title, string_types) or not title.lower().startswith(REQUEST_EXAMPLE_PREFIX):
+                if not isinstance(title, str) or not title.lower().startswith(REQUEST_EXAMPLE_PREFIX):
                     continue
                 if isinstance(example, dict):
                     request_examples.append(example)
@@ -503,7 +502,7 @@ class FmcSwaggerValidator:
         return True, None
 
     def _check_validate_data_params(self, data, operation_name):
-        if not operation_name or not isinstance(operation_name, string_types):
+        if not operation_name or not isinstance(operation_name, str):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
         if not isinstance(data, dict) and not isinstance(data, list):
             raise IllegalArgumentException("The data parameter must be a dict or list")
@@ -606,7 +605,7 @@ class FmcSwaggerValidator:
             return True, None
 
     def _check_validate_url_params(self, operation, params):
-        if not operation or not isinstance(operation, string_types):
+        if not operation or not isinstance(operation, str):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
         if not isinstance(params, dict):
             raise IllegalArgumentException("The params parameter must be a dict")
@@ -771,16 +770,16 @@ class FmcSwaggerValidator:
         if value is None and allow_null:
             return True
         elif expected_type == PropType.STRING:
-            return isinstance(value, string_types)
+            return isinstance(value, str)
         elif expected_type == PropType.BOOLEAN:
             return isinstance(value, bool)
         elif expected_type == PropType.INTEGER:
-            is_integer = isinstance(value, integer_types) and not isinstance(value, bool)
-            is_digit_string = isinstance(value, string_types) and value.isdigit()
+            is_integer = isinstance(value, int) and not isinstance(value, bool)
+            is_digit_string = isinstance(value, str) and value.isdigit()
             return is_integer or is_digit_string
         elif expected_type == PropType.NUMBER:
-            is_number = isinstance(value, (integer_types, float)) and not isinstance(value, bool)
-            is_numeric_string = isinstance(value, string_types) and is_numeric_string(value)
+            is_number = isinstance(value, (int, float)) and not isinstance(value, bool)
+            is_numeric_string = isinstance(value, str) and is_numeric_string(value)
             return is_number or is_numeric_string
         return False
 

@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create a prefilter rule
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -23,7 +25,7 @@
           domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"
           containerUUID: "{{ prefilter[1].id }}"
 
-    - name: update Prefilter Rule
+    - name: Update Prefilter Rule
       cisco.fmcansible.fmc_configuration:
         operation: updatePrefilterRule
         data:

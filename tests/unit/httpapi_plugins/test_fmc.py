@@ -22,11 +22,11 @@ __metaclass__ = type
 
 import json
 import unittest
+from io import BytesIO, StringIO
+from urllib.error import HTTPError
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
-from ansible.module_utils.six import PY3, BytesIO, StringIO
-from ansible.module_utils.six.moves.urllib.error import HTTPError
 
 try:
     from unittest import mock
@@ -43,10 +43,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
     FmcSwaggerParser, SpecProp)
 
-if PY3:
-    BUILTINS_NAME = 'builtins'
-else:
-    BUILTINS_NAME = '__builtin__'
+BUILTINS_NAME = 'builtins'
 
 
 class FakeFmcHttpApiPlugin(HttpApi):

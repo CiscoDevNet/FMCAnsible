@@ -22,6 +22,6 @@ galaxy_info:
     - security
     - networking
     - ha
-    - high-availability
+    - highavailability
 
 dependencies: []

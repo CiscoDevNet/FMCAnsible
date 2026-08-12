@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Test NAT policy creation
+  hosts: all
   connection: httpapi
   tasks:
     - name: Get all SecurityZone objects
@@ -38,9 +40,9 @@
           destinationInterface: "{{ zones[0] }}"
           sourceInterface: "{{ zones[1] }}"
           originalSource: "{{ network_results[0] }}"
-          interfaceInTranslatedSource: True
-          dns: False
-          enabled: True
+          interfaceInTranslatedSource: true
+          dns: false
+          enabled: true
           type: FTDManualNatRule
         path_params:
           containerUUID: "{{ natpolicy.id }}"

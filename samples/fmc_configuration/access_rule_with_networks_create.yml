@@ -1,9 +1,11 @@
-- hosts: all
+---
+- name: Create an access rule with network objects
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
   tasks:
-    - name: create auxilary network object
+    - name: Create auxilary network object
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
@@ -32,7 +34,7 @@
           sourceNetworks:
             objects:
               - id: "{{ net1.id }}"
-                name: "{{net1.name }}"
+                name: "{{ net1.name }}"
                 type: "{{ net1.type }}"
           action: ALLOW
         path_params:
@@ -48,12 +50,12 @@
           sourceNetworks:
             objects:
               - id: "{{ net1.id }}"
-                name: "{{net1.name }}"
+                name: "{{ net1.name }}"
                 type: "{{ net1.type }}"
           destinationNetworks:
             objects:
               - id: "{{ net1.id }}"
-                name: "{{net1.name }}"
+                name: "{{ net1.name }}"
                 type: "{{ net1.type }}"
           action: BLOCK
         path_params:

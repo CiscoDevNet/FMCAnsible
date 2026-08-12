@@ -1,7 +1,7 @@
 ---
 # Main tasks file for device_backup role
 - name: Validate required variables
-  assert:
+  ansible.builtin.assert:
     that:
       - domain_uuid is defined
       - domain_uuid | length > 0
@@ -22,19 +22,20 @@
   register: backup_result
 
 - name: Set backup task fact
-  set_fact:
+  ansible.builtin.set_fact:
     "{{ register_as }}_task_id": "{{ ansible_facts[register_as].metadata.task.id }}"
 
 - name: Save backup task info to JSON file
-  copy:
+  ansible.builtin.copy:
     content: "{{ ansible_facts[register_as] | to_nice_json }}"
     dest: "{{ output_dir }}/backup_task.json"
+    mode: "0600"
   delegate_to: localhost
   when: save_to_file | bool
 
 - name: Display backup task information
-  debug:
-    msg: 
+  ansible.builtin.debug:
+    msg:
       - "Backup task initiated successfully"
       - "Task ID: {{ ansible_facts[register_as].metadata.task.id }}"
       - "Devices to backup: {{ target_devices | length }}"
@@ -53,26 +54,26 @@
   when: wait_for_completion | bool
 
 - name: Set backup status fact
-  set_fact:
+  ansible.builtin.set_fact:
     "{{ register_as }}_status": "{{ backup_status.response }}"
-  when: 
+  when:
     - wait_for_completion | bool
     - backup_status is defined
 
 - name: Verify backup success
-  assert:
+  ansible.builtin.assert:
     that: backup_status.response.status == "COMPLETED"
     fail_msg: "Backup failed: {{ backup_status.response.error | default('Unknown error') }}"
     success_msg: "Backup completed successfully for {{ target_devices | length }} device(s)!"
-  when: 
+  when:
     - wait_for_completion | bool
     - verify_success | bool
 
 - name: Display backup completion status
-  debug:
+  ansible.builtin.debug:
     msg:
       - "Backup Status: {{ backup_status.response.status }}"
       - "Message: {{ backup_status.response.message | default('No message') }}"
-  when: 
+  when:
     - wait_for_completion | bool
     - backup_status is defined

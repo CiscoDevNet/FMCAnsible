@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Test duplicate network object handling
+  hosts: all
   connection: httpapi
 
   tasks:
@@ -8,25 +10,26 @@
         register_as: cra1
 
     # sanity: ensure network object doesn't exist
-    - name: get network object
+    - name: Get network object
       cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
-          #this filter will return all networks that contain "ansible-test-dup-no"
+          # this filter will return all networks that contain "ansible-test-dup-no"
           filter: "nameOrValue:ansible-test-dup-no"
         register_as: "getObjs"
       register: result
-    - assert:
+    - name: Verify the expected network objects exist
+      ansible.builtin.assert:
         that:
           - getObjs | length == 7
 
-    - name: createMultipleNetworkObject should create multiple new networks
+    - name: CreateMultipleNetworkObject should create multiple new networks
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
           bulk: true
         data:
@@ -40,16 +43,17 @@
             type: "networkobject"
         register_as: "createdObjs"
       register: result
-    - assert:
+    - name: Verify both network objects were created
+      ansible.builtin.assert:
         that:
           - result.changed == true
           - createdObjs | length == 2
 
-    - name: createMultipleNetworkObject should quietly succeed with the existing network object when they are identical
+    - name: CreateMultipleNetworkObject should quietly succeed with the existing network object when they are identical
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-dup-no1"
           description: "Create network object"
@@ -57,16 +61,17 @@
           type: "networkobject"
         register_as: "duplicateObj1"
       register: result
-    - assert:
+    - name: Verify an identical object is unchanged
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - createdObjs[0].name == duplicateObj1.name
 
-    - name: createMultipleNetworkObject should quietly succeed with no change to the existing network object when they are identical
+    - name: CreateMultipleNetworkObject should quietly succeed with no change to the existing network object when they are identical
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-dup-no1"
           description: "Create network object"
@@ -74,17 +79,18 @@
           type: "networkobject"
         register_as: "duplicateObj1"
       register: result
-    - assert:
+    - name: Verify repeated identical creation is unchanged
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - createdObjs[0].name == duplicateObj1.name
 
-    - name: updateNetworkObject should quietly succeed with no change to the existing network object when they are identical
+    - name: UpdateNetworkObject should quietly succeed with no change to the existing network object when they are identical
       cisco.fmcansible.fmc_configuration:
         operation: updateNetworkObject
         path_params:
-          objectId: '{{ createdObjs[0].id }}'
-          domainUUID: '{{ cra1[0].uuid }}'
+          objectId: "{{ createdObjs[0].id }}"
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-dup-no1"
           description: "Create network object"
@@ -92,16 +98,17 @@
           type: "networkobject"
         register_as: "duplicateObj1"
       register: result
-    - assert:
+    - name: Verify an identical update is unchanged
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - createdObjs[0].name == duplicateObj1.name
 
-    - name: createMultipleNetworkObject should raise an error when the network object exists and they they are NOT identical
+    - name: CreateMultipleNetworkObject should raise an error when the network object exists and they they are NOT identical
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: "ansible-test-dup-no1"
           description: "A different description here"
@@ -109,17 +116,18 @@
           type: "networkobject"
         register_as: "duplicateObj1"
       register: result
-      ignore_errors: yes
-    - assert:
+      ignore_errors: true
+    - name: Verify a conflicting duplicate is rejected
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - "'already exists.' in result.msg"
 
-    - name: createMultipleNetworkObject should raise an error if any of the objects are duplicates and not identical
+    - name: CreateMultipleNetworkObject should raise an error if any of the objects are duplicates and not identical
       cisco.fmcansible.fmc_configuration:
         operation: createMultipleNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
           bulk: true
         data:
@@ -133,21 +141,23 @@
             type: "networkobject"
         register_as: "createdObjs"
       register: result
-      ignore_errors: yes
-    - assert:
+      ignore_errors: true
+    - name: Verify a conflicting bulk duplicate is rejected
+      ansible.builtin.assert:
         that:
           - result.changed == false
           - "'already exists.' in result.msg"
 
     # clean up NetworkObjects
-    - name: deleteNetworkObject should delete the network objects with loop
+    - name: DeleteNetworkObject should delete the network objects with loop
       cisco.fmcansible.fmc_configuration:
         operation: deleteNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
-          objectId: '{{ item.id }}'            
+          domainUUID: "{{ cra1[0].uuid }}"
+          objectId: "{{ item.id }}"
       register: result
-      loop: '{{ createdObjs }}'
-    - assert:
+      loop: "{{ createdObjs }}"
+    - name: Verify the network objects were deleted
+      ansible.builtin.assert:
         that:
           - result.changed == true

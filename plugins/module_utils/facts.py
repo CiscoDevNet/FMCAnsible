@@ -143,7 +143,7 @@ class FmcFactsBase(object):
             else:
                 # Return empty list if unexpected format
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -159,7 +159,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -175,7 +175,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -191,7 +191,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -207,7 +207,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -228,7 +228,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -244,7 +244,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -260,7 +260,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -276,7 +276,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -292,6 +292,6 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
