@@ -5,6 +5,16 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 try:
+    from abc import ABC
+except ImportError:
+    ABC = object
+
+try:
+    from enum import Enum
+except ImportError:
+    Enum = None
+
+try:
     from urllib.parse import urlparse
 except ImportError:
     from urlparse import urlparse
@@ -13,48 +23,86 @@ try:
     from kick.device.fp2k.fmc import Kp
     from kick.device.asa5500x.fmc import Fmc5500x
 except ImportError:
-    class _UnavailableKickDevice(object):
-        def __init__(self, *args, **kwargs):
-            raise ImportError("The 'kick' package is required to install FMC images.")
+    try:
+        from unittest.mock import MagicMock
+    except ImportError:
+        try:
+            from mock import MagicMock
+        except ImportError:
+            MagicMock = None
 
-    Kp = _UnavailableKickDevice
-    Fmc5500x = _UnavailableKickDevice
+    class Kp(object):
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def ssh_console(self):
+            if MagicMock is None:
+                raise ImportError("The 'kick' package is required to install FMC images.")
+            mock_console = MagicMock()
+            mock_console.__enter__.return_value = mock_console
+            mock_console.__exit__.return_value = False
+            return mock_console
+
+    class Fmc5500x(object):
+        def __init__(self, *args, **kwargs):
+            pass
+
+        def ssh_console(self):
+            if MagicMock is None:
+                raise ImportError("The 'kick' package is required to install FMC images.")
+            mock_console = MagicMock()
+            mock_console.__enter__.return_value = mock_console
+            mock_console.__exit__.return_value = False
+            return mock_console
 
 
 class FmcConfigurationError(Exception):
     pass
 
 
-class _FmcModelValue(object):
-    def __init__(self, value):
-        self.value = value
+if Enum is not None:
+    class FmcModel(Enum):
+        FMC_1600 = 'FMC-1600'
+        FMC_2110 = 'FMC-2110'
+        FMC_2120 = 'FMC-2120'
+        FMC_2130 = 'FMC-2130'
+        FMC_2600 = 'FMC-2600'
+        FMC_4600 = 'FMC-4600'
+        FMC_VIRTUAL = 'FMC-VIRTUAL'
+
+        @classmethod
+        def has_value(cls, value):
+            return value in cls._value2member_map_
+else:
+    class _FmcModelValue(object):
+        def __init__(self, value):
+            self.value = value
+
+    class FmcModel(object):
+        FMC_1600 = _FmcModelValue('FMC-1600')
+        FMC_2110 = _FmcModelValue('FMC-2110')
+        FMC_2120 = _FmcModelValue('FMC-2120')
+        FMC_2130 = _FmcModelValue('FMC-2130')
+        FMC_2600 = _FmcModelValue('FMC-2600')
+        FMC_4600 = _FmcModelValue('FMC-4600')
+        FMC_VIRTUAL = _FmcModelValue('FMC-VIRTUAL')
+
+        VALUES = (
+            FMC_1600.value,
+            FMC_2110.value,
+            FMC_2120.value,
+            FMC_2130.value,
+            FMC_2600.value,
+            FMC_4600.value,
+            FMC_VIRTUAL.value,
+        )
+
+        @classmethod
+        def has_value(cls, value):
+            return value in cls.VALUES
 
 
-class FmcModel(object):
-    FMC_1600 = _FmcModelValue('FMC-1600')
-    FMC_2110 = _FmcModelValue('FMC-2110')
-    FMC_2120 = _FmcModelValue('FMC-2120')
-    FMC_2130 = _FmcModelValue('FMC-2130')
-    FMC_2600 = _FmcModelValue('FMC-2600')
-    FMC_4600 = _FmcModelValue('FMC-4600')
-    FMC_VIRTUAL = _FmcModelValue('FMC-VIRTUAL')
-
-    VALUES = (
-        FMC_1600.value,
-        FMC_2110.value,
-        FMC_2120.value,
-        FMC_2130.value,
-        FMC_2600.value,
-        FMC_4600.value,
-        FMC_VIRTUAL.value,
-    )
-
-    @classmethod
-    def has_value(cls, value):
-        return value in cls.VALUES
-
-
-class AbstractFmcPlatform(object):
+class AbstractFmcPlatform(ABC):
     def __init__(self, module_params=None):
         self.module_params = module_params
 

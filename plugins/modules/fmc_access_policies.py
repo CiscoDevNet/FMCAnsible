@@ -130,6 +130,7 @@ response:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
+import errno
 import os
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
@@ -313,8 +314,11 @@ def main():
         output_dir = params['output_dir']
         if output_dir:
             # Ensure the output directory exists
-            if not os.path.isdir(output_dir):
+            try:
                 os.makedirs(output_dir)
+            except OSError as exc:
+                if exc.errno != errno.EEXIST or not os.path.isdir(output_dir):
+                    raise
 
             # Define the output file path
             output_file = os.path.join(output_dir, 'fmc_access_policy_response.json')
