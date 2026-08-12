@@ -3,6 +3,7 @@ on:
   # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
   push:
   pull_request:
+  workflow_dispatch:
   # Run CI once per day (at 06:00 UTC)
   # This ensures that even if there haven't been commits that we are still testing against latest version of ansible-test for each ansible-base version
   schedule:
@@ -28,7 +29,7 @@ jobs:
         ansible: [2.18.3]
     steps:
     - name: Check out code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     
     - name: Set up Python 3.11
       uses: actions/setup-python@v5
@@ -47,7 +48,7 @@ jobs:
     - name: Store migrated collection artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: collection-${{ strategy.index }}
+        name: collection-2.18.3
         path: .cache/collection-tarballs
 
 ###
@@ -60,8 +61,11 @@ jobs:
     - build
     runs-on: ubuntu-latest
     steps:
+    - name: Check out code
+      uses: actions/checkout@v4
+
     - name: Set up Python 3.11
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
 
@@ -71,8 +75,7 @@ jobs:
     - name: Download migrated collection artifacts
       uses: actions/download-artifact@v4
       with:
-        name: collection-${{ strategy.index }}
-        merge-multiple: true
+        name: collection-2.18.3
         path: .cache/collection-tarballs
 
     - name: Install the collection tarball
@@ -81,14 +84,13 @@ jobs:
     - name: Install galaxy-importer
       run: pip install galaxy-importer
 
-    - name: Create galaxy-importer directory
-      run: sudo mkdir -p /etc/galaxy-importer
-
-    - name: Create galaxy-importer.cfg
-      run: sudo cp /home/runner/.ansible/collections/ansible_collections/cisco/fmcansible/.github/workflows/galaxy-importer.cfg /etc/galaxy-importer/galaxy-importer.cfg
-
     - name: Run galaxy-importer check
-      run: python -m galaxy_importer.main .cache/collection-tarballs/cisco-*.tar.gz | tee .cache/collection-tarballs/log.txt && sudo cp ./importer_result.json .cache/collection-tarballs/importer_result.json
+      env:
+        GALAXY_IMPORTER_CONFIG: ${{ github.workspace }}/.github/workflows/galaxy-importer.cfg
+      run: |
+        set -o pipefail
+        python -m galaxy_importer.main .cache/collection-tarballs/cisco-*.tar.gz | tee .cache/collection-tarballs/log.txt
+        cp ./importer_result.json .cache/collection-tarballs/importer_result.json
 
     - name: Check warnings and errors
       run: if grep -E 'ERROR' .cache/collection-tarballs/log.txt; then exit 1; else exit 0; fi
@@ -96,7 +98,7 @@ jobs:
     - name: Store galaxy_importer check log file
       uses: actions/upload-artifact@v4
       with:
-        name: galaxy-importer-log-${{ strategy.index }}
+        name: galaxy-importer-log
         path: .cache/collection-tarballs/importer_result.json
 
 ###
@@ -124,12 +126,12 @@ jobs:
       # .../ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}/
 
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           # it is just required to run that once as "ansible-test sanity" in the docker image
           # will run on all python versions it supports.
@@ -156,7 +158,7 @@ jobs:
         working-directory: ./ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
 
       # See the reports at https://codecov.io/gh/GITHUBORG/REPONAME
-      - uses: codecov/codecov-action@v1
+      - uses: codecov/codecov-action@v5
         with:
           fail_ci_if_error: false
 
@@ -185,7 +187,7 @@ jobs:
       # .../ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}/
 
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           path: ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
 
