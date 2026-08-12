@@ -222,6 +222,7 @@ jobs:
           ./ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
         run: >-
           ansible-test coverage xml
+          --requirements
           --group-by command
           --group-by version
 

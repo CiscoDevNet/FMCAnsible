@@ -177,4 +177,6 @@ class FmcPlatformFactory(object):
             if platform_class.supports_fmc_model(model):
                 return platform_class(module_params)
 
-        raise ValueError(f"FMC model '{model}' is not supported by this module.")
+        raise ValueError(
+            "FMC model '{0}' is not supported by this module.".format(model)
+        )
