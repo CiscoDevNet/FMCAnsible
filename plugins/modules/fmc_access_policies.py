@@ -130,6 +130,7 @@ response:
 
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
+import errno
 import os
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.configuration import BaseConfigurationResource, CheckModeException, FmcInvalidOperationNameError
@@ -262,7 +263,10 @@ def main():
                         else:
                             # Default to a generic operation for unknown types
                             get_obj_operation = 'getAllAccessPolicies'  # Using a known valid operation
-                            module.warn(f"Unknown object type: {obj_type}. Cannot retrieve details.")
+                            module.warn(
+                                "Unknown object type: {0}. Cannot retrieve details.".format(
+                                    obj_type)
+                            )
                             enriched_objects.append(obj)
                             continue
 
@@ -279,14 +283,24 @@ def main():
                         except (FmcConfigurationError, FmcServerError) as e:
                             # If we can't get details, use the original object and provide a helpful warning
                             if hasattr(e, 'code') and e.code == 404:
-                                module.warn(f"Object not found: {obj['id']} (Type: {obj_type}). "
-                                            f"This object may have been deleted but is still referenced in the rule.")
+                                module.warn(
+                                    "Object not found: {0} (Type: {1}). This object may have "
+                                    "been deleted but is still referenced in the rule.".format(
+                                        obj['id'], obj_type)
+                                )
                             else:
-                                module.warn(f"Could not retrieve details for object {obj['id']} (Type: {obj_type}): {str(e)}")
+                                module.warn(
+                                    "Could not retrieve details for object {0} "
+                                    "(Type: {1}): {2}".format(
+                                        obj['id'], obj_type, str(e))
+                                )
                             # Add whatever information we do have about the object
                             enriched_objects.append(obj)
                         except (FmcUnexpectedResponse, ValidationError) as e:
-                            module.warn(f"Error processing object {obj['id']} (Type: {obj_type}): {str(e)}")
+                            module.warn(
+                                "Error processing object {0} (Type: {1}): {2}".format(
+                                    obj['id'], obj_type, str(e))
+                            )
                             enriched_objects.append(obj)
 
                     # Replace the response with the enriched objects
@@ -300,7 +314,11 @@ def main():
         output_dir = params['output_dir']
         if output_dir:
             # Ensure the output directory exists
-            os.makedirs(output_dir, exist_ok=True)
+            try:
+                os.makedirs(output_dir)
+            except OSError as exc:
+                if exc.errno != errno.EEXIST or not os.path.isdir(output_dir):
+                    raise
 
             # Define the output file path
             output_file = os.path.join(output_dir, 'fmc_access_policy_response.json')

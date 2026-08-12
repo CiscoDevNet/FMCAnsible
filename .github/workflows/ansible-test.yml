@@ -1,216 +1,233 @@
+---
 name: CI
+
 on:
-  # Run CI against all pushes (direct commits, also merged PRs), Pull Requests
   push:
+    branches:
+      - develop
+      - main
   pull_request:
-  # Run CI once per day (at 06:00 UTC)
-  # This ensures that even if there haven't been commits that we are still testing against latest version of ansible-test for each ansible-base version
-  schedule:
-    - cron: '0 6 * * *'
+    branches:
+      - develop
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NAMESPACE: cisco
   COLLECTION_NAME: fmcansible
 
 jobs:
-
-###
-# Check Build
-#
-
-
   build:
-    name: Build collection
+    name: Build/install (core ${{ matrix.ansible }}, Python ${{ matrix.python }})
     runs-on: ubuntu-22.04
     strategy:
+      fail-fast: false
       matrix:
-        # ansible: [2.9.17, 2.10.5]
-        # ansible: [2.18.3, 2.17.9, 2.16.14]
-        ansible: [2.18.3]
+        include:
+          - ansible: 2.16.19
+            python: "3.12"
+          - ansible: 2.17.14
+            python: "3.12"
+          - ansible: 2.18.18
+            python: "3.13"
+          - ansible: 2.19.11
+            python: "3.13"
+          - ansible: 2.20.7
+            python: "3.14"
+          - ansible: 2.21.3
+            python: "3.14"
     steps:
-    - name: Check out code
-      uses: actions/checkout@v3
-    
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.11'
-
-    - name: Install ansible-core
-      run: pip install ansible-core --force-reinstall
-
-    - name: Install ansible-base (v${{ matrix.ansible }})
-      run: pip install https://github.com/ansible/ansible/archive/v${{ matrix.ansible }}.tar.gz --disable-pip-version-check
-
-    - name: Build a collection tarball
-      run: pwd && ls -al && find . && ansible-galaxy collection build --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
-
-    - name: Store migrated collection artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: collection-${{ strategy.index }}
-        path: .cache/collection-tarballs
-
-###
-# Check Importer
-#
-
-  importer:
-    name: Galaxy-importer check
-    needs:
-    - build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Set up Python 3.11
-      uses: actions/setup-python@v1
-      with:
-        python-version: '3.11'
-
-    - name: Install ansible-base (v2.18.3)
-      run: pip install https://github.com/ansible/ansible/archive/v2.18.3.tar.gz --disable-pip-version-check
-
-    - name: Download migrated collection artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: collection-${{ strategy.index }}
-        merge-multiple: true
-        path: .cache/collection-tarballs
-
-    - name: Install the collection tarball
-      run: ansible-galaxy collection install .cache/collection-tarballs/*.tar.gz
-
-    - name: Install galaxy-importer
-      run: pip install galaxy-importer
-
-    - name: Create galaxy-importer directory
-      run: sudo mkdir -p /etc/galaxy-importer
-
-    - name: Create galaxy-importer.cfg
-      run: sudo cp /home/runner/.ansible/collections/ansible_collections/cisco/fmcansible/.github/workflows/galaxy-importer.cfg /etc/galaxy-importer/galaxy-importer.cfg
-
-    - name: Run galaxy-importer check
-      run: python -m galaxy_importer.main .cache/collection-tarballs/cisco-*.tar.gz | tee .cache/collection-tarballs/log.txt && sudo cp ./importer_result.json .cache/collection-tarballs/importer_result.json
-
-    - name: Check warnings and errors
-      run: if grep -E 'ERROR' .cache/collection-tarballs/log.txt; then exit 1; else exit 0; fi
-
-    - name: Store galaxy_importer check log file
-      uses: actions/upload-artifact@v4
-      with:
-        name: galaxy-importer-log-${{ strategy.index }}
-        path: .cache/collection-tarballs/importer_result.json
-
-###
-# Sanity tests (REQUIRED)
-#
-# https://docs.ansible.com/ansible/latest/dev_guide/testing_sanity.html
-
-  sanity:
-    name: Sanity (Ⓐ${{ matrix.ansible }})
-    strategy:
-      matrix:
-        ansible:
-          # - stable-2.9
-          # - stable-2.10
-          # - stable-2.16
-          - stable-2.17
-          - stable-2.18
-          # It's important that Sanity is tested against all stable-X.Y branches
-          # Testing against `devel` may fail as new tests are added.
-          # - stable-2.9 # Only if your collection supports Ansible 2.9
-    runs-on: ubuntu-latest
-    steps:
-
-      # ansible-test requires the collection to be in a directory in the form
-      # .../ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}/
-
       - name: Check out code
-        uses: actions/checkout@v2
-        with:
-          path: ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
+        uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          # it is just required to run that once as "ansible-test sanity" in the docker image
-          # will run on all python versions it supports.
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          # Install urllib3 directly if it's a direct dependency
-          pip install urllib3
-
-      # Install the head of the given branch (devel, stable-2.10)
-      - name: Install ansible-base (${{ matrix.ansible }})
-        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
-
-      - name: Run sanity tests
-        run: ansible-test sanity --docker -v --color
-        working-directory: ./ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
-
-      # ansible-test support producing code coverage date
-      - name: Generate coverage report
-        # run: ansible-test coverage xml -v --requirements --group-by command --group-by version
-        run: ansible-test coverage xml -v --requirements --group-by command --group-by version
-        working-directory: ./ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
-
-      # See the reports at https://codecov.io/gh/GITHUBORG/REPONAME
-      - uses: codecov/codecov-action@v1
-        with:
-          fail_ci_if_error: false
-
-###
-# Unit tests (REQUIRED)
-#
-# https://docs.ansible.com/ansible/latest/dev_guide/testing_sanity.html
-
-  units:
-    name: Unit (Ⓐ${{ matrix.ansible }})
-    strategy:
-      matrix:
-        ansible:
-          # - stable-2.9
-          # - stable-2.10
-          # - stable-2.16
-          - stable-2.17
-          - stable-2.18
-          # It's important that Sanity is tested against all stable-X.Y branches
-          # Testing against `devel` may fail as new tests are added.
-          # - stable-2.9 # Only if your collection supports Ansible 2.9
-    runs-on: ubuntu-latest
-    steps:
-
-      # ansible-test requires the collection to be in a directory in the form
-      # .../ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}/
-
-      - name: Check out code
-        uses: actions/checkout@v2
-        with:
-          path: ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
-
-      - name: Set up Python
+      - name: Set up Python ${{ matrix.python }}
         uses: actions/setup-python@v5
         with:
-          # it is just required to run that once as "ansible-test sanity" in the docker image
-          # will run on all python versions it supports.
-          python-version: '3.11'
+          python-version: ${{ matrix.python }}
 
-      - name: Install dependencies
+      - name: Install ansible-core ${{ matrix.ansible }}
         run: |
           python -m pip install --upgrade pip
-          # Install urllib3 directly if it's a direct dependency
-          pip install urllib3
+          python -m pip install "ansible-core==${{ matrix.ansible }}"
 
-      # Install the head of the given branch (devel, stable-2.10)
-      - name: Install ansible-base (${{ matrix.ansible }})
-        run: pip install https://github.com/ansible/ansible/archive/${{ matrix.ansible }}.tar.gz --disable-pip-version-check
+      - name: Build collection
+        run: >-
+          ansible-galaxy collection build
+          --output-path "${GITHUB_WORKSPACE}/.cache/collection-tarballs"
 
-      # Install units
-      # - name: Install units
-      #   run: pip install units
+      - name: Install and load collection
+        env:
+          ANSIBLE_COLLECTIONS_PATH: ${{ runner.temp }}/collections
+        run: |
+          ansible-galaxy collection install \
+            .cache/collection-tarballs/cisco-*.tar.gz \
+            --force \
+            --collections-path "${ANSIBLE_COLLECTIONS_PATH}"
+          ansible-doc cisco.fmcansible.fmc_configuration >/dev/null
+          ansible-doc cisco.fmcansible.fmc_facts >/dev/null
+          ansible-doc --type httpapi cisco.fmcansible.fmc >/dev/null
 
-      # Run the unit tests on python 3.5
+      - name: Store release artifact
+        if: matrix.ansible == '2.21.3'
+        uses: actions/upload-artifact@v4
+        with:
+          name: collection-release
+          path: .cache/collection-tarballs/cisco-*.tar.gz
+          if-no-files-found: error
+
+  importer:
+    name: Galaxy importer
+    needs:
+      - build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install importer
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install \
+            "ansible-core==2.21.3" \
+            "galaxy-importer==0.4.41"
+
+      - name: Download release artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: collection-release
+          path: .cache/collection-tarballs
+
+      - name: Install collection
+        run: >-
+          ansible-galaxy collection install
+          .cache/collection-tarballs/cisco-*.tar.gz
+          --force
+
+      - name: Run Galaxy importer
+        env:
+          GALAXY_IMPORTER_CONFIG: ${{ github.workspace }}/.github/workflows/galaxy-importer.cfg
+        run: |
+          set -o pipefail
+          python -m galaxy_importer.main \
+            .cache/collection-tarballs/cisco-*.tar.gz \
+            | tee .cache/collection-tarballs/importer.log
+          cp importer_result.json \
+            .cache/collection-tarballs/importer_result.json
+
+      - name: Store importer results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: galaxy-importer-results
+          path: |
+            .cache/collection-tarballs/importer.log
+            .cache/collection-tarballs/importer_result.json
+          if-no-files-found: warn
+
+  sanity:
+    name: Sanity (core ${{ matrix.ansible }}, Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ansible: 2.16.19
+            python: "3.12"
+          - ansible: 2.17.14
+            python: "3.12"
+          - ansible: 2.18.18
+            python: "3.13"
+          - ansible: 2.19.11
+            python: "3.13"
+          - ansible: 2.20.7
+            python: "3.14"
+          - ansible: 2.21.3
+            python: "3.14"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install ansible-core ${{ matrix.ansible }}
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "ansible-core==${{ matrix.ansible }}"
+
+      - name: Run sanity tests
+        working-directory: >-
+          ./ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
+        run: ansible-test sanity --docker -v --color
+
+  units:
+    name: Unit (core ${{ matrix.ansible }}, Python ${{ matrix.python }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - ansible: 2.16.19
+            python: "3.12"
+          - ansible: 2.17.14
+            python: "3.12"
+          - ansible: 2.18.18
+            python: "3.13"
+          - ansible: 2.19.11
+            python: "3.13"
+          - ansible: 2.20.7
+            python: "3.14"
+          - ansible: 2.21.3
+            python: "3.14"
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+        with:
+          path: ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install ansible-core ${{ matrix.ansible }}
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "ansible-core==${{ matrix.ansible }}"
+
       - name: Run unit tests
+        working-directory: >-
+          ./ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
         run: ansible-test units --docker -v --color
-        working-directory: ./ansible_collections/${{env.NAMESPACE}}/${{env.COLLECTION_NAME}}
+
+      - name: Generate coverage report
+        if: matrix.ansible == '2.21.3'
+        working-directory: >-
+          ./ansible_collections/${{ env.NAMESPACE }}/${{ env.COLLECTION_NAME }}
+        run: >-
+          ansible-test coverage xml
+          --requirements
+          --group-by command
+          --group-by version
+
+      - name: Upload coverage
+        if: matrix.ansible == '2.21.3'
+        uses: codecov/codecov-action@v5
+        with:
+          fail_ci_if_error: false
