@@ -30,6 +30,10 @@ Minor Changes
   native Python 3 equivalents for current Ansible sanity compatibility.
 - Updated Python and Ansible content to pass the Galaxy importer flake8 and
   ansible-lint checks.
+- Corrected bulk network and URL object examples, documented the dedicated
+  on-prem FMC API-user requirement, clarified loop result registration, and
+  linked the generated API operation index. Documented the current true-bulk
+  idempotency limitation and the single-object upsert workaround.
 
 Bugfixes
 --------

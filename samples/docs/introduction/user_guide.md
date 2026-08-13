@@ -131,12 +131,12 @@ If you want to change the default naming convention, add a `register_as` paramet
 ### Task idempotency
 
 A task is _idempotent_ if the result of running it once is exactly the same as the result of running it
-multiple times. As Ansible requires modules to be idempotent, `fmc_configuration` complies with this requirement.
+multiple times. `fmc_configuration` compares existing objects for single-object create, update, and upsert operations.
 
 Before executing the operation, fmc_configuration` checks whether the desired final state is already achieved.
 If yes, no actions are executed, and the operation finishes showing that the state is not changed. A comparison of objects is described below.
 
-For example, when running the `createMultipleNetworkObject` operation multiple times without changing the play configuration, only the first run results in `changed` status. Subsequent runs are finished with `ok` status.
+True bulk operations, where `data` is a list or `query_params.bulk` is `true`, do not perform per-object equality checks. Repeating an identical bulk create can therefore return an FMC duplicate-name error. Use a loop with the corresponding `upsert` operation when rerunnable object creation is required.
 
 ---
 

@@ -54,6 +54,11 @@ ansible_facts_modules=cisco.fmcansible.fmc_facts
 <FMC IP> ansible_user=<username> ansible_password=<password> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
 ```
 
+Use a dedicated FMC API user for automation. An on-prem FMC user session can
+invalidate another session for the same account, so do not use the account that
+is also signed in to the FMC web interface or another API client. This guidance
+does not apply to cdFMC bearer-token authentication.
+
 ### Traditional FMC Playbook Example
 
 Then create a playbook referencing the module and the desired operation. This example `network.yml` demonstrates how to create a simple network object. The task creates a new object representing the subnet.
@@ -196,6 +201,11 @@ ansible_facts_modules=cisco.fmcansible.fmc_facts
 **Security Note**: Bearer tokens are sensitive credentials. Store them securely and avoid committing them to version control. Consider using Ansible Vault or environment variables for token management.
 
 Detailed Usage Instructions can be found [here](https://github.com/CiscoDevNet/FMCAnsible/blob/main/docs/usage.md)
+
+The generated [operation index](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/docs/operations/index.md)
+lists the FMC API operations exposed by the collection. Availability and request
+fields still depend on the API specification returned by the target FMC or
+cdFMC release.
 
 
 Sample playbooks are located [`here`](https://github.com/CiscoDevNet/FMCAnsible/tree/main/samples).
