@@ -22,11 +22,11 @@ __metaclass__ = type
 
 import json
 import unittest
+from io import BytesIO, StringIO
+from urllib.error import HTTPError
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils.connection import ConnectionError
-from ansible.module_utils.six import PY3, BytesIO, StringIO
-from ansible.module_utils.six.moves.urllib.error import HTTPError
 
 try:
     from unittest import mock
@@ -43,10 +43,7 @@ from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
     FmcSwaggerParser, SpecProp)
 
-if PY3:
-    BUILTINS_NAME = 'builtins'
-else:
-    BUILTINS_NAME = '__builtin__'
+BUILTINS_NAME = 'builtins'
 
 
 class FakeFmcHttpApiPlugin(HttpApi):
@@ -73,6 +70,34 @@ class TestFmcHttpApi(unittest.TestCase):
         self.fmc_plugin = FakeFmcHttpApiPlugin(self.connection_mock)
         self.fmc_plugin.access_token = 'ACCESS_TOKEN'
         self.fmc_plugin._load_name = 'httpapi'
+
+    @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.InternalHttpClient')
+    def test_internal_client_enables_onprem_authentication_recovery(self, client_mock):
+        plugin = HttpApi(self.connection_mock)
+        plugin.get_option = mock.Mock(return_value=False)
+        self.connection_mock.get_option.return_value = 'fmc.example.com'
+
+        assert client_mock.return_value == plugin.http_client
+
+        client_mock.assert_called_once_with(
+            'fmc.example.com',
+            TOKEN_PATH_TEMPLATE,
+            enable_auth_recovery=True
+        )
+
+    @patch('ansible_collections.cisco.fmcansible.plugins.httpapi.fmc.InternalHttpClient')
+    def test_internal_client_disables_cdfmc_authentication_recovery(self, client_mock):
+        plugin = HttpApi(self.connection_mock)
+        plugin.get_option = mock.Mock(return_value=True)
+        self.connection_mock.get_option.return_value = 'cdfmc.example.com'
+
+        assert client_mock.return_value == plugin.http_client
+
+        client_mock.assert_called_once_with(
+            'cdfmc.example.com',
+            TOKEN_PATH_TEMPLATE,
+            enable_auth_recovery=False
+        )
 
     def test_login_should_request_tokens_when_no_refresh_token(self):
         self.connection_mock.send.return_value = self._login_response(

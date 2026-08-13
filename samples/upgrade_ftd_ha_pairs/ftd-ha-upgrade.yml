@@ -3,9 +3,6 @@
   hosts: fmc
 
   connection: httpapi
-  collections:
-    - cisco.fmcansible
-
   vars_files:
     - vars.yml
 
@@ -21,7 +18,7 @@
         register_as: pkg_list
 
     - name: Select package by name
-      set_fact:
+      ansible.builtin.set_fact:
         upgrade_pkg: >-
           {{ pkg_list
             | selectattr('name','issuperset', version)
@@ -38,20 +35,20 @@
       register: all_devices_in_ha
 
     - name: Build targets list from names
-      set_fact:
+      ansible.builtin.set_fact:
         targets: |-
           [{% for name in ha_pair_names %}
-            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).id }}",
+            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name', 'equalto', name) | list | first).id }}",
               "type": "HAContainer",
               "name": "{{ name }}" }{{ "," if not loop.last else "" }}{% endfor %}]
 
     - name: Build target devices list from names
-      set_fact:
+      ansible.builtin.set_fact:
         target_devices: |-
           [{% for name in ha_pair_names %}
-            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).primary.id }}",
+            { "id": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name', 'equalto', name) | list | first).primary.id }}",
               "type": "Device",
-              "name": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name','equalto', name) | list | first).primary.name }}" },
+              "name": "{{ (all_devices_in_ha.response.get('items', []) | selectattr('name', 'equalto', name) | list | first).primary.name }}" },
               {{ "," if not loop.last else "" }}{% endfor %}]
 
     - name: Create backup of devices
@@ -77,16 +74,15 @@
       delay: 30
 
     - name: Verify backup success
-      assert:
+      ansible.builtin.assert:
         that: backup_status.status == "COMPLETED"
         fail_msg: "Backup failed: {{ backup_status.error | default('Unknown error') }}"
         success_msg: "Backup completed successfully for {{ ha_pair_names | length }} HA Pair(s)!"
 
     - name: About the Readiness Check
-      debug:
-        msg:
-          "Starting readiness check for upgrade package '{{ upgrade_pkg.name }}' on HA devices: {{ ha_pair_names | join(', ') }}.
-          The readiness check identifies issues including database integrity, version inconsistencies, and device registration. Do not reboot or shut down an appliance during the readiness check."
+      ansible.builtin.debug:
+        msg: "Starting readiness check for upgrade package '{{ upgrade_pkg.name }}' on HA devices: {{ ha_pair_names | join(', ') }}. The readiness check identifies
+          issues including database integrity, version inconsistencies, and device registration. Do not reboot or shut down an appliance during the readiness check."
 
     - name: Start readiness check
       cisco.fmcansible.fmc_configuration:
@@ -113,7 +109,7 @@
       delay: 60
 
     - name: Fail if readiness failed
-      fail:
+      ansible.builtin.fail:
         msg: "Readiness check failed: {{ readiness_status }}"
       when: readiness_status.status == "FAILED"
 
@@ -142,7 +138,7 @@
       delay: 60
 
     - name: Show upgrade outcome
-      debug:
+      ansible.builtin.debug:
         msg:
           - "Upgrade Status: {{ upgrade_status.status }}"
           - "Errors/Warnings: {{ upgrade_status.message | default('None') }}"

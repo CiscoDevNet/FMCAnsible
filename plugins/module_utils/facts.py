@@ -46,14 +46,23 @@ class FmcFactsBase(object):
         if 'domains' in gather_subset or domain_uuid is None:
             domains = self._gather_domains()
             if not isinstance(domains, list):
-                raise ValueError(f"Expected domains to be a list, got {type(domains)}: {domains}")
+                raise ValueError(
+                    "Expected domains to be a list, got {0}: {1}".format(
+                        type(domains), domains)
+                )
 
             # Debug each domain structure
             for i, domain in enumerate(domains):
                 if not isinstance(domain, dict):
-                    raise ValueError(f"Domain {i} is not a dict. Type: {type(domain)}, Value: {domain}")
+                    raise ValueError(
+                        "Domain {0} is not a dict. Type: {1}, Value: {2}".format(
+                            i, type(domain), domain)
+                    )
                 if 'uuid' not in domain and 'id' not in domain:
-                    raise ValueError(f"Domain {i} missing uuid/id. Keys: {list(domain.keys()) if isinstance(domain, dict) else 'Not a dict'}")
+                    keys = list(domain.keys()) if isinstance(domain, dict) else 'Not a dict'
+                    raise ValueError(
+                        "Domain {0} missing uuid/id. Keys: {1}".format(i, keys)
+                    )
 
             facts['fmc']['domains'] = domains
 
@@ -69,7 +78,10 @@ class FmcFactsBase(object):
         # Debug target domains
         for i, domain in enumerate(target_domains):
             if not isinstance(domain, dict):
-                raise ValueError(f"target_domains[{i}] is not a dict. Type: {type(domain)}, Value: {domain}")
+                raise ValueError(
+                    "target_domains[{0}] is not a dict. Type: {1}, Value: {2}".format(
+                        i, type(domain), domain)
+                )
 
         # Gather facts for each domain
         if target_domains:
@@ -92,13 +104,19 @@ class FmcFactsBase(object):
                             # If domain is just a string UUID, use it directly
                             domain_id = domain
                         else:
-                            raise ValueError(f"Unexpected domain type: {type(domain)}")
+                            raise ValueError(
+                                "Unexpected domain type: {0}".format(type(domain))
+                            )
 
                         if not domain_id:
-                            raise ValueError(f"No domain_id found in domain: {domain}")
+                            raise ValueError(
+                                "No domain_id found in domain: {0}".format(domain)
+                            )
 
                     except Exception as e:
-                        raise ValueError(f"Error processing domain {domain}: {e}")
+                        raise ValueError(
+                            "Error processing domain {0}: {1}".format(domain, e)
+                        )
 
                     if subset == 'devices':
                         facts['fmc'][subset][domain_id] = self._gather_devices(domain_id)
@@ -143,7 +161,7 @@ class FmcFactsBase(object):
             else:
                 # Return empty list if unexpected format
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -159,7 +177,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -175,7 +193,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -191,7 +209,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -207,7 +225,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -228,7 +246,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -244,7 +262,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -260,7 +278,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -276,7 +294,7 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []
 
@@ -292,6 +310,6 @@ class FmcFactsBase(object):
                 return result['items']
             else:
                 return []
-        except Exception as e:
+        except Exception:
             # Return empty list if operation fails
             return []

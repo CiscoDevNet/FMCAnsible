@@ -8,7 +8,7 @@
   register: access_policies
 
 - name: Process each access policy
-  include_tasks: process_policy.yml
+  ansible.builtin.include_tasks: process_policy.yml
   loop: "{{ access_policies.response['items'] }}"
   loop_control:
     loop_var: policy

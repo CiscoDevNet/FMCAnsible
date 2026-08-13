@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create a port object
+  hosts: all
   connection: httpapi
   tasks:
     - name: Create a TCP port for PostgreSQL

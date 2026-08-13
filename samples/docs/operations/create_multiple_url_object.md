@@ -7,14 +7,7 @@ The createMultipleURLObject operation handles configuration related to [/api/fmc
 ## Data Parameters Example
 | Parameter | Value |
 | --------- | -------- |
-| type | Url |
-| name | UrlObject1 |
-| description | url object 1 |
-| url | http://wwwin.cisco.com |
-| type | Url |
-| name | UrlObject2 |
-| description | url object 2 |
-| url | http://www.google.com |
+| data | `[{'type': 'Url', 'name': 'UrlObject1', 'description': 'url object 1', 'url': 'http://wwwin.cisco.com'}, {'type': 'Url', 'name': 'UrlObject2', 'description': 'url object 2', 'url': 'http://www.google.com'}]` |
 
 ## Path Parameters
 | Parameter | Required | Type | Description |
@@ -32,17 +25,17 @@ The createMultipleURLObject operation handles configuration related to [/api/fmc
   cisco.fmcansible.fmc_configuration:
     operation: "createMultipleURLObject"
     data:
-        type: Url
+      - type: Url
         name: UrlObject1
         description: url object 1
         url: http://wwwin.cisco.com
-        type: Url
+      - type: Url
         name: UrlObject2
         description: url object 2
         url: http://www.google.com
     path_params:
-        domainUUID: "{{ domain_uuid }}"
+      domainUUID: "{{ domain_uuid }}"
     query_params:
-        bulk: "{{ bulk }}"
+      bulk: true
 
 ```

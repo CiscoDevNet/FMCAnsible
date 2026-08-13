@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create an access policy
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -8,7 +10,7 @@
         operation: "createAccessPolicy"
         data:
           type: "AccessPolicy"
-          name: "{{accesspolicy_name | default('AccessPolicy1') }}"
+          name: "{{ accesspolicy_name | default('AccessPolicy1') }}"
           defaultAction: { "action": "TRUST" }
         path_params:
           domainUUID: "{{ ansible_facts.fmc.domains[0].uuid }}"

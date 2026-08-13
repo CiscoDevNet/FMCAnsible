@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Test upsert response fact registration
+  hosts: all
   connection: httpapi
 
   tasks:
@@ -11,12 +13,13 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: test-network6
           value: 3.3.3.0/24
           type: networkobject
-    - assert:
+    - name: Verify implicit upsert registration
+      ansible.builtin.assert:
         that:
           - Network_test_network6 != None
           - Network_test_network6.name == "test-network6"
@@ -25,13 +28,14 @@
       cisco.fmcansible.fmc_configuration:
         operation: upsertNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         data:
           name: test-network8
           value: 192.23.23.0/24
           type: networkobject
         register_as: test_network
-    - assert:
+    - name: Verify explicit upsert registration
+      ansible.builtin.assert:
         that:
           - test_network != None
           - test_network.name  == "test-network8"
@@ -40,7 +44,7 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
           filter: "nameOrValue:test-network6"
 
@@ -48,19 +52,20 @@
       cisco.fmcansible.fmc_configuration:
         operation: getAllNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
         query_params:
           filter: "nameOrValue:test-network8"
         register_as: networks
-    - assert:
-       that:
-         - networks != None
-         - networks | length == 1
-         - networks.0.name == "test-network8"
+    - name: Verify explicit upsert list registration
+      ansible.builtin.assert:
+        that:
+          - networks != None
+          - networks | length == 1
+          - networks.0.name == "test-network8"
 
     - name: Delete created Network Object
       cisco.fmcansible.fmc_configuration:
         operation: deleteNetworkObject
         path_params:
-          domainUUID: '{{ cra1[0].uuid }}'
+          domainUUID: "{{ cra1[0].uuid }}"
           objectId: "{{ test_network.id }}"

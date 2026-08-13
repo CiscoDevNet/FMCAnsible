@@ -5,7 +5,7 @@ and execution of operational tasks on Cisco Secure Firewall Management Centre (F
 
 **Supports both traditional FMC and Cisco Defense FMC (cdFMC) deployments with Bearer token authentication.**
 
-This module has been tested against the following ansible versions: **2.9.17, 2.10.5**
+This module requires Ansible Core **2.16.0 or later**.
 This module has been tested against the following cisco Secure Firewall Management Center versions up to **7.6** and **10.0**
 
 ## Included Content
@@ -53,6 +53,11 @@ ansible_facts_modules=cisco.fmcansible.fmc_facts
 [vfmc]
 <FMC IP> ansible_user=<username> ansible_password=<password> ansible_httpapi_port=443 ansible_httpapi_use_ssl=True ansible_httpapi_validate_certs=True
 ```
+
+Use a dedicated FMC API user for automation. An on-prem FMC user session can
+invalidate another session for the same account, so do not use the account that
+is also signed in to the FMC web interface or another API client. This guidance
+does not apply to cdFMC bearer-token authentication.
 
 ### Traditional FMC Playbook Example
 
@@ -197,10 +202,14 @@ ansible_facts_modules=cisco.fmcansible.fmc_facts
 
 Detailed Usage Instructions can be found [here](https://github.com/CiscoDevNet/FMCAnsible/blob/main/docs/usage.md)
 
+The generated [operation index](https://github.com/CiscoDevNet/FMCAnsible/blob/main/samples/docs/operations/index.md)
+lists the FMC API operations exposed by the collection. Availability and request
+fields still depend on the API specification returned by the target FMC or
+cdFMC release.
+
 
 Sample playbooks are located [`here`](https://github.com/CiscoDevNet/FMCAnsible/tree/main/samples).
 
 ## Contributing to this collection
 
 We welcome community contributions to this collection. If you find problems, please open an issue or create a PR against the [Cisco FMCAnsible repository](https://github.com/CiscoDevNet/FMCAnsible)
-

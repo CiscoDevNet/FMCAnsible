@@ -3,10 +3,8 @@
   hosts: vfmc
 
   connection: httpapi
-  collections:
-    - cisco.fmcansible
   vars_files:
     - vars.yml
 
   roles:
-    - role: get_access_policies
+    - role: cisco.fmcansible.get_access_policies

@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Configure a physical interface
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -28,7 +30,7 @@
               address: "{{ outside_ip | default('192.168.10.4') }}"
               netmask: "{{ outside_netmask | default('255.255.255.0') }}"
           MTU: 1500
-          enabled: True
+          enabled: true
           mode: NONE
           type: physicalinterface
           name: GigabitEthernet0/0
@@ -47,7 +49,7 @@
               address: "{{ inside_ip | default('192.168.20.2') }}"
               netmask: "{{ inside_netmask | default('255.255.255.0') }}"
           MTU: 1500
-          enabled: True
+          enabled: true
           mode: NONE
           type: physicalinterface
           name: GigabitEthernet0/1
@@ -63,10 +65,10 @@
           ifname: inside
           ipv4:
             dhcp:
-              enableDefaultRouteDHCP: True
+              enableDefaultRouteDHCP: true
               dhcpRouteMetric: 100
           MTU: 1500
-          enabled: True
+          enabled: true
           mode: NONE
           type: physicalinterface
           name: GigabitEthernet0/1

@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create an access rule with logging
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -30,9 +32,9 @@
         data:
           name: "{{ accessrule_name | default('Log traffic with malware files 2') }}"
           action: ALLOW
-          logEnd: True
-          logBegin: False
-          sendEventsToFMC: True
+          logEnd: true
+          logBegin: false
+          sendEventsToFMC: true
           filePolicy: "{{ file_policies[0] }}"
           type: AccessRule
         path_params:

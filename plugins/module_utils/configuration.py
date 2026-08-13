@@ -25,13 +25,12 @@ __metaclass__ = type
 import copy
 from functools import partial
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import (
     FmcConfigurationError, FmcServerError, FmcUnexpectedResponse, HTTPMethod,
     ResponseParams, add_missing_properties_left_to_right,
     copy_identity_properties, delete_props_not_in_model, equal_objects)
 from ansible_collections.cisco.fmcansible.plugins.module_utils.fmc_swagger_client import (
-    OperationField, ValidationError)
+    OperationField, OperationParams, ValidationError)
 
 # from module_utils.common import HTTPMethod, equal_objects, FmcConfigurationError, FmcServerError, ResponseParams, \
 #   copy_identity_properties, FmcUnexpectedResponse
@@ -228,8 +227,8 @@ class OperationChecker(object):
         :return: True if all criteria required to provide requested called operation are satisfied, otherwise False
         :rtype: bool
         """
-        has_edit_op = next((name for name, spec in iteritems(operations) if cls.is_edit_operation(name, spec)), None)
-        has_get_list_op = next((name for name, spec in iteritems(operations)
+        has_edit_op = next((name for name, spec in operations.items() if cls.is_edit_operation(name, spec)), None)
+        has_get_list_op = next((name for name, spec in operations.items()
                                 if cls.is_get_list_operation(name, spec)), None)
         return has_edit_op and has_get_list_op
 
@@ -299,7 +298,7 @@ class BaseConfigurationResource(object):
         if model_name not in self._models_operations_specs_cache:
             model_op_specs = self._conn.get_operation_specs_by_model_name(model_name)
             self._models_operations_specs_cache[model_name] = model_op_specs
-            for op_name, op_spec in iteritems(model_op_specs):
+            for op_name, op_spec in model_op_specs.items():
                 self._operation_spec_cache.setdefault(op_name, op_spec)
         return self._models_operations_specs_cache[model_name]
 
@@ -309,7 +308,7 @@ class BaseConfigurationResource(object):
         """
         # filter func that filters by params, usually name
         def match_filters(obj):
-            for k, v in iteritems(filter_params):
+            for k, v in filter_params.items():
                 if k not in obj or obj[k] != v:
                     return False
             return True
@@ -334,6 +333,23 @@ class BaseConfigurationResource(object):
             partial(self.send_general_request, operation_name=operation_name), url_params
         )
         return (i for i in item_generator if filter_func(i))
+
+    def _params_for_operation(self, operation_name, params):
+        """
+        Copies request parameters and removes query parameters unsupported by
+        the operation that will actually execute them.
+        """
+        operation_spec = self.get_operation_spec(operation_name)
+        operation_params = operation_spec.get(OperationField.PARAMETERS) or {}
+        supported_query_params = operation_params.get(OperationParams.QUERY) or {}
+        query_params = params.get(ParamName.QUERY_PARAMS) or {}
+
+        operation_request = dict(params)
+        operation_request[ParamName.QUERY_PARAMS] = {
+            name: value for name, value in query_params.items()
+            if name in supported_query_params
+        }
+        return operation_request
 
     def _find_existing_object(self, model_name, path_params, object_id):
         get_operation = self._find_get_operation(model_name)
@@ -476,7 +492,10 @@ class BaseConfigurationResource(object):
         use_if_name = model_has_property(model, IF_NAME)
 
         obj = None
-        filtered_objs = self.get_objects_by_filter_func(get_list_operation, params, filter_on_name_or_whole_object)
+        lookup_params = self._params_for_operation(get_list_operation, params)
+        filtered_objs = self.get_objects_by_filter_func(
+            get_list_operation, lookup_params, filter_on_name_or_whole_object
+        )
 
         for i, o in enumerate(filtered_objs):
             if i > 0:
@@ -607,7 +626,7 @@ class BaseConfigurationResource(object):
 
     @staticmethod
     def _get_operation_name(checker, operations):
-        return next((op_name for op_name, op_spec in iteritems(operations) if checker(op_name, op_spec)), None)
+        return next((op_name for op_name, op_spec in operations.items() if checker(op_name, op_spec)), None)
 
     def _add_upserted_object(self, model_operations, params):
         add_op_name = self._get_operation_name(self._operation_checker.is_add_operation, model_operations)
@@ -631,9 +650,12 @@ class BaseConfigurationResource(object):
         Determines if the edit operation begins with 'edit' or 'update', and contains
         the identity param (i.e. objectId) in its url path
         """
-        return self._operation_checker.is_edit_operation(operation_name, operation_spec) and \
-            (operation_spec.get(OperationField.PARAMETERS) is None or
-             operation_spec[OperationField.PARAMETERS]['path'].get(PATH_IDENTITY_PARAM) is not None)
+        is_edit = self._operation_checker.is_edit_operation(operation_name, operation_spec)
+        parameters = operation_spec.get(OperationField.PARAMETERS)
+        has_identity_param = parameters is None
+        if parameters is not None:
+            has_identity_param = parameters['path'].get(PATH_IDENTITY_PARAM) is not None
+        return is_edit and has_identity_param
 
     def upsert_object(self, op_name, params):
         """
@@ -736,9 +758,15 @@ def iterate_over_pageable_resource(resource_func, params):
         if items is None:
             break
 
-        # for item in items:
-        #     yield item
-        yield from items
+        # ansible-core 2.16 validates module_utils against Python 2.7, where
+        # ``yield from`` is not valid syntax. Using an iterator also avoids a
+        # version-specific pylint suppression.
+        item_iterator = iter(items)
+        sentinel = object()
+        item = next(item_iterator, sentinel)
+        while item is not sentinel:
+            yield item
+            item = next(item_iterator, sentinel)
 
         if received_less_items_than_requested(len(items), limit):
             break

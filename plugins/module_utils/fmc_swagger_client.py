@@ -28,12 +28,13 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.cisco.fmcansible.plugins.module_utils.common import HTTPMethod
-from ansible.module_utils.six import integer_types, string_types, iteritems
 
 FILE_MODEL_NAME = '_File'
 SUCCESS_RESPONSE_CODE = '200'
 DELETE_PREFIX = 'delete'
 MODEL_LIST_SUFFIX = 'ListContainer'
+APPLICATION_JSON = 'application/json'
+REQUEST_EXAMPLE_PREFIX = 'request example'
 
 
 class OperationField:
@@ -43,6 +44,7 @@ class OperationField:
     MODEL_NAME = 'modelName'
     DESCRIPTION = 'description'
     RETURN_MULTIPLE_ITEMS = 'returnMultipleItems'
+    REQUEST_REQUIRED_FIELDS = 'requestRequiredFields'
     TAGS = "tags"
 
 
@@ -54,7 +56,9 @@ class SpecProp:
 
 
 class PropName:
+    ADDITIONAL_PROPERTIES = 'additionalProperties'
     ENUM = 'enum'
+    EXAMPLES = 'examples'
     TYPE = 'type'
     REQUIRED = 'required'
     INVALID_TYPE = 'invalid_type'
@@ -196,7 +200,7 @@ class FmcSwaggerParser:
 
     def _get_model_operations(self, operations):
         model_operations = {}
-        for operations_name, params in iteritems(operations):
+        for operations_name, params in operations.items():
             model_name = params[OperationField.MODEL_NAME]
             # FMC uses separate model names for list operations, so strip out "ListContainer" and merge into main model ops object
             model_name = self._resolve_model_name(model_name)
@@ -206,8 +210,8 @@ class FmcSwaggerParser:
     def _get_operations(self, spec):
         paths_dict = spec[PropName.PATHS]
         operations_dict = {}
-        for url, operation_params in iteritems(paths_dict):
-            for method, params in iteritems(operation_params):
+        for url, operation_params in paths_dict.items():
+            for method, params in operation_params.items():
                 operation = {
                     OperationField.METHOD: method,
                     OperationField.URL: self._base_path + url,
@@ -218,9 +222,52 @@ class FmcSwaggerParser:
                 if OperationField.PARAMETERS in params:
                     operation[OperationField.PARAMETERS] = self._get_rest_params(params[OperationField.PARAMETERS], spec['parameters'])
 
+                request_required_fields = self._get_request_required_fields(
+                    method,
+                    params,
+                    operation[OperationField.MODEL_NAME],
+                )
+                if request_required_fields is not None:
+                    operation[OperationField.REQUEST_REQUIRED_FIELDS] = request_required_fields
+
                 operation_id = params[PropName.OPERATION_ID]
                 operations_dict[operation_id] = operation
         return operations_dict
+
+    def _get_request_required_fields(self, method, params, model_name):
+        if method not in (HTTPMethod.POST, HTTPMethod.PUT) or model_name is None:
+            return None
+
+        model_required_fields = self._definitions.get(model_name, {}).get(PropName.REQUIRED)
+        request_examples = self._get_request_examples(params)
+        if model_required_fields is None or not request_examples:
+            return None
+
+        request_fields = set(model_required_fields)
+        for example in request_examples:
+            request_fields.intersection_update(example.keys())
+
+        return [field for field in model_required_fields if field in request_fields]
+
+    @staticmethod
+    def _get_request_examples(params):
+        # FMC stores labeled request and response examples together under each
+        # response instead of placing request examples on the body parameter.
+        request_examples = []
+        for response in params.get(PropName.RESPONSES, {}).values():
+            examples = response.get(PropName.EXAMPLES, {}).get(APPLICATION_JSON, {})
+            if not isinstance(examples, dict):
+                continue
+
+            for title, example in examples.items():
+                if not isinstance(title, str) or not title.lower().startswith(REQUEST_EXAMPLE_PREFIX):
+                    continue
+                if isinstance(example, dict):
+                    request_examples.append(example)
+                elif isinstance(example, list):
+                    request_examples.extend(item for item in example if isinstance(item, dict))
+
+        return request_examples
 
     def _enrich_operations_with_docs(self, operations, docs):
         def get_operation_docs(op):
@@ -443,6 +490,9 @@ class FmcSwaggerValidator:
         operation = self._operations[operation_name]
         model_name = operation[OperationField.MODEL_NAME]
         model = self._models[model_name]
+        if OperationField.REQUEST_REQUIRED_FIELDS in operation:
+            model = dict(model)
+            model[PropName.REQUIRED] = operation[OperationField.REQUEST_REQUIRED_FIELDS]
         status = self._init_report()
 
         self._validate_root_object(status, model, data, '')
@@ -452,7 +502,7 @@ class FmcSwaggerValidator:
         return True, None
 
     def _check_validate_data_params(self, data, operation_name):
-        if not operation_name or not isinstance(operation_name, string_types):
+        if not operation_name or not isinstance(operation_name, str):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
         if not isinstance(data, dict) and not isinstance(data, list):
             raise IllegalArgumentException("The data parameter must be a dict or list")
@@ -555,7 +605,7 @@ class FmcSwaggerValidator:
             return True, None
 
     def _check_validate_url_params(self, operation, params):
-        if not operation or not isinstance(operation, string_types):
+        if not operation or not isinstance(operation, str):
             raise IllegalArgumentException("The operation_name parameter must be a non-empty string")
         if not isinstance(params, dict):
             raise IllegalArgumentException("The params parameter must be a dict")
@@ -643,7 +693,7 @@ class FmcSwaggerValidator:
         if PropName.REQUIRED in model:
             self._check_required_fields(status, model[PropName.REQUIRED], data, path)
 
-        model_properties = model[PropName.PROPERTIES]
+        model_properties = model.get(PropName.PROPERTIES) or {}
         for prop in model_properties.keys():
             if prop in data:
                 model_prop_val = model_properties[prop]
@@ -654,6 +704,19 @@ class FmcSwaggerValidator:
                     expected_type = PropType.OBJECT
                 actually_value = data[prop]
                 self._check_types(status, actually_value, expected_type, model_prop_val, path, prop)
+
+        additional_properties = model.get(PropName.ADDITIONAL_PROPERTIES)
+        if isinstance(additional_properties, dict):
+            if PropName.TYPE in additional_properties:
+                expected_type = additional_properties[PropName.TYPE]
+            elif PropName.REF in additional_properties:
+                expected_type = PropType.OBJECT
+            else:
+                return
+
+            for prop in data.keys():
+                if prop not in model_properties:
+                    self._check_types(status, data[prop], expected_type, additional_properties, path, prop)
 
     def _check_types(self, status, actually_value, expected_type, model, path, prop_name):
         if expected_type == PropType.OBJECT:
@@ -707,16 +770,16 @@ class FmcSwaggerValidator:
         if value is None and allow_null:
             return True
         elif expected_type == PropType.STRING:
-            return isinstance(value, string_types)
+            return isinstance(value, str)
         elif expected_type == PropType.BOOLEAN:
             return isinstance(value, bool)
         elif expected_type == PropType.INTEGER:
-            is_integer = isinstance(value, integer_types) and not isinstance(value, bool)
-            is_digit_string = isinstance(value, string_types) and value.isdigit()
+            is_integer = isinstance(value, int) and not isinstance(value, bool)
+            is_digit_string = isinstance(value, str) and value.isdigit()
             return is_integer or is_digit_string
         elif expected_type == PropType.NUMBER:
-            is_number = isinstance(value, (integer_types, float)) and not isinstance(value, bool)
-            is_numeric_string = isinstance(value, string_types) and is_numeric_string(value)
+            is_number = isinstance(value, (int, float)) and not isinstance(value, bool)
+            is_numeric_string = isinstance(value, str) and is_numeric_string(value)
             return is_number or is_numeric_string
         return False
 

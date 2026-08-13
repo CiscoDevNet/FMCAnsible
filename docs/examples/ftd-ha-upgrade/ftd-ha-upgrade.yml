@@ -3,21 +3,18 @@
   hosts: fmc
 
   connection: httpapi
-  collections:
-    - cisco.fmcansible
-
   vars_files:
     - vars.yml
 
   roles:
     # Step 1: Get FMC domains
-    - role: get_domains
+    - role: cisco.fmcansible.get_domains
       register_as: fmc_domains
       save_to_file: true
       output_dir: "{{ output_directory | default('.') }}"
 
     # Step 2: Get upgrade packages and filter by version
-    - role: get_upgrade_packages
+    - role: cisco.fmcansible.get_upgrade_packages
       register_as: upgrade_packages
       version_filter: "{{ version }}"
       filter_by_version: true
@@ -25,7 +22,7 @@
       output_dir: "{{ output_directory | default('.') }}"
 
     # Step 3: Get HA devices and build target lists
-    - role: get_ha_devices
+    - role: cisco.fmcansible.get_ha_devices
       domain_uuid: "{{ fmc_domains[0].uuid }}"
       register_as: ha_devices
       filter_by_names: true
@@ -35,7 +32,7 @@
       output_dir: "{{ output_directory | default('.') }}"
 
     # Step 4: Create backup of HA devices
-    - role: device_backup
+    - role: cisco.fmcansible.device_backup
       domain_uuid: "{{ fmc_domains[0].uuid }}"
       target_devices: "{{ ha_devices_target_containers }}"
       register_as: device_backup
@@ -48,7 +45,7 @@
       output_dir: "{{ output_directory | default('.') }}"
 
     # Step 5: Perform readiness check
-    - role: device_upgrade
+    - role: cisco.fmcansible.device_upgrade
       domain_uuid: "{{ fmc_domains[0].uuid }}"
       upgrade_package: "{{ upgrade_packages_filtered }}"
       target_devices: "{{ ha_devices_target_devices }}"
@@ -63,7 +60,7 @@
       output_dir: "{{ output_directory | default('.') }}"
 
     # Step 6: Perform actual upgrade
-    - role: device_upgrade
+    - role: cisco.fmcansible.device_upgrade
       domain_uuid: "{{ fmc_domains[0].uuid }}"
       upgrade_package: "{{ upgrade_packages_filtered }}"
       target_devices: "{{ ha_devices_target_devices }}"
@@ -80,7 +77,7 @@
 
   post_tasks:
     - name: Display upgrade summary
-      debug:
+      ansible.builtin.debug:
         msg:
           - "=== FTD HA Upgrade Summary ==="
           - "Domain: {{ fmc_domains[0].name }}"

@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Create a NAT policy and rule
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
@@ -37,9 +39,9 @@
           destinationInterface: "{{ zones[1] }}"
           sourceInterface: "{{ zones[0] }}"
           originalSource: "{{ network_results[0] }}"
-          interfaceInTranslatedSource: True
-          dns: False
-          enabled: True
+          interfaceInTranslatedSource: true
+          dns: false
+          enabled: true
           type: ftdmanualnatrule
         path_params:
           containerUUID: "{{ NAT.id }}"

@@ -43,14 +43,8 @@
   when: collect_ports | default(true)
 
 - name: Add rule with objects to policy output
-  set_fact:
-    policy_output: "{{ policy_output | combine({'rules': policy_output.rules + [{
-      'name': rule.name,
-      'id': rule.id,
-      'sourceNetworks': source_networks.response | default({}),
-      'destinationNetworks': dest_networks.response | default({}),
-      'sourcePorts': source_ports.response | default({}) if collect_ports | default(true) else {},
-      'destinationPorts': dest_ports.response | default({}) if collect_ports | default(true) else {},
-      'action': rule.action | default(''),
-      'enabled': rule.enabled | default(true)
-    }]}) }}"
+  ansible.builtin.set_fact:
+    policy_output: "{{ policy_output | combine({'rules': policy_output.rules + [{'name': rule.name, 'id': rule.id, 'sourceNetworks': source_networks.response | default({}),
+      'destinationNetworks': dest_networks.response | default({}), 'sourcePorts': source_ports.response | default({}) if collect_ports | default(true) else {}, 'destinationPorts':
+      dest_ports.response | default({}) if collect_ports | default(true) else {}, 'action': rule.action | default(''), 'enabled': rule.enabled | default(true)}]})
+      }}"

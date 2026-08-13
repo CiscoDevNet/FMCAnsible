@@ -1,4 +1,6 @@
-- hosts: all
+---
+- name: Delete a DNS server group
+  hosts: all
   connection: httpapi
   vars_files:
     - vars.yml
