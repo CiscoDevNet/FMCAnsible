@@ -85,6 +85,87 @@ class TestBaseConfigurationResource(object):
         }
         assert params[ParamName.QUERY_PARAMS]['placement'] == 'before'
 
+    @patch.object(BaseConfigurationResource, '_find_get_list_operation', return_value='getObjectList')
+    @patch.object(BaseConfigurationResource, 'get_objects_by_filter_func', return_value=[])
+    def test_unnamed_object_lookup_requests_expanded_list_when_supported(
+            self, get_objects_mock, find_get_list_mock, connection_mock):
+        connection_mock.get_model_spec.return_value = {
+            'properties': {
+                'name': {'type': 'string'},
+                'deviceInterface': {'type': 'object'}
+            }
+        }
+        connection_mock.get_operation_spec.return_value = {
+            'method': HTTPMethod.GET,
+            'url': '/objects',
+            'parameters': {
+                'path': {'containerId': {'type': 'string'}},
+                'query': {'expanded': {'type': 'boolean'}}
+            }
+        }
+        resource = BaseConfigurationResource(connection_mock, False)
+        params = {
+            ParamName.DATA: {'deviceInterface': {'id': 'interface-1'}},
+            ParamName.PATH_PARAMS: {'containerId': 'device-1'}
+        }
+
+        assert resource._find_object_matching_params('InterfacePolicy', params) is None
+
+        lookup_params = get_objects_mock.call_args[0][1]
+        assert lookup_params[ParamName.QUERY_PARAMS] == {'expanded': True}
+
+    @patch.object(BaseConfigurationResource, '_find_get_list_operation', return_value='getObjectList')
+    @patch.object(BaseConfigurationResource, 'get_objects_by_filter_func', return_value=[])
+    def test_named_object_lookup_does_not_force_expanded_list(
+            self, get_objects_mock, find_get_list_mock, connection_mock):
+        connection_mock.get_model_spec.return_value = {
+            'properties': {'name': {'type': 'string'}}
+        }
+        connection_mock.get_operation_spec.return_value = {
+            'method': HTTPMethod.GET,
+            'url': '/objects',
+            'parameters': {
+                'path': {'containerId': {'type': 'string'}},
+                'query': {'expanded': {'type': 'boolean'}}
+            }
+        }
+        resource = BaseConfigurationResource(connection_mock, False)
+        params = {
+            ParamName.DATA: {'name': 'object-1'},
+            ParamName.PATH_PARAMS: {'containerId': 'device-1'}
+        }
+
+        assert resource._find_object_matching_params('NamedModel', params) is None
+
+        lookup_params = get_objects_mock.call_args[0][1]
+        assert lookup_params[ParamName.QUERY_PARAMS] == {}
+
+    @patch.object(BaseConfigurationResource, '_find_get_list_operation', return_value='getObjectList')
+    @patch.object(BaseConfigurationResource, 'get_objects_by_filter_func', return_value=[])
+    def test_unnamed_object_lookup_does_not_add_unsupported_expanded_parameter(
+            self, get_objects_mock, find_get_list_mock, connection_mock):
+        connection_mock.get_model_spec.return_value = {
+            'properties': {'deviceInterface': {'type': 'object'}}
+        }
+        connection_mock.get_operation_spec.return_value = {
+            'method': HTTPMethod.GET,
+            'url': '/objects',
+            'parameters': {
+                'path': {'containerId': {'type': 'string'}},
+                'query': {}
+            }
+        }
+        resource = BaseConfigurationResource(connection_mock, False)
+        params = {
+            ParamName.DATA: {'deviceInterface': {'id': 'interface-1'}},
+            ParamName.PATH_PARAMS: {'containerId': 'device-1'}
+        }
+
+        assert resource._find_object_matching_params('InterfacePolicy', params) is None
+
+        lookup_params = get_objects_mock.call_args[0][1]
+        assert lookup_params[ParamName.QUERY_PARAMS] == {}
+
     @patch.object(BaseConfigurationResource, '_fetch_system_info')
     @patch.object(BaseConfigurationResource, '_send_request')
     def test_get_objects_by_filter_with_multiple_filters(self, send_request_mock, fetch_system_info_mock,

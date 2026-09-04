@@ -85,6 +85,7 @@ class OperationNamePrefix:
 
 
 class QueryParams:
+    EXPANDED = 'expanded'
     FILTER = 'filter'
 
 
@@ -493,6 +494,16 @@ class BaseConfigurationResource(object):
 
         obj = None
         lookup_params = self._params_for_operation(get_list_operation, params)
+        has_named_identity = (
+            (use_if_name and data.get(IF_NAME) is not None)
+            or (not use_if_name and data_name is not None)
+        )
+        if not has_named_identity:
+            operation_spec = self.get_operation_spec(get_list_operation)
+            operation_params = operation_spec.get(OperationField.PARAMETERS) or {}
+            supported_query_params = operation_params.get(OperationParams.QUERY) or {}
+            if QueryParams.EXPANDED in supported_query_params:
+                lookup_params[ParamName.QUERY_PARAMS][QueryParams.EXPANDED] = True
         filtered_objs = self.get_objects_by_filter_func(
             get_list_operation, lookup_params, filter_on_name_or_whole_object
         )
